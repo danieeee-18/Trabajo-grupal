@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://4dwh20dufcq5"]
+
+[ext_resource type="PackedScene" uid="uid://ckrmwddkl3sn3" path="res://board.tscn" id="1_3tbxw"]
+[ext_resource type="Script" uid="uid://buhmj71d7hac7" path="res://main_game.gd" id="1_ws5ob"]
+[ext_resource type="PackedScene" uid="uid://bdo5b0hnj41gs" path="res://Piece.tscn" id="2_e3m3f"]
+
+[node name="MainGame" type="Node2D"]
+script = ExtResource("1_ws5ob")
+
+[node name="Board" parent="." instance=ExtResource("1_3tbxw")]
+position = Vector2(104, 150)
+
+[node name="Piece" parent="." instance=ExtResource("2_e3m3f")]
+position = Vector2(150, 1000)
+
+[node name="Piece2" parent="." instance=ExtResource("2_e3m3f")]
+position = Vector2(360, 1000)
+
+[node name="Piece3" parent="." instance=ExtResource("2_e3m3f")]
+position = Vector2(570, 1000)

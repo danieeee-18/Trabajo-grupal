@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://bdo5b0hnj41gs"]
+
+[ext_resource type="Script" uid="uid://c3i7jyaj66kkl" path="res://piece.gd" id="1_fnypl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fnypl"]
+size = Vector2(128, 128)
+
+[node name="Piece" type="Node2D"]
+script = ExtResource("1_fnypl")
+
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(32, 32)
+shape = SubResource("RectangleShape2D_fnypl")
+
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
