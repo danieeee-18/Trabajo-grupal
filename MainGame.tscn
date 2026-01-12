@@ -18,3 +18,12 @@ position = Vector2(360, 1000)
 
 [node name="Piece3" parent="." instance=ExtResource("2_e3m3f")]
 position = Vector2(570, 1000)
+
+[node name="PosicionPieza1" type="Marker2D" parent="."]
+position = Vector2(100, 1018)
+
+[node name="PosicionPieza2" type="Marker2D" parent="."]
+position = Vector2(546, 1020)
+
+[node name="PosicionPieza3" type="Marker2D" parent="."]
+position = Vector2(354, 1020)
