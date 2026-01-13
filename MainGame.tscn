@@ -1,14 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://4dwh20dufcq5"]
+[gd_scene load_steps=5 format=3 uid="uid://4dwh20dufcq5"]
 
 [ext_resource type="PackedScene" uid="uid://ckrmwddkl3sn3" path="res://board.tscn" id="1_3tbxw"]
 [ext_resource type="Script" uid="uid://buhmj71d7hac7" path="res://main_game.gd" id="1_ws5ob"]
 [ext_resource type="PackedScene" uid="uid://bdo5b0hnj41gs" path="res://Piece.tscn" id="2_e3m3f"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_ws5ob"]
+font_size = 60
+
 [node name="MainGame" type="Node2D"]
 script = ExtResource("1_ws5ob")
 
 [node name="Board" parent="." instance=ExtResource("1_3tbxw")]
-position = Vector2(104, 150)
+position = Vector2(162, 254)
 
 [node name="Piece" parent="." instance=ExtResource("2_e3m3f")]
 position = Vector2(150, 1000)
@@ -27,3 +30,14 @@ position = Vector2(546, 1020)
 
 [node name="PosicionPieza3" type="Marker2D" parent="."]
 position = Vector2(354, 1020)
+
+[node name="ScoreLabel" type="Label" parent="."]
+anchors_preset = -1
+offset_left = 70.0
+offset_top = -1.0
+offset_right = 582.0
+offset_bottom = 124.0
+text = "0"
+label_settings = SubResource("LabelSettings_ws5ob")
+horizontal_alignment = 1
+vertical_alignment = 1

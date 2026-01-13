@@ -1,11 +1,14 @@
 extends Node2D
 
+# --- SEÑAL NUEVA: Avisa cuando ganamos puntos ---
+signal puntos_ganados(cantidad)
+
 var block_texture = preload("res://block_texture.tres")
 
 const GRID_SIZE = 8
 const CELL_SIZE = 64
 
-# Memoria: Ahora guardaremos el propio bloque (Sprite2D) o null
+# Matriz de sprites
 var grid_sprites = [] 
 
 func _ready():
@@ -34,7 +37,6 @@ func can_place_piece(start_x, start_y, cells_shape):
 		if target_x < 0 or target_x >= GRID_SIZE or target_y < 0 or target_y >= GRID_SIZE:
 			return false
 		
-		# Si hay un sprite guardado ahí, es que está ocupado
 		if grid_sprites[target_x][target_y] != null:
 			return false
 			
@@ -54,7 +56,10 @@ func place_piece(start_x, start_y, cells_shape, color):
 		
 		grid_sprites[target_x][target_y] = new_block
 	
-	# 2. Inmediatamente comprobamos si hemos hecho línea
+	# 2. PUNTOS BASE: Ganamos tantos puntos como bloques tenga la pieza
+	puntos_ganados.emit(cells_shape.size())
+	
+	# 3. Comprobamos líneas
 	check_and_clear_lines()
 
 func check_and_clear_lines():
@@ -68,8 +73,7 @@ func check_and_clear_lines():
 			if grid_sprites[x][y] == null:
 				is_full = false
 				break
-		if is_full:
-			cols_to_clear.append(x)
+		if is_full: cols_to_clear.append(x)
 	
 	# Revisar Filas
 	for y in range(GRID_SIZE):
@@ -78,9 +82,17 @@ func check_and_clear_lines():
 			if grid_sprites[x][y] == null:
 				is_full = false
 				break
-		if is_full:
-			rows_to_clear.append(y)
+		if is_full: rows_to_clear.append(y)
 	
+	# --- CÁLCULO DE COMBO ---
+	var total_lines = rows_to_clear.size() + cols_to_clear.size()
+	if total_lines > 0:
+		# Fórmula: 100 puntos * número de líneas * número de líneas
+		# 1 linea = 100, 2 lineas = 400, 3 lineas = 900
+		var score_bonus = total_lines * 100 * total_lines
+		puntos_ganados.emit(score_bonus)
+	
+	# Borrar visualmente
 	for x in cols_to_clear: delete_column(x)
 	for y in rows_to_clear: delete_row(y)
 
@@ -96,24 +108,19 @@ func delete_row(y):
 			grid_sprites[x][y].queue_free() 
 			grid_sprites[x][y] = null       
 
-# --- NUEVA FUNCIÓN: INTELIGENCIA ARTIFICIAL ---
-# Esta función prueba "a fuerza bruta" si una forma cabe en ALGÚN sitio
+# IA: Comprobar si cabe algo
 func check_if_shape_fits_anywhere(cells_shape):
-	# Probamos todas las casillas del tablero (0,0) a (7,7)
 	for x in range(GRID_SIZE):
 		for y in range(GRID_SIZE):
-			# Si en la posición X,Y la pieza cabe...
 			if can_place_piece(x, y, cells_shape):
-				return true # ¡Sí cabe! Aún no has perdido.
-				
-	return false # Hemos probado todo y no cabe.
-	# --- NUEVA FUNCIÓN: CONTAR ESPACIOS ---
-# Devuelve cuántas casillas vacías quedan (de 0 a 64)
+				return true 
+	return false 
+
+# IA: Contar vacíos
 func get_empty_cells_count():
 	var empty_count = 0
 	for x in range(GRID_SIZE):
 		for y in range(GRID_SIZE):
-			# Si es null, está vacío
 			if grid_sprites[x][y] == null:
 				empty_count += 1
 	return empty_count
