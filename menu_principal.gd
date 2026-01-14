@@ -4,6 +4,8 @@ func _ready():
 	# Buscamos el nodo llamado "BotonJugar" y le decimos que avise cuando lo pulsen
 	# IMPORTANTE: Asegúrate de que tu botón en la lista se llame exactamente: BotonJugar
 	$BotonJugar.pressed.connect(_al_pulsar_jugar)
+	# --- NUEVO: Actualizar el texto del récord ---
+	$LabelRecord.text = "👑 " + str(Global.high_score)
 
 func _al_pulsar_jugar():
 	print("¡Cambiando de escena!") # Esto saldrá en la consola abajo para confirmar

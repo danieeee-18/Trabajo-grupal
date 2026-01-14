@@ -189,6 +189,7 @@ func check_hand_empty_silent():
 
 func check_game_over():
 	var can_move = false
+	# Revisamos si alguna de las 3 piezas cabe en el tablero
 	for p in pieces_array:
 		if p.visible:
 			if board.check_if_shape_fits_anywhere(p.cells):
@@ -197,4 +198,17 @@ func check_game_over():
 	
 	if not can_move:
 		print("!!! GAME OVER REAL !!!")
+		
+		# --- NUEVO: GUARDAR RÉCORD ---
+		# Enviamos tu puntuación actual a la memoria global
+		Global.actualizar_record(score)
+		
+		# Avisamos al jugador
 		score_label.text = "GAME OVER\nScore: " + str(score)
+		
+		# --- NUEVO: VOLVER AL MENÚ ---
+		# Esperamos 3 segundos para que el jugador vea su puntuación final
+		await get_tree().create_timer(3.0).timeout
+		
+		# Cambiamos de escena al Menú Principal
+		get_tree().change_scene_to_file("res://MenuPrincipal.tscn")

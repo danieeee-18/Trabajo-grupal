@@ -14,6 +14,10 @@ config/name="BlockBust"
 run/main_scene="uid://dwuh734k7n0qn"
 config/features=PackedStringArray("4.5", "Forward Plus")
 
+[autoload]
+
+Global="*res://Global.gd"
+
 [display]
 
 window/size/viewport_width=720

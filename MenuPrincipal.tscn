@@ -1,13 +1,33 @@
-[gd_scene load_steps=3 format=3 uid="uid://dwuh734k7n0qn"]
+[gd_scene load_steps=5 format=3 uid="uid://dwuh734k7n0qn"]
 
 [ext_resource type="Script" uid="uid://cg73behmoagmt" path="res://menu_principal.gd" id="1_0oe1n"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ba235"]
-font_size = 70
-font_color = Color(1.6302733, 0.036214694, 2.9302641e-06, 1)
-outline_size = 10
-outline_color = Color(0, 0, 0, 1)
+font_size = 80
+font_color = Color(1, 0.4, 0, 1)
+outline_size = 15
+outline_color = Color(0, 0.2, 0.4, 1)
 shadow_offset = Vector2(0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0oe1n"]
+content_margin_left = 50.0
+content_margin_top = 20.0
+content_margin_right = 50.0
+content_margin_bottom = 35.0
+bg_color = Color(0.28037357, 0.99999994, 0.7798865, 1)
+border_width_bottom = 12
+border_color = Color(0, 0.56078434, 0.41960785, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ba235"]
+content_margin_top = 10.0
+bg_color = Color(0, 0.8117647, 0.6156863, 1)
+border_color = Color(0, 0.56078434, 0.41960785, 1)
 
 [node name="MenuPrincipal" type="Control"]
 layout_mode = 3
@@ -25,18 +45,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.4045111, 0.40451115, 0.4045111, 1)
+color = Color(0.6862745, 1, 0.8039216, 1)
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -199.5
-offset_right = 199.5
-offset_bottom = 96.0
+offset_left = -130.5
+offset_top = 70.0
+offset_right = 130.5
+offset_bottom = 293.0
 grow_horizontal = 2
-text = "BLOCKBAST"
+text = "BLOCK
+BUST"
 label_settings = SubResource("LabelSettings_ba235")
 horizontal_alignment = 1
 
@@ -53,5 +75,25 @@ offset_right = 29.0
 offset_bottom = 15.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.4, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.8346143, 0.8346143, 0.8346143, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.50980395, 1)
+theme_override_colors/font_outline_color = Color(0, 0.2, 0.4, 1)
+theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 50
-text = "JUGAR"
+theme_override_styles/normal = SubResource("StyleBoxFlat_0oe1n")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ba235")
+theme_override_styles/hover = SubResource("StyleBoxFlat_0oe1n")
+text = "∞ Classic"
+
+[node name="LabelRecord" type="Label" parent="."]
+layout_mode = 0
+offset_left = 330.0
+offset_top = 500.0
+offset_right = 407.0
+offset_bottom = 549.0
+theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
+theme_override_font_sizes/font_size = 35
+text = "👑 0"
+horizontal_alignment = 1
+vertical_alignment = 1
