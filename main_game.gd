@@ -130,8 +130,7 @@ func spawn_new_hand():
 		var marker = markers[i]
 		
 		p.visible = true
-		p.scale = Vector2(0.6, 0.6) 
-		
+		p.scale = Vector2(0.57, 0.57)
 		var col_shape = p.get_node("Area2D/CollisionShape2D")
 		var raw_size = col_shape.shape.size
 		var centered_pos = marker.global_position - (raw_size / 2.0 * p.scale.x)
