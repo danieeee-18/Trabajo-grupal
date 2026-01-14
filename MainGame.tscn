@@ -17,19 +17,19 @@ position = Vector2(162, 254)
 position = Vector2(150, 1000)
 
 [node name="Piece2" parent="." instance=ExtResource("2_e3m3f")]
-position = Vector2(360, 1000)
+position = Vector2(352, 1000)
 
 [node name="Piece3" parent="." instance=ExtResource("2_e3m3f")]
 position = Vector2(570, 1000)
 
 [node name="PosicionPieza1" type="Marker2D" parent="."]
-position = Vector2(100, 1018)
+position = Vector2(108, 1020)
 
 [node name="PosicionPieza2" type="Marker2D" parent="."]
-position = Vector2(546, 1020)
+position = Vector2(366, 1036)
 
 [node name="PosicionPieza3" type="Marker2D" parent="."]
-position = Vector2(354, 1020)
+position = Vector2(564, 1020)
 
 [node name="ScoreLabel" type="Label" parent="."]
 anchors_preset = -1
