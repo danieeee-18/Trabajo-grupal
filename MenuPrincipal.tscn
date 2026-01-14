@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://dwuh734k7n0qn"]
+[gd_scene load_steps=3 format=3 uid="uid://d1chu28hld1bi"]
 
-[ext_resource type="Script" uid="uid://cg73behmoagmt" path="res://menu_principal.gd" id="1_0oe1n"]
+[ext_resource type="Script" path="res://menu_principal.gd" id="1_0oe1n"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ba235"]
 font_size = 70
@@ -25,16 +25,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.4045111, 0.40451115, 0.4045111, 1)
+color = Color(0.64875597, 0.22657564, 0.41279176, 1)
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -199.5
-offset_right = 199.5
-offset_bottom = 96.0
+offset_left = -207.0
+offset_top = 90.0
+offset_right = 192.0
+offset_bottom = 186.0
 grow_horizontal = 2
 text = "BLOCKBAST"
 label_settings = SubResource("LabelSettings_ba235")
