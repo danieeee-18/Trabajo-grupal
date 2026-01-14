@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="BlockBust"
-run/main_scene="uid://dbxg3bqgqucy"
+run/main_scene="uid://dwuh734k7n0qn"
 config/features=PackedStringArray("4.5", "Forward Plus")
 
 [display]
