@@ -1,5 +1,7 @@
 extends Node2D
 
+# Al principio, con las otras variables @onready
+const GAME_OVER_SCENE = preload("res://GameOver.tscn") # Asegúrate de que la ruta sea correcta
 @onready var board = $Board
 @onready var pieces_array = [$Piece, $Piece2, $Piece3]
 @onready var markers = [$PosicionPieza1, $PosicionPieza2, $PosicionPieza3]
@@ -198,16 +200,19 @@ func check_game_over():
 	if not can_move:
 		print("!!! GAME OVER REAL !!!")
 		
-		# --- NUEVO: GUARDAR RÉCORD ---
-		# Enviamos tu puntuación actual a la memoria global
+		# 1. Guardamos el récord
 		Global.actualizar_record(score)
 		
-		# Avisamos al jugador
-		score_label.text = "GAME OVER\nScore: " + str(score)
+		# 2. INSTANCIAMOS LA PANTALLA DE GAME OVER
+		var game_over_instance = GAME_OVER_SCENE.instantiate()
 		
-		# --- NUEVO: VOLVER AL MENÚ ---
-		# Esperamos 3 segundos para que el jugador vea su puntuación final
-		await get_tree().create_timer(3.0).timeout
+		# 3. Le pasamos la puntuación para que la muestre
+		# (Asegúrate de que el script de GameOver tenga la función set_score que te di arriba)
+		if game_over_instance.has_method("set_score"):
+			game_over_instance.set_score(score)
+			
+		# 4. La añadimos a la escena
+		add_child(game_over_instance)
 		
-		# Cambiamos de escena al Menú Principal
-		get_tree().change_scene_to_file("res://MenuPrincipal.tscn")
+		# 5. OPCIONAL: Pausar el juego de fondo (si quieres)
+		# get_tree().paused = true
