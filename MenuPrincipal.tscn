@@ -1,6 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://dwuh734k7n0qn"]
+[gd_scene load_steps=8 format=3 uid="uid://dwuh734k7n0qn"]
 
 [ext_resource type="Script" uid="uid://cg73behmoagmt" path="res://menu_principal.gd" id="1_0oe1n"]
+[ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_ba235"]
+
+[sub_resource type="Gradient" id="Gradient_0oe1n"]
+colors = PackedColorArray(0, 0.3529412, 0.654902, 1, 1, 0.99215686, 0.89411765, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ba235"]
+gradient = SubResource("Gradient_0oe1n")
+fill_from = Vector2(0.33333334, 0.22222222)
+fill_to = Vector2(0.3888889, 1)
+metadata/_snap_enabled = true
+metadata/_snap_count = 18
 
 [sub_resource type="LabelSettings" id="LabelSettings_ba235"]
 font_size = 80
@@ -38,16 +49,49 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_0oe1n")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Fondo" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.6862745, 1, 0.8039216, 1)
+texture = SubResource("GradientTexture2D_ba235")
+
+[node name="TituloSombra" type="RichTextLabel" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 191.0
+offset_top = 84.0
+offset_right = 515.0
+offset_bottom = 250.0
+theme_override_colors/font_outline_color = Color(0.16862746, 0.105882354, 0.09019608, 1)
+theme_override_colors/font_shadow_color = Color(0.16862746, 0.105882354, 0.09019608, 1)
+theme_override_constants/shadow_offset_x = 5
+theme_override_constants/shadow_offset_y = 5
+theme_override_constants/outline_size = 25
+theme_override_fonts/normal_font = ExtResource("2_ba235")
+theme_override_font_sizes/normal_font_size = 60
+bbcode_enabled = true
+text = "[center][color=#2b1b17]BLOCK BUST[/color][/center]"
+
+[node name="TituloColorido" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 185.0
+offset_top = 123.0
+offset_right = 526.0
+offset_bottom = 301.0
+theme_override_colors/font_shadow_color = Color(0.16862746, 0.105882354, 0.09019608, 1)
+theme_override_constants/shadow_offset_x = 14
+theme_override_constants/shadow_offset_y = 11
+theme_override_fonts/normal_font = ExtResource("2_ba235")
+theme_override_font_sizes/normal_font_size = 87
+bbcode_enabled = true
+text = "[center][color=#FFD700]B[/color][color=#1E90FF]L[/color][color=#FF4500]O[/color][color=#FFD700]C[/color][color=#1E90FF]K[/color]
+[color=#FF4500]B[/color][color=#FFD700]U[/color][color=#1E90FF]S[/color][color=#FF4500]T[/color][/center]"
 
 [node name="Label" type="Label" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5

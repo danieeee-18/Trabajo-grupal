@@ -5,16 +5,16 @@
 [ext_resource type="PackedScene" uid="uid://bdo5b0hnj41gs" path="res://Piece.tscn" id="2_e3m3f"]
 
 [sub_resource type="Gradient" id="Gradient_ws5ob"]
-colors = PackedColorArray(0.3019608, 0.6313726, 0.6627451, 1, 0.1254902, 0.30588236, 0.31764707, 1)
+colors = PackedColorArray(0.15294118, 0.10980392, 0.09803922, 1, 0.30588236, 0.20392157, 0.18039216, 1)
 metadata/_snap_enabled = true
 metadata/_snap_count = 2
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_bqqt8"]
 gradient = SubResource("Gradient_ws5ob")
-fill_from = Vector2(1, 0)
-fill_to = Vector2(0, 0.5)
-metadata/_snap_enabled = true
+fill_from = Vector2(1, 1)
+fill_to = Vector2(1, 0.1)
 metadata/_snap_count = 2
+metadata/_snap_enabled = true
 
 [sub_resource type="LabelSettings" id="LabelSettings_ws5ob"]
 font_size = 60
