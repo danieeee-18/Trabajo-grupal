@@ -5,19 +5,21 @@
 [ext_resource type="PackedScene" uid="uid://bdo5b0hnj41gs" path="res://Piece.tscn" id="2_e3m3f"]
 
 [sub_resource type="Gradient" id="Gradient_ws5ob"]
-colors = PackedColorArray(0.15294118, 0.10980392, 0.09803922, 1, 0.30588236, 0.20392157, 0.18039216, 1)
-metadata/_snap_enabled = true
-metadata/_snap_count = 2
+colors = PackedColorArray(0, 0.4, 0.8, 1, 1, 0.99215686, 0.89411765, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_bqqt8"]
 gradient = SubResource("Gradient_ws5ob")
-fill_from = Vector2(1, 1)
-fill_to = Vector2(1, 0.1)
+fill_from = Vector2(1, 0)
+fill_to = Vector2(1, 1)
 metadata/_snap_count = 2
 metadata/_snap_enabled = true
 
 [sub_resource type="LabelSettings" id="LabelSettings_ws5ob"]
-font_size = 60
+font_size = 85
+font_color = Color(1, 0.99215686, 0.89411765, 1)
+outline_size = 10
+outline_color = Color(1, 0.99215686, 0.89411765, 1)
+shadow_size = 0
 
 [node name="MainGame" type="Node2D"]
 script = ExtResource("1_ws5ob")
@@ -32,28 +34,28 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(140, 280)
 
 [node name="Piece" parent="." instance=ExtResource("2_e3m3f")]
-position = Vector2(150, 1000)
+position = Vector2(150, 920)
 
 [node name="Piece2" parent="." instance=ExtResource("2_e3m3f")]
-position = Vector2(352, 1000)
+position = Vector2(352, 920)
 
 [node name="Piece3" parent="." instance=ExtResource("2_e3m3f")]
-position = Vector2(570, 1000)
+position = Vector2(570, 920)
 
 [node name="PosicionPieza1" type="Marker2D" parent="."]
-position = Vector2(160, 1000)
+position = Vector2(160, 920)
 
 [node name="PosicionPieza2" type="Marker2D" parent="."]
-position = Vector2(380, 1000)
+position = Vector2(380, 920)
 
 [node name="PosicionPieza3" type="Marker2D" parent="."]
-position = Vector2(590, 1000)
+position = Vector2(590, 920)
 
 [node name="ScoreLabel" type="Label" parent="."]
 offset_left = 104.0
-offset_top = 130.0
+offset_top = 100.0
 offset_right = 616.0
-offset_bottom = 260.0
+offset_bottom = 237.0
 text = "0"
 label_settings = SubResource("LabelSettings_ws5ob")
 horizontal_alignment = 1

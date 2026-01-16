@@ -1,0 +1,88 @@
+[gd_scene load_steps=6 format=3 uid="uid://gd6xqklh1xsa"]
+
+[ext_resource type="Script" uid="uid://gqax3f6dhl6s" path="res://GameOver.gd" id="1_a1htc"]
+[ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_eksk4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl4ts"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a1htc"]
+bg_color = Color(1, 0.62352943, 0.10980392, 1)
+border_width_bottom = 5
+border_color = Color(0.7490196, 0.30588236, 0.03137255, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eksk4"]
+bg_color = Color(0.8784314, 0.18039216, 0.18039216, 1)
+border_width_bottom = 5
+border_color = Color(0.54509807, 0, 0, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[node name="CanvasLayer" type="CanvasLayer"]
+script = ExtResource("1_a1htc")
+
+[node name="FondoNegro" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5882353)
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xl4ts")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.16862746, 0.19607843, 0.69803923, 1)
+theme_override_fonts/font = ExtResource("2_eksk4")
+theme_override_font_sizes/font_size = 45
+text = "GAME OVER"
+
+[node name="LabelPuntos" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_eksk4")
+text = "Score: 0"
+
+[node name="BotonReiniciar" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_eksk4")
+theme_override_styles/normal = SubResource("StyleBoxFlat_a1htc")
+text = "REINTENTAR"
+
+[node name="BotonMenu" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_eksk4")
+text = "VOLVER AL MENÚ"
