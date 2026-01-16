@@ -1,15 +1,24 @@
 extends Control
 
-func _ready():
-	# Buscamos el nodo llamado "BotonJugar" y le decimos que avise cuando lo pulsen
-	# IMPORTANTE: Asegúrate de que tu botón en la lista se llame exactamente: BotonJugar
-	$BotonJugar.pressed.connect(_al_pulsar_jugar)
-	# --- NUEVO: Actualizar el texto del récord ---
-	$LabelRecord.text = "👑 " + str(Global.high_score)
+# Aquí referenciamos los nodos (Asegúrate de que tus nodos se llaman así en la escena)
+@onready var label_record = $Label  # O como se llame tu Label del récord
+@onready var boton_jugar = $BotonJugar
+@onready var boton_opciones = $BotonOpciones
 
-func _al_pulsar_jugar():
-	print("¡Cambiando de escena!") # Esto saldrá en la consola abajo para confirmar
+func _ready():
+	# 1. Cargar el Récord
+	# (Si te da error aquí, revisa que tu Label del récord se llame igual que arriba)
+	if label_record:
+		label_record.text = "Récord: " + str(Global.high_score)
 	
-	# Cambia a la escena del juego. 
-	# Verifica que "res://MainGame.tscn" sea el nombre EXACTO de tu archivo de juego.
+	# 2. Conectar los botones
+	boton_jugar.pressed.connect(_on_jugar_pressed)
+	boton_opciones.pressed.connect(_on_opciones_pressed)
+
+func _on_jugar_pressed():
+	# Cambia a la pantalla de juego
 	get_tree().change_scene_to_file("res://MainGame.tscn")
+
+func _on_opciones_pressed():
+	# Cambia a la pantalla de opciones
+	get_tree().change_scene_to_file("res://Options.tscn")
