@@ -1,0 +1,127 @@
+[gd_scene load_steps=7 format=3 uid="uid://bpxiy6tufdg3v"]
+
+[ext_resource type="Script" uid="uid://deo3bndqks7th" path="res://options.gd" id="1_r314q"]
+[ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_yia4p"]
+
+[sub_resource type="Gradient" id="Gradient_0oe1n"]
+colors = PackedColorArray(0, 0.3529412, 0.654902, 1, 1, 0.99215686, 0.89411765, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vxhgq"]
+gradient = SubResource("Gradient_0oe1n")
+fill_from = Vector2(0.33333334, 0.22222222)
+fill_to = Vector2(0.3888889, 1)
+metadata/_snap_enabled = true
+metadata/_snap_count = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r314q"]
+content_margin_left = 50.0
+content_margin_top = 20.0
+content_margin_right = 50.0
+content_margin_bottom = 35.0
+bg_color = Color(1, 0.84313726, 0, 1)
+border_width_bottom = 12
+border_color = Color(0.85490197, 0.64705884, 0.1254902, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yia4p"]
+content_margin_top = 10.0
+bg_color = Color(0, 0.8117647, 0.6156863, 1)
+border_color = Color(0, 0.56078434, 0.41960785, 1)
+
+[node name="PantallaOpciones" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_r314q")
+
+[node name="Fondo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_vxhgq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.056
+anchor_bottom = 0.031000001
+offset_left = 128.0
+offset_top = 473.0
+offset_right = 320.68
+offset_bottom = 606.32
+scale = Vector2(2, 2)
+
+[node name="CheckButtonSonido" type="CheckButton" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.11764706, 0.1882353, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_yia4p")
+theme_override_font_sizes/font_size = 30
+text = "Sonido
+"
+
+[node name="CheckButtonMusica" type="CheckButton" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.11764706, 0.1882353, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_yia4p")
+theme_override_font_sizes/font_size = 30
+text = "Música"
+
+[node name="CheckButtonVibra" type="CheckButton" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.11764706, 0.1882353, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_yia4p")
+theme_override_font_sizes/font_size = 30
+text = "Vibración"
+
+[node name="BotonVolver" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -164.0
+offset_top = 267.0
+offset_right = 175.0
+offset_bottom = 391.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.8346143, 0.8346143, 0.8346143, 1)
+theme_override_colors/font_hover_color = Color(0.7490196, 0.30588236, 0.03137255, 1)
+theme_override_colors/font_outline_color = Color(0, 0.2, 0.4, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_r314q")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_yia4p")
+theme_override_styles/hover = SubResource("StyleBoxFlat_r314q")
+text = "∞ Volver
+"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 224.0
+offset_top = 158.0
+offset_right = 512.0
+offset_bottom = 233.0
+theme_override_fonts/normal_font = ExtResource("2_yia4p")
+theme_override_font_sizes/normal_font_size = 70
+bbcode_enabled = true
+text = "[center][color=#FFD700][shake rate=5 level=10]AJUSTES[/shake][/color][/center]"

@@ -3,11 +3,11 @@
 [ext_resource type="Script" uid="uid://cg73behmoagmt" path="res://menu_principal.gd" id="1_0oe1n"]
 [ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_ba235"]
 
-[sub_resource type="Gradient" id="Gradient_0oe1n"]
+[sub_resource type="Gradient" id="Gradient_ba235"]
 colors = PackedColorArray(0, 0.3529412, 0.654902, 1, 1, 0.99215686, 0.89411765, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ba235"]
-gradient = SubResource("Gradient_0oe1n")
+gradient = SubResource("Gradient_ba235")
 fill_from = Vector2(0.33333334, 0.22222222)
 fill_to = Vector2(0.3888889, 1)
 metadata/_snap_enabled = true
@@ -113,10 +113,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -29.0
-offset_top = -15.5
-offset_right = 29.0
-offset_bottom = 15.5
+offset_left = -162.0
+offset_top = -62.0
+offset_right = 179.0
+offset_bottom = 62.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.4, 0, 1)
@@ -129,6 +129,30 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_0oe1n")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ba235")
 theme_override_styles/hover = SubResource("StyleBoxFlat_0oe1n")
 text = "∞ Classic"
+
+[node name="BotonOpciones" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = 120.0
+offset_right = 179.0
+offset_bottom = 244.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.4, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.8346143, 0.8346143, 0.8346143, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.50980395, 1)
+theme_override_colors/font_outline_color = Color(0, 0.2, 0.4, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_0oe1n")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ba235")
+theme_override_styles/hover = SubResource("StyleBoxFlat_0oe1n")
+text = "∞ Options"
 
 [node name="LabelRecord" type="Label" parent="."]
 layout_mode = 0
