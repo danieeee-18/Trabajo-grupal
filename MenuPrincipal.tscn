@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dwuh734k7n0qn"]
+[gd_scene load_steps=7 format=3 uid="uid://dwuh734k7n0qn"]
 
 [ext_resource type="Script" uid="uid://cg73behmoagmt" path="res://menu_principal.gd" id="1_0oe1n"]
 [ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_ba235"]
@@ -12,13 +12,6 @@ fill_from = Vector2(0.33333334, 0.22222222)
 fill_to = Vector2(0.3888889, 1)
 metadata/_snap_enabled = true
 metadata/_snap_count = 18
-
-[sub_resource type="LabelSettings" id="LabelSettings_ba235"]
-font_size = 80
-font_color = Color(1, 0.4, 0, 1)
-outline_size = 15
-outline_color = Color(0, 0.2, 0.4, 1)
-shadow_offset = Vector2(0, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0oe1n"]
 content_margin_left = 50.0
@@ -90,22 +83,6 @@ bbcode_enabled = true
 text = "[center][color=#FFD700]B[/color][color=#1E90FF]L[/color][color=#FF4500]O[/color][color=#FFD700]C[/color][color=#1E90FF]K[/color]
 [color=#FF4500]B[/color][color=#FFD700]U[/color][color=#1E90FF]S[/color][color=#FF4500]T[/color][/center]"
 
-[node name="Label" type="Label" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -130.5
-offset_top = 70.0
-offset_right = 130.5
-offset_bottom = 293.0
-grow_horizontal = 2
-text = "BLOCK
-BUST"
-label_settings = SubResource("LabelSettings_ba235")
-horizontal_alignment = 1
-
 [node name="BotonJugar" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -113,9 +90,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -145.0
+offset_left = -159.0
 offset_top = 15.0
-offset_right = 165.0
+offset_right = 181.0
 offset_bottom = 139.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -129,6 +106,30 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_0oe1n")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ba235")
 theme_override_styles/hover = SubResource("StyleBoxFlat_0oe1n")
 text = "∞ Classic"
+
+[node name="BotonOpciones" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -157.0
+offset_top = 201.0
+offset_right = 182.0
+offset_bottom = 325.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.4, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.8346143, 0.8346143, 0.8346143, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.50980395, 1)
+theme_override_colors/font_outline_color = Color(0, 0.2, 0.4, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_0oe1n")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ba235")
+theme_override_styles/hover = SubResource("StyleBoxFlat_0oe1n")
+text = "∞ Options"
 
 [node name="LabelRecord" type="Label" parent="."]
 layout_mode = 0

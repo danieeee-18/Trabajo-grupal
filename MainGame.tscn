@@ -60,3 +60,6 @@ text = "0"
 label_settings = SubResource("LabelSettings_ws5ob")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(361, 643)
