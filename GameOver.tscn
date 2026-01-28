@@ -1,28 +1,69 @@
-[gd_scene load_steps=6 format=3 uid="uid://gd6xqklh1xsa"]
+[gd_scene load_steps=10 format=3 uid="uid://gd6xqklh1xsa"]
 
 [ext_resource type="Script" uid="uid://gqax3f6dhl6s" path="res://GameOver.gd" id="1_a1htc"]
 [ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_eksk4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl4ts"]
-bg_color = Color(1, 1, 1, 1)
+bg_color = Color(0.2901961, 0.13725491, 0.3529412, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.6862745, 0.47843137, 0.77254903, 1)
 corner_radius_top_left = 25
 corner_radius_top_right = 25
 corner_radius_bottom_right = 25
 corner_radius_bottom_left = 25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a1htc"]
-bg_color = Color(1, 0.62352943, 0.10980392, 1)
+bg_color = Color(0, 0.7372549, 0.9490196, 1)
 border_width_bottom = 5
-border_color = Color(0.7490196, 0.30588236, 0.03137255, 1)
+border_color = Color(0, 0.47058824, 0.84313726, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jywu3"]
+bg_color = Color(0.3019608, 0.8156863, 0.88235295, 1)
+border_width_bottom = 2
+border_color = Color(0, 0.47058824, 0.84313726, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3y56u"]
+bg_color = Color(0.3019608, 0.8156863, 0.88235295, 1)
+border_width_bottom = 5
+border_color = Color(0, 0.47058824, 0.84313726, 1)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eksk4"]
-bg_color = Color(0.8784314, 0.18039216, 0.18039216, 1)
+bg_color = Color(1, 0.2509804, 0.5058824, 1)
 border_width_bottom = 5
-border_color = Color(0.54509807, 0, 0, 1)
+border_color = Color(0.77254903, 0.06666667, 0.38431373, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ua7od"]
+bg_color = Color(1, 0.2509804, 0.5058824, 1)
+border_width_bottom = 2
+border_color = Color(0.77254903, 0.06666667, 0.38431373, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3fonj"]
+bg_color = Color(1, 0.5019608, 0.67058825, 1)
+border_width_bottom = 5
+border_color = Color(0.77254903, 0.06666667, 0.38431373, 1)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
@@ -65,24 +106,37 @@ alignment = 1
 
 [node name="Label" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.16862746, 0.19607843, 0.69803923, 1)
+theme_override_colors/font_color = Color(0.9529412, 0.6117647, 0.07058824, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
 theme_override_fonts/font = ExtResource("2_eksk4")
 theme_override_font_sizes/font_size = 45
 text = "GAME OVER"
+horizontal_alignment = 1
 
 [node name="LabelPuntos" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0.18039216, 0.8, 0.44313726, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_eksk4")
 text = "Score: 0"
+horizontal_alignment = 1
 
 [node name="BotonReiniciar" type="Button" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("2_eksk4")
 theme_override_styles/normal = SubResource("StyleBoxFlat_a1htc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jywu3")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3y56u")
 text = "REINTENTAR"
 
 [node name="BotonMenu" type="Button" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_eksk4")
 theme_override_styles/normal = SubResource("StyleBoxFlat_eksk4")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ua7od")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3fonj")
 text = "VOLVER AL MENÚ"

@@ -66,7 +66,7 @@ func check_and_clear_lines():
 	var rows_to_clear = []
 	var cols_to_clear = []
 	
-	# Revisar Columnas
+	# 1. DETECTAR (Esto sigue igual)
 	for x in range(GRID_SIZE):
 		var is_full = true
 		for y in range(GRID_SIZE):
@@ -75,7 +75,6 @@ func check_and_clear_lines():
 				break
 		if is_full: cols_to_clear.append(x)
 	
-	# Revisar Filas
 	for y in range(GRID_SIZE):
 		var is_full = true
 		for x in range(GRID_SIZE):
@@ -83,6 +82,37 @@ func check_and_clear_lines():
 				is_full = false
 				break
 		if is_full: rows_to_clear.append(y)
+		
+	if rows_to_clear.size() == 0 and cols_to_clear.size() == 0:
+		return
+	
+	var is_combo = (rows_to_clear.size() + cols_to_clear.size()) >= 2
+	
+	# --- FASE 1: ANIMACIÓN (Nadie muere todavía) ---
+	
+	# Animamos las filas detectadas
+	for y in rows_to_clear:
+		# No usamos await aquí para que las columnas se animen a la vez
+		animar_linea_completada(y, is_combo) 
+		
+	# Animamos las columnas detectadas
+	for x in cols_to_clear:
+		animar_columna_completada(x, is_combo)
+		
+	# Esperamos un poco manualmente para que se vean las animaciones
+	# (0.4 segundos es lo que duran tus tweens: 0.1 + 0.3)
+	await get_tree().create_timer(0.4).timeout
+	
+	# --- FASE 2: BORRADO (Ahora sí, limpieza general) ---
+	
+	for y in rows_to_clear:
+		delete_row(y)
+		
+	for x in cols_to_clear:
+		delete_col(x)
+		
+	# Sonido de éxito (Opcional)
+	# if is_combo: ...
 	
 	# --- CÁLCULO DE COMBO ---
 	var total_lines = rows_to_clear.size() + cols_to_clear.size()
@@ -106,7 +136,16 @@ func delete_row(y):
 	for x in range(GRID_SIZE):
 		if grid_sprites[x][y] != null:
 			grid_sprites[x][y].queue_free() 
-			grid_sprites[x][y] = null       
+			grid_sprites[x][y] = null     
+			
+func delete_col(x):
+	# Recorremos todas las filas (Y) para esa columna fija (X)
+	for y in range(GRID_SIZE):
+		if grid_sprites[x][y] != null:
+			# Borramos el nodo visual
+			grid_sprites[x][y].queue_free()
+			# Borramos el dato de la matriz
+			grid_sprites[x][y] = null  
 
 # IA: Comprobar si cabe algo
 func check_if_shape_fits_anywhere(cells_shape):
@@ -124,3 +163,81 @@ func get_empty_cells_count():
 			if grid_sprites[x][y] == null:
 				empty_count += 1
 	return empty_count
+
+func animar_linea_completada(fila_y, es_combo_grande):
+	var tween = create_tween()
+	tween.set_parallel(true)
+	
+	for x in range(GRID_SIZE):
+		var bloque = grid_sprites[x][fila_y]
+		
+		# --- CAMBIA ESTA LÍNEA ---
+		if is_instance_valid(bloque): # <--- Antes ponía: if bloque != null:
+		# -------------------------
+			
+			tween.tween_property(bloque, "scale", Vector2(1.2, 1.2), 0.1)
+			tween.tween_property(bloque, "scale", Vector2.ZERO, 0.3).set_delay(0.1) # Aquí daba el error
+			tween.tween_property(bloque, "modulate:a", 0.0, 0.3)
+			
+			if es_combo_grande:
+				bloque.modulate = Color(2, 2, 2) 
+	
+	if es_combo_grande:
+		aplicar_shake()
+	
+	await tween.finished
+	
+	# Recorremos todas las celdas de esa fila (Asumiendo tablero de 10x10 u 8x8)
+	for x in range(GRID_SIZE): # Asegúrate de usar tu variable de ancho (8 o 10)
+		var bloque = grid_sprites[x][fila_y]
+		
+		if bloque != null:
+			# 1. ANIMACIÓN BÁSICA (Escala y Transparencia)
+			# Hacemos que crezca un pelín y luego desaparezca (efecto "Pop")
+			tween.tween_property(bloque, "scale", Vector2(1.2, 1.2), 0.1)
+			tween.tween_property(bloque, "scale", Vector2.ZERO, 0.3).set_delay(0.1)
+			tween.tween_property(bloque, "modulate:a", 0.0, 0.3) # Desvanecer
+			
+			# 2. ANIMACIÓN DE COMBO (Si borras 2+ líneas)
+			if es_combo_grande:
+				# Flash Blanco: Cambiamos el color a blanco puro brillante y luego volvemos
+				bloque.modulate = Color(2, 2, 2) # Blanco brillante (HDR)
+	
+	# Efecto de Cámara (Shake) si es combo
+	if es_combo_grande:
+		aplicar_shake()
+	
+	# Esperamos a que termine la animación antes de devolver el control
+	await tween.finished
+
+func aplicar_shake():
+	var camera = get_viewport().get_camera_2d()
+	if camera:
+		var tween_cam = create_tween()
+		for i in range(10):
+			var offset_random = Vector2(randf_range(-5, 5), randf_range(-5, 5))
+			tween_cam.tween_property(camera, "offset", offset_random, 0.02)
+		tween_cam.tween_property(camera, "offset", Vector2.ZERO, 0.02)
+		
+func animar_columna_completada(col_x, es_combo_grande):
+	var tween = create_tween()
+	tween.set_parallel(true)
+	
+	for y in range(GRID_SIZE):
+		var bloque = grid_sprites[col_x][y]
+		
+		# --- CAMBIA ESTA LÍNEA TAMBIÉN ---
+		if is_instance_valid(bloque): # <--- Usa is_instance_valid aquí también
+		# -------------------------------
+			
+			tween.tween_property(bloque, "scale", Vector2(1.2, 1.2), 0.1)
+			tween.tween_property(bloque, "scale", Vector2.ZERO, 0.3).set_delay(0.1)
+			tween.tween_property(bloque, "modulate:a", 0.0, 0.3)
+			
+			if es_combo_grande:
+				bloque.modulate = Color(2, 2, 2)
+				
+	if es_combo_grande:
+		aplicar_shake()
+		
+	await tween.finished
