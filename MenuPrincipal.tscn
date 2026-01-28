@@ -141,3 +141,8 @@ theme_override_font_sizes/font_size = 35
 text = "👑 0"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0

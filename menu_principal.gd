@@ -3,7 +3,7 @@ extends Control
 # Aquí referenciamos los nodos (Asegúrate de que tus nodos se llaman así en la escena)
 @onready var label_record = $Label  # O como se llame tu Label del récord
 @onready var boton_jugar = $BotonJugar
-@onready var boton_opciones = $BotonOpciones
+# @onready var BotonOpciones = $BotonOpciones
 
 func _ready():
 	# 1. Cargar el Récord
@@ -13,7 +13,7 @@ func _ready():
 	
 	# 2. Conectar los botones
 	boton_jugar.pressed.connect(_on_jugar_pressed)
-	boton_opciones.pressed.connect(_on_opciones_pressed)
+	#BotonOpciones.pressed.connect(_on_opciones_pressed)
 
 func _on_jugar_pressed():
 	# Cambia a la pantalla de juego
