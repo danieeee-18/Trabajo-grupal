@@ -216,3 +216,43 @@ func check_game_over():
 		
 		# 5. OPCIONAL: Pausar el juego de fondo (si quieres)
 		# get_tree().paused = true
+
+
+# Función para el botón HOME / EXIT
+func _on_btn_home_pressed():
+	# 1. ¡DESCONGELA EL MOTOR!
+	# Si no haces esto, el menú principal cargará pero estará quieto.
+	get_tree().paused = false 
+	
+	# 2. Ahora sí, cambia de escena
+	get_tree().change_scene_to_file("res://MenuPrincipal.tscn")
+
+# Función para el botón REPLAY / RETRY
+func _on_btn_replay_pressed():
+	# 1. CERRAR EL MENÚ INMEDIATAMENTE
+	$CapaAjustes.visible = false 
+	
+	# 2. IMPORTANTE: Si pausaste el juego al abrir el menú, ¡despaúsalo!
+	# Si no haces esto, el juego se reiniciará pero se quedará congelado.
+	get_tree().paused = false
+	
+	# 3. AHORA SÍ, REINICIAR EL JUEGO
+	# (Si usas reload_current_scene, el juego parpadeará y empezará de nuevo)
+	get_tree().reload_current_scene()
+
+func _on_boton_cerrar_pressed():
+	# 1. Ocultar el menú (la capa azul)
+	$CapaAjustes.visible = false
+	
+	# 2. IMPORTANTE: Reanudar el juego
+	# Si habías pausado el juego al abrir el menú, esto hace que vuelva a moverse.
+	get_tree().paused = false
+
+
+func _on_btn_abrir_ajustes_pressed():
+	# 1. Hacer visible el menú (la capa azul)
+	$CapaAjustes.visible = true
+	
+	# 2. PAUSAR el juego
+	# Esto congela todo lo que tenga "Process Mode: Inherit"
+	get_tree().paused = true

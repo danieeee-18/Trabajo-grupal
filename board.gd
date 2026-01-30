@@ -25,7 +25,15 @@ func draw_background_grid():
 		for y in range(GRID_SIZE):
 			var slot = Sprite2D.new()
 			slot.texture = block_texture
-			slot.modulate = Color(0.2, 0.2, 0.2) 
+			
+			# ESCALA: 0.96 para dejar una línea fina entre casillas
+			slot.scale = Vector2(0.96, 0.96)
+			
+			# EL TRUCO DEL COLOR:
+			# Usamos BLANCO al 10% de opacidad.
+			# Al ponerse sobre el fondo negro (#111111), se ve GRIS GRAFITO.
+			slot.modulate = Color(1, 1, 1, 0.1) 
+			
 			slot.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
 			add_child(slot)
 

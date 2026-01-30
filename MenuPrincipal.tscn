@@ -4,7 +4,8 @@
 [ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_ba235"]
 
 [sub_resource type="Gradient" id="Gradient_0oe1n"]
-colors = PackedColorArray(0, 0.3529412, 0.654902, 1, 0.2901961, 0.5647059, 0.8862745, 1)
+offsets = PackedFloat32Array(0, 0.98)
+colors = PackedColorArray(0, 0.48235294, 0.9529412, 1, 0.2784314, 0.5686275, 0.99607843, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ba235"]
 gradient = SubResource("Gradient_0oe1n")
@@ -18,9 +19,9 @@ content_margin_left = 50.0
 content_margin_top = 20.0
 content_margin_right = 50.0
 content_margin_bottom = 35.0
-bg_color = Color(1, 0.62352943, 0.10980392, 1)
-border_width_bottom = 12
-border_color = Color(1, 0.62352943, 0.10980392, 1)
+bg_color = Color(1, 0.61443746, 0.03272814, 1)
+border_width_bottom = 8
+border_color = Color(0.73410374, 0.56212294, 0.38070887, 1)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
@@ -28,10 +29,15 @@ corner_radius_bottom_left = 20
 shadow_size = 10
 shadow_offset = Vector2(0, 5)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ba235"]
-content_margin_top = 10.0
-bg_color = Color(0, 0.8117647, 0.6156863, 1)
-border_color = Color(0, 0.56078434, 0.41960785, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5dpk2"]
+bg_color = Color(0.08216285, 0.77946645, 0.7951356, 1)
+border_width_bottom = 10
+border_color = Color(0.050067358, 0.5519778, 0.5655069, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 9
 
 [node name="MenuPrincipal" type="Control"]
 layout_mode = 3
@@ -92,20 +98,22 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -159.0
 offset_top = 15.0
-offset_right = 181.0
-offset_bottom = 139.0
+offset_right = 191.0
+offset_bottom = 128.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 0.4, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.8346143, 0.8346143, 0.8346143, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 0.50980395, 1)
-theme_override_colors/font_outline_color = Color(0, 0.2, 0.4, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 50
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.83839667, 0.44408447, 3.85046e-07, 1)
+theme_override_colors/font_hover_color = Color(0.60324824, 0.6032482, 0.6032482, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 42
 theme_override_styles/normal = SubResource("StyleBoxFlat_0oe1n")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_ba235")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_0oe1n")
 theme_override_styles/hover = SubResource("StyleBoxFlat_0oe1n")
-text = "∞ Classic"
+text = "  ♾️  Classic 
+"
+alignment = 0
 
 [node name="BotonOpciones" type="Button" parent="."]
 layout_mode = 1
@@ -116,20 +124,20 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -157.0
 offset_top = 201.0
-offset_right = 182.0
-offset_bottom = 325.0
+offset_right = 193.0
+offset_bottom = 315.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 0.4, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(0.8346143, 0.8346143, 0.8346143, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 0.50980395, 1)
-theme_override_colors/font_outline_color = Color(0, 0.2, 0.4, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 50
-theme_override_styles/normal = SubResource("StyleBoxFlat_0oe1n")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_ba235")
-theme_override_styles/hover = SubResource("StyleBoxFlat_0oe1n")
-text = "∞ Options"
+theme_override_colors/font_hover_color = Color(0.6913568, 0.6913567, 0.69135773, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 42
+theme_override_styles/normal = SubResource("StyleBoxFlat_5dpk2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5dpk2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5dpk2")
+text = " ⚙️ Options"
 
 [node name="LabelRecord" type="Label" parent="."]
 layout_mode = 0
@@ -147,3 +155,4 @@ vertical_alignment = 1
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
+theme_override_colors/font_color = Color(0.6356103, 0.9302399, 0.9997811, 1)

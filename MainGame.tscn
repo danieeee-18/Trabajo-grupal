@@ -1,11 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://4dwh20dufcq5"]
+[gd_scene load_steps=16 format=3 uid="uid://4dwh20dufcq5"]
 
 [ext_resource type="PackedScene" uid="uid://ckrmwddkl3sn3" path="res://board.tscn" id="1_3tbxw"]
 [ext_resource type="Script" uid="uid://buhmj71d7hac7" path="res://main_game.gd" id="1_ws5ob"]
 [ext_resource type="PackedScene" uid="uid://bdo5b0hnj41gs" path="res://Piece.tscn" id="2_e3m3f"]
+[ext_resource type="Script" uid="uid://dwvf47fvagd27" path="res://button.gd" id="4_bqqt8"]
 
 [sub_resource type="Gradient" id="Gradient_ws5ob"]
-colors = PackedColorArray(0, 0.4, 0.8, 1, 1, 0.99215686, 0.89411765, 1)
+colors = PackedColorArray(7.52765e-05, 0.4820559, 0.9541736, 1, 0.2788064, 0.5682157, 0.99752694, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_bqqt8"]
 gradient = SubResource("Gradient_ws5ob")
@@ -14,12 +15,68 @@ fill_to = Vector2(1, 1)
 metadata/_snap_count = 2
 metadata/_snap_enabled = true
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ws5ob"]
+bg_color = Color(0.21050721, 0.21050721, 0.21050721, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
 [sub_resource type="LabelSettings" id="LabelSettings_ws5ob"]
 font_size = 85
 font_color = Color(1, 0.99215686, 0.89411765, 1)
 outline_size = 10
 outline_color = Color(1, 0.99215686, 0.89411765, 1)
 shadow_size = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bqqt8"]
+bg_color = Color(0.30980393, 0.6745098, 0.99607843, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_size = 20
+shadow_offset = Vector2(0, 10)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pv6b4"]
+bg_color = Color(1, 0.26666668, 0.26666668, 1)
+border_width_bottom = 4
+border_color = Color(0.6, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8dnxm"]
+bg_color = Color(0.4627451, 0.8784314, 0.2, 1)
+border_width_bottom = 4
+border_color = Color(0.2901961, 0.56078434, 0.13333334, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v3hs3"]
+bg_color = Color(1, 0.4, 0.4, 1)
+
+[sub_resource type="FontFile" id="FontFile_ws5ob"]
+cache/0/50/0/ascent = 0.0
+cache/0/50/0/descent = 0.0
+cache/0/50/0/underline_position = 0.0
+cache/0/50/0/underline_thickness = 0.0
+cache/0/50/0/scale = 1.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8qpgq"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x5ji8"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="MainGame" type="Node2D"]
 script = ExtResource("1_ws5ob")
@@ -29,6 +86,13 @@ offset_right = 722.0
 offset_bottom = 1282.0
 texture = SubResource("GradientTexture2D_bqqt8")
 metadata/_edit_use_anchors_ = true
+
+[node name="FondoTablero" type="Panel" parent="."]
+offset_left = 100.0
+offset_top = 243.0
+offset_right = 625.0
+offset_bottom = 768.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ws5ob")
 
 [node name="Board" parent="." instance=ExtResource("1_3tbxw")]
 position = Vector2(140, 280)
@@ -63,3 +127,206 @@ vertical_alignment = 1
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(361, 643)
+
+[node name="CapaAjustes" type="CanvasLayer" parent="."]
+process_mode = 3
+visible = false
+
+[node name="FondoOScuro" type="ColorRect" parent="CapaAjustes"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5882353)
+
+[node name="CajaMenu" type="Panel" parent="CapaAjustes"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -246.0
+offset_top = -404.0
+offset_right = 254.0
+offset_bottom = 246.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bqqt8")
+
+[node name="Label" type="Label" parent="CapaAjustes/CajaMenu"]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 34.0
+offset_right = 366.0
+offset_bottom = 103.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 50
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="ListaOpciones" type="VBoxContainer" parent="CapaAjustes/CajaMenu"]
+layout_direction = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.52400005
+anchor_top = 0.26000002
+anchor_right = 0.52400005
+anchor_bottom = 0.26000002
+offset_left = -210.00003
+offset_top = -20.000015
+offset_right = 209.99997
+offset_bottom = 70.999985
+theme_override_constants/separation = 25
+
+[node name="FilaSonido" type="HBoxContainer" parent="CapaAjustes/CajaMenu/ListaOpciones"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaSonido"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Sound"
+
+[node name="Control" type="Control" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaSonido"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaSonido"]
+clip_contents = true
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_pv6b4")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8dnxm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_v3hs3")
+toggle_mode = true
+button_pressed = true
+text = "🔈"
+script = ExtResource("4_bqqt8")
+
+[node name="FilaMusica" type="HBoxContainer" parent="CapaAjustes/CajaMenu/ListaOpciones"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaMusica"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Music"
+
+[node name="Control" type="Control" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaMusica"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaMusica"]
+clip_contents = true
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_pv6b4")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8dnxm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_v3hs3")
+toggle_mode = true
+button_pressed = true
+text = "🔈"
+script = ExtResource("4_bqqt8")
+
+[node name="FilaVibracion" type="HBoxContainer" parent="CapaAjustes/CajaMenu/ListaOpciones"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaVibracion"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Vibration"
+
+[node name="Control" type="Control" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaVibracion"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaVibracion"]
+clip_contents = true
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_pv6b4")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8dnxm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_v3hs3")
+toggle_mode = true
+button_pressed = true
+text = "🔈"
+script = ExtResource("4_bqqt8")
+
+[node name="FilaHome" type="HBoxContainer" parent="CapaAjustes/CajaMenu/ListaOpciones"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaHome"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Home"
+
+[node name="Control" type="Control" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaHome"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BtnHome" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaHome"]
+process_mode = 3
+clip_contents = true
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_8dnxm")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8dnxm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_v3hs3")
+text = "🏠"
+
+[node name="FilaReplay" type="HBoxContainer" parent="CapaAjustes/CajaMenu/ListaOpciones"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Replay"
+
+[node name="Control" type="Control" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BtnReplay" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay"]
+clip_contents = true
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_8dnxm")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8dnxm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_v3hs3")
+text = "🔁"
+
+[node name="BotonCerrar" type="Button" parent="CapaAjustes"]
+anchors_preset = -1
+anchor_left = 0.772
+anchor_top = 0.23600002
+anchor_right = 0.77800006
+anchor_bottom = 0.24400002
+offset_left = -11.840027
+offset_top = -21.080017
+offset_right = 16.839966
+offset_bottom = 31.679993
+theme_override_colors/font_color = Color(0.3553136, 0.35531354, 0.35531357, 1)
+theme_override_fonts/font = SubResource("FontFile_ws5ob")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_8qpgq")
+text = "X"
+alignment = 2
+
+[node name="BtnAbrirAjustes" type="Button" parent="."]
+offset_left = 590.0
+offset_top = 5.0
+offset_right = 640.0
+offset_bottom = 36.0
+scale = Vector2(2.75, 2.75)
+theme_override_styles/normal = SubResource("StyleBoxFlat_x5ji8")
+text = "⚙️"
+
+[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaHome/BtnHome" to="." method="_on_btn_home_pressed"]
+[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay/BtnReplay" to="." method="_on_btn_replay_pressed"]
+[connection signal="pressed" from="CapaAjustes/BotonCerrar" to="." method="_on_boton_cerrar_pressed"]
+[connection signal="pressed" from="BtnAbrirAjustes" to="." method="_on_btn_abrir_ajustes_pressed"]
