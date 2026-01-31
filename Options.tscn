@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bpxiy6tufdg3v"]
+[gd_scene load_steps=9 format=3 uid="uid://bpxiy6tufdg3v"]
 
 [ext_resource type="Script" uid="uid://deo3bndqks7th" path="res://options.gd" id="1_r314q"]
 [ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_yia4p"]
@@ -12,6 +12,36 @@ fill_from = Vector2(0.33333334, 0.22222222)
 fill_to = Vector2(0.3888889, 1)
 metadata/_snap_enabled = true
 metadata/_snap_count = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ywiuv"]
+bg_color = Color(0.72156864, 0.5254902, 0.043137256, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.84313726, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.003921569, 0.003921569, 0.003921569, 0.34509805)
+shadow_size = 5
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2r1l1"]
+bg_color = Color(0.5019608, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.84313726, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.003921569, 0.003921569, 0.003921569, 0.34509805)
+shadow_size = 5
+shadow_offset = Vector2(0, 3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r314q"]
 content_margin_left = 50.0
@@ -51,20 +81,32 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_vxhgq")
 
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0.101960786, 0.10980392, 0.17254902, 0.8862745)
+
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.056
 anchor_bottom = 0.031000001
-offset_left = 128.0
-offset_top = 473.0
-offset_right = 320.68
-offset_bottom = 606.32
+offset_left = 137.0
+offset_top = 301.0
+offset_right = 346.68
+offset_bottom = 553.32
 scale = Vector2(2, 2)
+theme_override_constants/separation = 20
 
 [node name="CheckButtonSonido" type="CheckButton" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.7764706, 0.7764706, 0.7764706, 1)
 theme_override_colors/font_outline_color = Color(0.078431375, 0.11764706, 0.1882353, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("2_yia4p")
@@ -75,6 +117,7 @@ text = "Sonido
 [node name="CheckButtonMusica" type="CheckButton" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.7764706, 0.7764706, 0.7764706, 1)
 theme_override_colors/font_outline_color = Color(0.078431375, 0.11764706, 0.1882353, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("2_yia4p")
@@ -84,11 +127,36 @@ text = "Música"
 [node name="CheckButtonVibra" type="CheckButton" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.7764706, 0.7764706, 0.7764706, 1)
 theme_override_colors/font_outline_color = Color(0.078431375, 0.11764706, 0.1882353, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("2_yia4p")
 theme_override_font_sizes/font_size = 30
 text = "Vibración"
+
+[node name="BotonReset" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.875, 0.875, 0.875, 1)
+theme_override_fonts/font = ExtResource("2_yia4p")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ywiuv")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ywiuv")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_ywiuv")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ywiuv")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_ywiuv")
+text = "Reiniciar récord"
+
+[node name="BotonEliminar" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8745098, 0.8745098, 0.8745098, 1)
+theme_override_fonts/font = ExtResource("2_yia4p")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2r1l1")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2r1l1")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_2r1l1")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_2r1l1")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_2r1l1")
+text = "Eliminar cuenta"
 
 [node name="BotonVolver" type="Button" parent="."]
 layout_mode = 1
@@ -97,10 +165,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -164.0
-offset_top = 267.0
-offset_right = 175.0
-offset_bottom = 391.0
+offset_left = -150.0
+offset_top = 305.0
+offset_right = 189.0
+offset_bottom = 429.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -117,10 +185,10 @@ text = "∞ Volver
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 224.0
-offset_top = 158.0
-offset_right = 512.0
-offset_bottom = 233.0
+offset_left = 231.0
+offset_top = 172.0
+offset_right = 519.0
+offset_bottom = 247.0
 theme_override_fonts/normal_font = ExtResource("2_yia4p")
 theme_override_font_sizes/normal_font_size = 70
 bbcode_enabled = true

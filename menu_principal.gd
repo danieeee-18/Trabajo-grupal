@@ -6,19 +6,20 @@ extends Control
 # @onready var BotonOpciones = $BotonOpciones
 
 func _ready():
-	# 1. Cargar el Récord
-	# (Si te da error aquí, revisa que tu Label del récord se llame igual que arriba)
-	if label_record:
-		label_record.text = "👑: " + str(Global.high_score)
-	
-	# 2. Conectar los botones
-	boton_jugar.pressed.connect(_on_jugar_pressed)
-	#BotonOpciones.pressed.connect(_on_opciones_pressed)
+	# Actualizamos el récord si el nodo existe
+	if has_node("LabelRecord"):
+		$LabelRecord.text = "👑: " + str(Global.high_score)
 
-func _on_jugar_pressed():
-	# Cambia a la pantalla de juego
+func _on_play_pressed() -> void:
 	get_tree().change_scene_to_file("res://MainGame.tscn")
 
-func _on_opciones_pressed():
-	# Cambia a la pantalla de opciones
+func _on_options_pressed() -> void:
+	# Esta es la línea que arregla tu duda:
 	get_tree().change_scene_to_file("res://Options.tscn")
+
+func _on_exit_pressed() -> void:
+	get_tree().quit()
+
+
+func _on_boton_jugar_pressed() -> void:
+	pass # Replace with function body.
