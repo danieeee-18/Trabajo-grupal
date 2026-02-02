@@ -193,3 +193,5 @@ theme_override_fonts/normal_font = ExtResource("2_yia4p")
 theme_override_font_sizes/normal_font_size = 70
 bbcode_enabled = true
 text = "[center][color=#FFD700][shake rate=5 level=10]AJUSTES[/shake][/color][/center]"
+
+[connection signal="pressed" from="BotonVolver" to="." method="_on_boton_volver_pressed"]

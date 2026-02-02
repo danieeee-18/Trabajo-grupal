@@ -8,7 +8,8 @@ extends Control
 func _ready():
 	# Actualizamos el récord si el nodo existe
 	if has_node("LabelRecord"):
-		$LabelRecord.text = "👑: " + str(Global.high_score)
+		# He quitado los dos puntos (:). Ahora solo hay un espacio después de la corona.
+		$LabelRecord.text = "👑 " + str(Global.high_score)
 
 func _on_play_pressed() -> void:
 	get_tree().change_scene_to_file("res://MainGame.tscn")

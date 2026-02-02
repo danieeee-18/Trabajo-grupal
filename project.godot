@@ -14,6 +14,10 @@ config/name="BlockBust"
 run/main_scene="uid://dwuh734k7n0qn"
 config/features=PackedStringArray("4.5", "Forward Plus")
 
+[audio]
+
+buses/default_bus_layout=""
+
 [autoload]
 
 Global="*res://Global.gd"
