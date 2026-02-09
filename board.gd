@@ -1,7 +1,7 @@
 extends Node2D
 
 # --- SEÑAL NUEVA: Avisa cuando ganamos puntos ---
-signal puntos_ganados(cantidad)
+signal puntos_ganados(puntos)
 
 var block_texture = preload("res://block_texture.tres")
 
@@ -68,8 +68,7 @@ func place_piece(start_x, start_y, cells_shape, color):
 	puntos_ganados.emit(cells_shape.size())
 	
 	# 3. Comprobamos líneas
-	check_and_clear_lines()
-
+	await check_and_clear_lines()
 func check_and_clear_lines():
 	var rows_to_clear = []
 	var cols_to_clear = []
@@ -249,3 +248,50 @@ func animar_columna_completada(col_x, es_combo_grande):
 		aplicar_shake()
 		
 	await tween.finished
+	
+	
+
+# --- ANIMACIONES DEL TABLERO ---
+
+# En Board.gd
+
+func animar_ola_entrada():
+	var celdas = get_children()
+	
+	if celdas.size() == 0: return
+	
+	print("🌊 Lanzando ola lenta desde Arriba-Izquierda...")
+	
+	for celda in celdas:
+		if celda is Node2D or celda is Control:
+			if "Marker" in celda.name: continue 
+			
+			# 1. Calculamos posición en la cuadrícula
+			var grid_pos = celda.position / 64 
+			
+			# 2. FÓRMULA DE OLA CLÁSICA (Arriba-Izquierda -> Abajo-Derecha)
+			# Sumamos X + Y: Las celdas cerca del (0,0) empiezan antes.
+			var indice_ola = grid_pos.x + grid_pos.y
+			
+			# 3. VELOCIDAD
+			# Multiplicamos por 0.1 (Cuanto más alto el número, más lenta la ola)
+			var delay_final = indice_ola * 0.1 
+			
+			animar_celda(celda, delay_final)
+
+func animar_celda(nodo, tiempo_espera):
+	# Guardamos su color original (blanco o el que tenga)
+	var color_final = nodo.modulate
+	
+	# ESTADO INICIAL (Antes de aparecer)
+	nodo.scale = Vector2(0, 0) # Invisible (diminuto)
+	nodo.modulate = Color(2, 0.5, 1) # Un color inicial (ej. morado/rosa brillante)
+	
+	# EL TWEEN (La animación)
+	var tween = create_tween()
+	tween.tween_interval(tiempo_espera) # Esperar su turno
+	
+	# Efecto de "Pop" elástico
+	tween.set_parallel(true)
+	tween.tween_property(nodo, "scale", Vector2(1, 1), 0.4).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(nodo, "modulate", color_final, 0.4) # Volver a su color normal
