@@ -3,19 +3,30 @@ extends Node2D
 const GAME_OVER_SCENE = preload("res://GameOver.tscn")
 const FUENTE_HYPE = preload("res://Luckiest_Guy/LuckiestGuy-Regular.ttf")
 const FUENTE_MODERNA = preload("res://Fuentes/Montserrat-Black.ttf")
-# REFERENCIAS A LOS NODOS (Tal cual están en tu escena)
+
+# --- REFERENCIAS A LOS NODOS ---
 @onready var board = $Board
 @onready var pieces_array = [$Piece, $Piece2, $Piece3]
 @onready var markers = [$PosicionPieza1, $PosicionPieza2, $PosicionPieza3]
 @onready var score_label = $ScoreLabel
 @onready var capa_ajustes = $CapaAjustes
 
-# Variables de juego
+# CÁMARA (Asegúrate de tener un nodo Camera2D en la escena)
+@onready var camera = $Camera2D
+
+# SONIDOS (Asegúrate de tener estos nodos AudioStreamPlayer)
+@onready var sfx_pop = $AudioPop
+@onready var sfx_linea = $AudioLinea
+@onready var sfx_combo = $AudioCombo
+@onready var sfx_gameover = $AudioGameOver
+
+# --- VARIABLES DE JUEGO ---
 var start_positions = {}
 var score = 0
-# --- NUEVAS VARIABLES DE COMBO ---
-var combo_actual = 0         # Cuenta cuántas veces seguidas has roto líneas
-var hubo_puntos_turno = false # Nos dice si en este movimiento rompimos algo
+var combo_actual = 0          # Cuenta la racha
+var hubo_puntos_turno = false # Chivato de puntos
+var fuerza_temblor = 0.0      # Intensidad del terremoto actual
+
 # --- BASE DE DATOS DE PIEZAS ---
 var shapes_database = [
 	{"name": "Line_H_2", "color": Color.PINK, "cells": [Vector2i(0,0), Vector2i(1,0)]},
@@ -66,27 +77,47 @@ func _ready():
 		start_positions[p] = markers[i].global_position
 	
 	spawn_new_hand()
-	# 1. Iniciar la ola en el tablero
-	# ... (todo lo anterior del board y conexiones) ...
 	
+	# Iniciar la ola en el tablero
 	if board.has_method("animar_ola_entrada"):
 		board.animar_ola_entrada()
 	
-	# TIEMPOS MÁS RÁPIDOS
+	# INTRODUCCIÓN CON HYPE
 	await get_tree().create_timer(0.3).timeout
-	# Color: Naranja Neón Brillante
 	mostrar_frase_hype("READY?", Color(1, 0.5, 0)) 
 	
-	await get_tree().create_timer(0.6).timeout # Menos espera entre palabras
-	# Color: Verde Lima Radioactivo
+	await get_tree().create_timer(0.6).timeout
 	mostrar_frase_hype("GO!", Color(0.2, 1, 0.2))
+
+# --- FUNCIÓN PROCESS PARA EL TEMBLOR ---
+func _process(delta):
+	if fuerza_temblor > 0:
+		# Reducimos la fuerza poco a poco
+		fuerza_temblor = lerp(fuerza_temblor, 0.0, 10.0 * delta)
+		
+		# Movemos la cámara aleatoriamente
+		if camera:
+			camera.offset = Vector2(
+				randf_range(-fuerza_temblor, fuerza_temblor),
+				randf_range(-fuerza_temblor, fuerza_temblor)
+			)
+		
+		# Si es casi cero, lo paramos
+		if fuerza_temblor < 0.5:
+			fuerza_temblor = 0
+			if camera: camera.offset = Vector2.ZERO
+
+# --- FUNCIÓN PARA ACTIVAR EL TEMBLOR ---
+func aplicar_temblor(intensidad):
+	fuerza_temblor += intensidad
+
+# --- LÓGICA DE JUEGO ---
+
 func _on_puntos_ganados(puntos):
 	# 1. Avisamos de que en este turno SI hubo puntos
 	hubo_puntos_turno = true
 	
 	# 2. Calculamos el multiplicador
-	# Si ya tenías racha de 1, ahora tendrás racha de 2, así que multiplicamos x2.
-	# (Usamos max(1, ...) para que como mínimo sea x1)
 	var multiplicador = max(1, combo_actual + 1)
 	
 	# 3. Sumamos puntos con PREMIO
@@ -157,6 +188,8 @@ func assign_random_shape(piece_node):
 	var random_idx = randi() % shapes_database.size()
 	var data = shapes_database[random_idx]
 	piece_node.set_configuration(data["cells"], data["color"])
+
+# --- LÓGICA MAESTRA DE COLOCACIÓN Y SONIDO ---
 func _on_pieza_soltada(which_piece, posicion_global):
 	var cell_size = 64
 	var local_pos = posicion_global - board.global_position
@@ -165,31 +198,38 @@ func _on_pieza_soltada(which_piece, posicion_global):
 	
 	if board.can_place_piece(grid_x, grid_y, which_piece.cells):
 		
-		# 1. REINICIO ESTRICTO: Asumimos que NO hay puntos especiales aún
-		hubo_puntos_turno = false 
+		# 1. SONIDO POP (Inmediato)
+		if sfx_pop:
+			sfx_pop.pitch_scale = randf_range(0.9, 1.1)
+			sfx_pop.play()
 		
-		# Guardamos la puntuación ANTES de poner la pieza
+		# REINICIO ESTRICTO
+		hubo_puntos_turno = false 
 		var puntuacion_antes = score
 		
-		# 2. COLOCAR LA PIEZA
+		# 2. COLOCAR LA PIEZA (Con AWAIT)
 		await board.place_piece(grid_x, grid_y, which_piece.cells, which_piece.piece_color)
 		
-		# 3. CÁLCULO INTELIGENTE DEL COMBO
-		# Calculamos cuántos puntos hemos ganado en este movimiento exacto
+		# 3. CÁLCULO DE RESULTADOS
 		var diferencia_puntos = score - puntuacion_antes
-		
-		# TRUCO: Si ganas poquitos puntos (ej. menos de 10 o 20), es que solo has puesto ficha.
-		# Si ganas más (ej. 100), es que has roto línea.
-		# Ajusta este '15' según cuántos puntos da poner una ficha normal en tu juego.
 		var es_jugada_maestra = diferencia_puntos > 20 
 		
 		if es_jugada_maestra:
 			combo_actual += 1
-			# SOLO mostramos el texto si llevamos 2 o más seguidas
-			if combo_actual > 1: 
+			# DECIDIMOS SONIDO Y VISUALES AQUÍ
+			if combo_actual > 1:
+				# --- COMBO ---
+				if sfx_combo:
+					sfx_combo.pitch_scale = 1.0 + (combo_actual * 0.1)
+					sfx_combo.play()
 				mostrar_combo_visual(combo_actual)
+				aplicar_temblor(12.0)
+			else:
+				# --- LÍNEA NORMAL ---
+				if sfx_linea:
+					sfx_linea.play()
+				aplicar_temblor(6.0)
 		else:
-			# Si ha sido una jugada normal (poner ficha sin romper), el combo se corta
 			combo_actual = 0
 			
 		which_piece.visible = false
@@ -203,6 +243,7 @@ func _on_pieza_soltada(which_piece, posicion_global):
 	else:
 		var tween = create_tween()
 		tween.tween_property(which_piece, "global_position", start_positions[which_piece], 0.2).set_trans(Tween.TRANS_SINE)
+
 func check_hand_empty():
 	if check_hand_empty_silent():
 		await get_tree().create_timer(0.3).timeout
@@ -222,6 +263,7 @@ func check_game_over():
 				break
 	
 	if not can_move:
+		if sfx_gameover: sfx_gameover.play()
 		Global.actualizar_record(score)
 		var game_over_instance = GAME_OVER_SCENE.instantiate()
 		if game_over_instance.has_method("set_score"):
@@ -247,14 +289,12 @@ func _on_btn_abrir_ajustes_pressed():
 	capa_ajustes.visible = true
 	get_tree().paused = true
 
-# --- SISTEMA DE HYPE (FRASES EN PANTALLA) ---
-# En MainGame.gd
+# --- SISTEMA VISUAL (HYPE Y COMBOS) ---
+
 func mostrar_frase_hype(texto, color_texto):
-	# 1. Crear la etiqueta PRINCIPAL
 	var label = Label.new()
 	label.text = texto
 	
-	# Configuración Visual
 	var settings = LabelSettings.new()
 	settings.font = FUENTE_MODERNA
 	settings.font_size = 90
@@ -264,76 +304,52 @@ func mostrar_frase_hype(texto, color_texto):
 	settings.shadow_offset = Vector2(5, 5)
 	label.label_settings = settings
 	
-	# 2. POSICIONAMIENTO (CENTRO + SUBIDA)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.anchors_preset = Control.PRESET_CENTER
 	
-	# Calculamos el centro de la pantalla
 	var pantalla_centro = get_viewport_rect().size / 2
-	
-	# --- AQUÍ ESTÁ EL CAMBIO ---
-	# Restamos 200 píxeles a la altura (Y) para subirlo.
-	# Si lo quieres MÁS arriba, pon 300. Si es mucho, pon 100.
-	pantalla_centro.y -= 200 
+	pantalla_centro.y -= 200 # Ajuste hacia arriba
 	
 	label.global_position = pantalla_centro
-	
-	# Ajuste de pivote para que crezca desde su propio centro
 	label.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	label.grow_vertical = Control.GROW_DIRECTION_BOTH
-	
-	# Capa superior
 	label.z_index = 100 
 	add_child(label)
 	
-	# 3. EL EFECTO "MINI EXPLOSIÓN" (Shockwave)
+	# Shockwave
 	var shockwave = label.duplicate()
 	shockwave.modulate = color_texto
 	shockwave.z_index = 99
 	add_child(shockwave)
 	
-	# Animación Shockwave
 	var t_shock = create_tween()
 	shockwave.scale = Vector2(1, 1)
 	t_shock.parallel().tween_property(shockwave, "scale", Vector2(2.5, 2.5), 0.25).set_ease(Tween.EASE_OUT)
 	t_shock.parallel().tween_property(shockwave, "modulate:a", 0.0, 0.25)
 	t_shock.tween_callback(shockwave.queue_free)
 	
-	# 4. ANIMACIÓN FRENÉTICA (TEXTO)
+	# Animación Principal
 	var tween = create_tween()
 	label.scale = Vector2(0, 0)
 	label.rotation_degrees = randf_range(-10, 10)
 	
-	# Fase 1: Aparece de golpe
 	tween.tween_property(label, "scale", Vector2(1.2, 1.2), 0.2).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
-	
-	# Fase 2: Pausa breve
 	tween.parallel().tween_property(label, "rotation_degrees", 0, 0.2)
 	tween.tween_interval(0.2) 
-	
-	# Fase 3: Desaparece rápido
 	tween.tween_property(label, "scale", Vector2(0, 0), 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	tween.tween_callback(label.queue_free)
 
 func mostrar_combo_visual(valor_combo):
-	# 1. Elegir Color según la intensidad
-	var color_combo = Color.YELLOW # Por defecto x2
+	var color_combo = Color.YELLOW
 	var texto_extra = "COMBO"
 	
 	if valor_combo == 3:
-		color_combo = Color(1, 0.5, 0) # Naranja
+		color_combo = Color(1, 0.5, 0)
 		texto_extra = "SUPER"
 	elif valor_combo >= 4:
-		color_combo = Color(1, 0, 0) # Rojo puro
+		color_combo = Color(1, 0, 0)
 		texto_extra = "ULTRA"
 	
-	# 2. Texto final (Ej: "SUPER x3!")
 	var texto_final = texto_extra + "\nx" + str(valor_combo) + "!"
-	
-	# 3. Usamos tu función de Hype existente (reutilizar código es de sabios)
-	# Le pasamos el texto y el color que hemos elegido
 	mostrar_frase_hype(texto_final, color_combo)
-	
-	# 4. (Opcional) Sonido de subida de tono
-	# Si tuvieras sonido, aquí haríamos: $SonidoCombo.pitch_scale = 1.0 + (valor_combo * 0.1)

@@ -1,9 +1,13 @@
-[gd_scene load_steps=16 format=3 uid="uid://4dwh20dufcq5"]
+[gd_scene load_steps=20 format=3 uid="uid://4dwh20dufcq5"]
 
 [ext_resource type="PackedScene" uid="uid://ckrmwddkl3sn3" path="res://board.tscn" id="1_3tbxw"]
 [ext_resource type="Script" uid="uid://buhmj71d7hac7" path="res://main_game.gd" id="1_ws5ob"]
 [ext_resource type="PackedScene" uid="uid://bdo5b0hnj41gs" path="res://Piece.tscn" id="2_e3m3f"]
 [ext_resource type="Script" uid="uid://dwvf47fvagd27" path="res://button.gd" id="4_bqqt8"]
+[ext_resource type="AudioStream" uid="uid://fksgcpc4nf7e" path="res://sonidos/pop.wav" id="5_v3hs3"]
+[ext_resource type="AudioStream" uid="uid://bm2jff3dr0o4v" path="res://sonidos/linea.wav" id="6_x5ji8"]
+[ext_resource type="AudioStream" uid="uid://bc2qce0csmhsc" path="res://sonidos/combo.wav" id="7_o8l48"]
+[ext_resource type="AudioStream" uid="uid://jf53jpo7s36x" path="res://sonidos/gameover.wav" id="8_0v7qb"]
 
 [sub_resource type="Gradient" id="Gradient_ws5ob"]
 colors = PackedColorArray(7.52765e-05, 0.4820559, 0.9541736, 1, 0.2788064, 0.5682157, 0.99752694, 1)
@@ -325,6 +329,18 @@ offset_bottom = 36.0
 scale = Vector2(2.75, 2.75)
 theme_override_styles/normal = SubResource("StyleBoxFlat_x5ji8")
 text = "⚙️"
+
+[node name="AudioPop" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_v3hs3")
+
+[node name="AudioLinea" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_x5ji8")
+
+[node name="AudioCombo" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_o8l48")
+
+[node name="AudioGameOver" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_0v7qb")
 
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaHome/BtnHome" to="." method="_on_btn_home_pressed"]
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay/BtnReplay" to="." method="_on_btn_replay_pressed"]
