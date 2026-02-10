@@ -16,11 +16,12 @@ config/features=PackedStringArray("4.5", "Forward Plus")
 
 [audio]
 
-buses/default_bus_layout=""
+buses/default_bus_layout="uid://c8h7k0wwnkt5a"
 
 [autoload]
 
 Global="*res://Global.gd"
+AudioManager="*res://AudioManager.tscn"
 
 [display]
 

@@ -10,6 +10,9 @@ func _ready():
 	if has_node("LabelRecord"):
 		# He quitado los dos puntos (:). Ahora solo hay un espacio después de la corona.
 		$LabelRecord.text = "👑 " + str(Global.high_score)
+		
+		# Le decimos al DJ que ponga el disco de Menú
+	AudioManager.poner_musica_menu()
 
 func _on_play_pressed() -> void:
 	get_tree().change_scene_to_file("res://MainGame.tscn")

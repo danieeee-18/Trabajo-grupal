@@ -332,15 +332,19 @@ text = "⚙️"
 
 [node name="AudioPop" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_v3hs3")
+bus = &"Efectos"
 
 [node name="AudioLinea" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_x5ji8")
+bus = &"Efectos"
 
 [node name="AudioCombo" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_o8l48")
+bus = &"Efectos"
 
 [node name="AudioGameOver" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_0v7qb")
+bus = &"Efectos"
 
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaHome/BtnHome" to="." method="_on_btn_home_pressed"]
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay/BtnReplay" to="." method="_on_btn_replay_pressed"]

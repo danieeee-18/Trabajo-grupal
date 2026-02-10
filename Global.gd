@@ -1,58 +1,55 @@
 extends Node
 
-# Archivo donde se guardarán los datos
-const SAVE_PATH = "user://savegame.save"
-
-# Variables del juego
+# VARIABLES GLOBALES
 var high_score = 0
 var sonido_activado = true
 var musica_activada = true
 var vibracion_activada = true
 
+# RUTA DE GUARDADO
+const SAVE_PATH = "user://savegame.save"
+
 func _ready():
 	load_game()
-
-func actualizar_record(puntos_nuevos):
-	if puntos_nuevos > high_score:
-		high_score = puntos_nuevos
-		save_game()
-
-# --- SISTEMA DE GUARDADO ---
+	# Aplicamos el audio nada más cargar
+	aplicar_audio_guardado()
 
 func save_game():
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	var data = {
 		"high_score": high_score,
-		"sonido": sonido_activado,
-		"musica": musica_activada,
-		"vibracion": vibracion_activada
+		"sonido_activado": sonido_activado,
+		"musica_activada": musica_activada,
+		"vibracion_activada": vibracion_activada
 	}
-	var json_string = JSON.stringify(data)
-	file.store_line(json_string)
-	print("Partida guardada.")
+	file.store_var(data)
 
 func load_game():
-	if not FileAccess.file_exists(SAVE_PATH):
-		print("No hay partida guardada previa.")
-		return
-
-	var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
-	var json_string = file.get_line()
-	
-	var json = JSON.new()
-	var parse_result = json.parse(json_string)
-	
-	# AQUÍ ES DONDE TE DABA EL ERROR ANTES
-	# Fíjate que este 'if' está empujado a la derecha (dentro de la función)
-	if parse_result == OK:
-		var data = json.get_data()
+	if FileAccess.file_exists(SAVE_PATH):
+		var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
+		var data = file.get_var()
 		
-		# Aquí aplicamos el truco del int() para evitar el 0.0
-		high_score = int(data.get("high_score", 0))
+		# --- ¡AQUÍ ESTÁ EL ARREGLO! ---
+		# Verificamos si los datos son válidos antes de usarlos
+		if data == null or not (data is Dictionary):
+			print("Archivo de guardado antiguo o corrupto. Se usarán valores por defecto.")
+			return # Salimos de la función y usamos los valores iniciales (true/0)
 		
-		sonido_activado = data.get("sonido", true)
-		musica_activada = data.get("musica", true)
-		vibracion_activada = data.get("vibracion", true)
-		print("Datos cargados correctamente. Récord: ", high_score)
+		# Si llegamos aquí, los datos son seguros
+		high_score = data.get("high_score", 0)
+		sonido_activado = data.get("sonido_activado", true)
+		musica_activada = data.get("musica_activada", true)
+		vibracion_activada = data.get("vibracion_activada", true)
 	else:
-		print("Error al leer el archivo de guardado.")
+		print("No hay datos guardados, usando valores por defecto.")
+
+# --- APLICAR AUDIO ---
+func aplicar_audio_guardado():
+	var bus_musica = AudioServer.get_bus_index("Musica")
+	var bus_efectos = AudioServer.get_bus_index("Efectos")
+	
+	if bus_musica != -1:
+		AudioServer.set_bus_mute(bus_musica, not musica_activada)
+	
+	if bus_efectos != -1:
+		AudioServer.set_bus_mute(bus_efectos, not sonido_activado)

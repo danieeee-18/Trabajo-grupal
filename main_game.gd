@@ -11,10 +11,10 @@ const FUENTE_MODERNA = preload("res://Fuentes/Montserrat-Black.ttf")
 @onready var score_label = $ScoreLabel
 @onready var capa_ajustes = $CapaAjustes
 
-# CÁMARA (Asegúrate de tener un nodo Camera2D en la escena)
+# CÁMARA
 @onready var camera = $Camera2D
 
-# SONIDOS (Asegúrate de tener estos nodos AudioStreamPlayer)
+# SONIDOS (SFX)
 @onready var sfx_pop = $AudioPop
 @onready var sfx_linea = $AudioLinea
 @onready var sfx_combo = $AudioCombo
@@ -81,6 +81,10 @@ func _ready():
 	# Iniciar la ola en el tablero
 	if board.has_method("animar_ola_entrada"):
 		board.animar_ola_entrada()
+	
+	# MÚSICA: Ponemos la música de juego al empezar
+	if AudioManager:
+		AudioManager.poner_musica_juego()
 	
 	# INTRODUCCIÓN CON HYPE
 	await get_tree().create_timer(0.3).timeout
@@ -263,7 +267,10 @@ func check_game_over():
 				break
 	
 	if not can_move:
+		# MÚSICA Y SFX DE FIN
 		if sfx_gameover: sfx_gameover.play()
+		if AudioManager: AudioManager.poner_musica_gameover()
+		
 		Global.actualizar_record(score)
 		var game_over_instance = GAME_OVER_SCENE.instantiate()
 		if game_over_instance.has_method("set_score"):
