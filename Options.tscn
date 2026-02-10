@@ -29,7 +29,7 @@ shadow_size = 5
 shadow_offset = Vector2(0, 3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2r1l1"]
-bg_color = Color(0.5019608, 0, 0, 1)
+bg_color = Color(0.47837073, 0.71254265, 0.5201916, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -156,7 +156,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_2r1l1")
 theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_2r1l1")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_2r1l1")
 theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_2r1l1")
-text = "Eliminar cuenta"
+text = "Tienda"
 
 [node name="BotonVolver" type="Button" parent="."]
 layout_mode = 1
