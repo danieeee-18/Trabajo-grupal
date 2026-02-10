@@ -14,6 +14,13 @@ func _ready():
 	# Aplicamos el audio nada más cargar
 	aplicar_audio_guardado()
 
+# --- ESTA ES LA FUNCIÓN QUE FALTABA ---
+func actualizar_record(puntos_actuales):
+	if puntos_actuales > high_score:
+		high_score = puntos_actuales
+		save_game() # Guardamos inmediatamente el nuevo récord
+
+# --- SISTEMA DE GUARDADO ---
 func save_game():
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	var data = {
@@ -29,19 +36,17 @@ func load_game():
 		var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
 		var data = file.get_var()
 		
-		# --- ¡AQUÍ ESTÁ EL ARREGLO! ---
-		# Verificamos si los datos son válidos antes de usarlos
+		# Protección contra archivos corruptos
 		if data == null or not (data is Dictionary):
-			print("Archivo de guardado antiguo o corrupto. Se usarán valores por defecto.")
-			return # Salimos de la función y usamos los valores iniciales (true/0)
+			print("Archivo antiguo o corrupto. Usando valores por defecto.")
+			return 
 		
-		# Si llegamos aquí, los datos son seguros
 		high_score = data.get("high_score", 0)
 		sonido_activado = data.get("sonido_activado", true)
 		musica_activada = data.get("musica_activada", true)
 		vibracion_activada = data.get("vibracion_activada", true)
 	else:
-		print("No hay datos guardados, usando valores por defecto.")
+		print("No hay datos guardados, iniciando nueva partida.")
 
 # --- APLICAR AUDIO ---
 func aplicar_audio_guardado():
