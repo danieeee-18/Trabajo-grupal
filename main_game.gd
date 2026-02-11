@@ -20,12 +20,30 @@ const FUENTE_MODERNA = preload("res://Fuentes/Montserrat-Black.ttf")
 @onready var sfx_combo = $AudioCombo
 @onready var sfx_gameover = $AudioGameOver
 
+# --- REFERENCIA AL FONDO ---
+@onready var fondo_visual = $Fondo 
+
 # --- VARIABLES DE JUEGO ---
 var start_positions = {}
 var score = 0
-var combo_actual = 0          # Cuenta la racha
-var hubo_puntos_turno = false # Chivato de puntos
-var fuerza_temblor = 0.0      # Intensidad del terremoto actual
+var combo_actual = 0          
+var hubo_puntos_turno = false 
+var fuerza_temblor = 0.0      
+
+# --- PALETA INFINITA (Colores HDR para fondo Azul) ---
+# El juego irá rotando por estos colores cada 1000 puntos
+var paleta_niveles = [
+	Color(1, 1, 1),          # 0-999:    Original (Blanco)
+	Color(0.6, 1.5, 1.5),    # 1000+:    Cian Eléctrico
+	Color(1.3, 0.8, 1.3),    # 2000+:    Rosa Magia
+	Color(0.8, 1.5, 0.8),    # 3000+:    Verde Esmeralda
+	Color(1.5, 1.2, 0.8),    # 4000+:    Dorado Solar
+	Color(1.5, 0.7, 0.7),    # 5000+:    Rojo Intenso
+	Color(0.9, 0.9, 1.8),    # 6000+:    Azul Hielo
+	Color(1.2, 0.5, 1.5)     # 7000+:    Violeta Profundo
+]
+
+var color_objetivo = Color.WHITE 
 
 # --- BASE DE DATOS DE PIEZAS ---
 var shapes_database = [
@@ -78,56 +96,43 @@ func _ready():
 	
 	spawn_new_hand()
 	
-	# Iniciar la ola en el tablero
 	if board.has_method("animar_ola_entrada"):
 		board.animar_ola_entrada()
 	
-	# MÚSICA: Ponemos la música de juego al empezar
-	if AudioManager:
-		AudioManager.poner_musica_juego()
+	if has_node("AudioManager"):
+		$AudioManager.poner_musica_juego()
+	elif Global.has_method("play_music_level"):
+		Global.play_music_level()
 	
-	# INTRODUCCIÓN CON HYPE
+	# INTRODUCCIÓN
 	await get_tree().create_timer(0.3).timeout
 	mostrar_frase_hype("READY?", Color(1, 0.5, 0)) 
-	
 	await get_tree().create_timer(0.6).timeout
 	mostrar_frase_hype("GO!", Color(0.2, 1, 0.2))
 
-# --- FUNCIÓN PROCESS PARA EL TEMBLOR ---
 func _process(delta):
 	if fuerza_temblor > 0:
-		# Reducimos la fuerza poco a poco
 		fuerza_temblor = lerp(fuerza_temblor, 0.0, 10.0 * delta)
-		
-		# Movemos la cámara aleatoriamente
 		if camera:
 			camera.offset = Vector2(
 				randf_range(-fuerza_temblor, fuerza_temblor),
 				randf_range(-fuerza_temblor, fuerza_temblor)
 			)
-		
-		# Si es casi cero, lo paramos
 		if fuerza_temblor < 0.5:
 			fuerza_temblor = 0
 			if camera: camera.offset = Vector2.ZERO
 
-# --- FUNCIÓN PARA ACTIVAR EL TEMBLOR ---
-func aplicar_temblor(intensidad):
-	fuerza_temblor += intensidad
-
 # --- LÓGICA DE JUEGO ---
 
 func _on_puntos_ganados(puntos):
-	# 1. Avisamos de que en este turno SI hubo puntos
 	hubo_puntos_turno = true
-	
-	# 2. Calculamos el multiplicador
 	var multiplicador = max(1, combo_actual + 1)
-	
-	# 3. Sumamos puntos con PREMIO
 	var puntos_finales = puntos * multiplicador
 	score += puntos_finales
 	update_score(score)
+	
+	# CAMBIO DE FONDO (Sistema de niveles infinito)
+	actualizar_fondo_por_puntos(score)
 
 func update_score(val):
 	score = val
@@ -193,7 +198,7 @@ func assign_random_shape(piece_node):
 	var data = shapes_database[random_idx]
 	piece_node.set_configuration(data["cells"], data["color"])
 
-# --- LÓGICA MAESTRA DE COLOCACIÓN Y SONIDO ---
+# --- LÓGICA MAESTRA ---
 func _on_pieza_soltada(which_piece, posicion_global):
 	var cell_size = 64
 	var local_pos = posicion_global - board.global_position
@@ -202,36 +207,28 @@ func _on_pieza_soltada(which_piece, posicion_global):
 	
 	if board.can_place_piece(grid_x, grid_y, which_piece.cells):
 		
-		# 1. SONIDO POP (Inmediato)
 		if sfx_pop:
 			sfx_pop.pitch_scale = randf_range(0.9, 1.1)
 			sfx_pop.play()
 		
-		# REINICIO ESTRICTO
 		hubo_puntos_turno = false 
 		var puntuacion_antes = score
 		
-		# 2. COLOCAR LA PIEZA (Con AWAIT)
 		await board.place_piece(grid_x, grid_y, which_piece.cells, which_piece.piece_color)
 		
-		# 3. CÁLCULO DE RESULTADOS
 		var diferencia_puntos = score - puntuacion_antes
 		var es_jugada_maestra = diferencia_puntos > 20 
 		
 		if es_jugada_maestra:
 			combo_actual += 1
-			# DECIDIMOS SONIDO Y VISUALES AQUÍ
 			if combo_actual > 1:
-				# --- COMBO ---
 				if sfx_combo:
 					sfx_combo.pitch_scale = 1.0 + (combo_actual * 0.1)
 					sfx_combo.play()
 				mostrar_combo_visual(combo_actual)
 				aplicar_temblor(12.0)
 			else:
-				# --- LÍNEA NORMAL ---
-				if sfx_linea:
-					sfx_linea.play()
+				if sfx_linea: sfx_linea.play()
 				aplicar_temblor(6.0)
 		else:
 			combo_actual = 0
@@ -267,9 +264,8 @@ func check_game_over():
 				break
 	
 	if not can_move:
-		# MÚSICA Y SFX DE FIN
 		if sfx_gameover: sfx_gameover.play()
-		if AudioManager: AudioManager.poner_musica_gameover()
+		if has_node("AudioManager"): $AudioManager.poner_musica_gameover()
 		
 		Global.actualizar_record(score)
 		var game_over_instance = GAME_OVER_SCENE.instantiate()
@@ -277,8 +273,7 @@ func check_game_over():
 			game_over_instance.set_score(score)
 		add_child(game_over_instance)
 
-# --- BOTONES DEL MENÚ DE PAUSA ---
-
+# --- BOTONES ---
 func _on_btn_home_pressed():
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://MenuPrincipal.tscn")
@@ -298,7 +293,9 @@ func _on_btn_abrir_ajustes_pressed():
 
 # --- SISTEMA VISUAL (HYPE Y COMBOS) ---
 
-func mostrar_frase_hype(texto, color_texto):
+func mostrar_frase_hype(texto, color_texto = Color.WHITE):
+	efecto_combo_fondo()
+	
 	var label = Label.new()
 	label.text = texto
 	
@@ -316,7 +313,7 @@ func mostrar_frase_hype(texto, color_texto):
 	label.anchors_preset = Control.PRESET_CENTER
 	
 	var pantalla_centro = get_viewport_rect().size / 2
-	pantalla_centro.y -= 200 # Ajuste hacia arriba
+	pantalla_centro.y -= 200
 	
 	label.global_position = pantalla_centro
 	label.grow_horizontal = Control.GROW_DIRECTION_BOTH
@@ -324,7 +321,6 @@ func mostrar_frase_hype(texto, color_texto):
 	label.z_index = 100 
 	add_child(label)
 	
-	# Shockwave
 	var shockwave = label.duplicate()
 	shockwave.modulate = color_texto
 	shockwave.z_index = 99
@@ -336,7 +332,6 @@ func mostrar_frase_hype(texto, color_texto):
 	t_shock.parallel().tween_property(shockwave, "modulate:a", 0.0, 0.25)
 	t_shock.tween_callback(shockwave.queue_free)
 	
-	# Animación Principal
 	var tween = create_tween()
 	label.scale = Vector2(0, 0)
 	label.rotation_degrees = randf_range(-10, 10)
@@ -360,3 +355,38 @@ func mostrar_combo_visual(valor_combo):
 	
 	var texto_final = texto_extra + "\nx" + str(valor_combo) + "!"
 	mostrar_frase_hype(texto_final, color_combo)
+
+func aplicar_temblor(intensidad):
+	fuerza_temblor += intensidad
+
+# --- NUEVA FUNCIÓN: CICLO DE COLORES CADA 1000 PUNTOS ---
+
+func actualizar_fondo_por_puntos(puntos_actuales):
+	if not fondo_visual: 
+		return
+	
+	# Calculamos el nivel (cada 1000 puntos es un nivel)
+	var nivel = int(puntos_actuales / 1000)
+	
+	# Usamos el módulo (%) para que si llegas al nivel 8, vuelva al color 0
+	# Esto hace que la paleta sea "infinita"
+	var indice_color = nivel % paleta_niveles.size()
+	
+	var nuevo_color = paleta_niveles[indice_color]
+	
+	# Solo cambiamos si el color es diferente al actual para no reiniciar el tween a cada rato
+	if color_objetivo != nuevo_color:
+		color_objetivo = nuevo_color
+		print("Nivel", nivel, "- Cambiando fondo a color índice:", indice_color)
+		
+		# Animación de transición muy suave
+		var tween = create_tween()
+		tween.tween_property(fondo_visual, "modulate", color_objetivo, 2.0).set_trans(Tween.TRANS_SINE)
+
+func efecto_combo_fondo():
+	if not fondo_visual: return
+	
+	var tween = create_tween()
+	# Flash más sutil y elegante (Blanco azulado)
+	tween.tween_property(fondo_visual, "modulate", Color(1.5, 1.5, 2.0), 0.1) 
+	tween.tween_property(fondo_visual, "modulate", color_objetivo, 0.5)

@@ -1,4 +1,5 @@
 extends Node2D
+@export var efecto_explosion_scene: PackedScene
 
 # --- SEÑAL NUEVA: Avisa cuando ganamos puntos ---
 signal puntos_ganados(puntos)
@@ -290,6 +291,24 @@ func animar_celda(nodo, tiempo_espera):
 	# EL TWEEN (La animación)
 	var tween = create_tween()
 	tween.tween_interval(tiempo_espera) # Esperar su turno
+	
+	# --- NUEVO: Disparar la explosión ---
+	tween.tween_callback(func():
+		if efecto_explosion_scene:
+			var explosion = efecto_explosion_scene.instantiate()
+			
+			# Centramos la explosión en la celda
+			if "size" in nodo:
+				explosion.position = nodo.size / 2
+			
+			nodo.add_child(explosion)
+			explosion.emitting = true
+			
+			# Limpieza automática: borra la explosión cuando termine
+			await explosion.finished
+			explosion.queue_free()
+	)
+	# ------------------------------------
 	
 	# Efecto de "Pop" elástico
 	tween.set_parallel(true)
