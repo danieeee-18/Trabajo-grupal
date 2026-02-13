@@ -5,6 +5,7 @@ extends Node2D
 # 1. "self": Enviamos la propia pieza para que el juego sepa CUÁL de las 3 es.
 # 2. "global_position": Dónde la has soltado.
 signal pieza_soltada(pieza_misma, posicion_global) 
+signal pieza_arrastrada(pieza, posicion)
 
 var block_texture = preload("res://block_texture.tres")
 
@@ -69,6 +70,7 @@ func draw_piece():
 func _process(delta):
 	if dragging:
 		global_position = get_global_mouse_position() + offset_mouse
+		emit_signal("pieza_arrastrada", self, global_position)
 
 # Detección del click inicial
 func _on_area_2d_input_event(viewport, event, shape_idx):

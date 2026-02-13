@@ -30,19 +30,28 @@ var combo_actual = 0
 var hubo_puntos_turno = false 
 var fuerza_temblor = 0.0      
 
-# --- PALETA INFINITA (Colores HDR para fondo Azul) ---
-# El juego irá rotando por estos colores cada 1000 puntos
-var paleta_niveles = [
-	Color(1, 1, 1),          # 0-999:    Original (Blanco)
-	Color(0.6, 1.5, 1.5),    # 1000+:    Cian Eléctrico
-	Color(1.3, 0.8, 1.3),    # 2000+:    Rosa Magia
-	Color(0.8, 1.5, 0.8),    # 3000+:    Verde Esmeralda
-	Color(1.5, 1.2, 0.8),    # 4000+:    Dorado Solar
-	Color(1.5, 0.7, 0.7),    # 5000+:    Rojo Intenso
-	Color(0.9, 0.9, 1.8),    # 6000+:    Azul Hielo
-	Color(1.2, 0.5, 1.5)     # 7000+:    Violeta Profundo
+# --- SISTEMA DE DOPAMINA ---
+var frases_animo = ["NICE", "GOOD", "SWEET", "PURE", "COOL", "FRESH", "SOFT", "LOVELY"]
+var colores_pastel = [
+	Color("ffb7b2"), # Rosa palo
+	Color("b5ead7"), # Menta suave
+	Color("e2f0cb"), # Verde lima suave
+	Color("ffdac1"), # Melocotón
+	Color("e0bbe4"), # Lavanda
+	Color("97c1a9")  # Verde salvia
 ]
 
+# --- PALETA INFINITA (Fondo) ---
+var paleta_niveles = [
+	Color(1, 1, 1),          # Blanco
+	Color(0.6, 1.5, 1.5),    # Cian Eléctrico
+	Color(1.3, 0.8, 1.3),    # Rosa Magia
+	Color(0.8, 1.5, 0.8),    # Verde Esmeralda
+	Color(1.5, 1.2, 0.8),    # Dorado Solar
+	Color(1.5, 0.7, 0.7),    # Rojo Intenso
+	Color(0.9, 0.9, 1.8),    # Azul Hielo
+	Color(1.2, 0.5, 1.5)     # Violeta Profundo
+]
 var color_objetivo = Color.WHITE 
 
 # --- BASE DE DATOS DE PIEZAS ---
@@ -90,8 +99,18 @@ func _ready():
 
 	for i in range(pieces_array.size()):
 		var p = pieces_array[i]
+		
+		# --- CONEXIÓN BÁSICA ---
 		if not p.pieza_soltada.is_connected(_on_pieza_soltada):
 			p.pieza_soltada.connect(_on_pieza_soltada)
+			
+		# --- CONEXIÓN NUEVA: PREVISUALIZACIÓN (GHOST) ---
+		# Si la señal existe en la pieza (que debería si modificaste Piece.gd)
+		if p.has_signal("pieza_arrastrada"):
+			if not p.pieza_arrastrada.is_connected(_on_pieza_arrastrada):
+				p.pieza_arrastrada.connect(_on_pieza_arrastrada)
+		# ------------------------------------------------
+		
 		start_positions[p] = markers[i].global_position
 	
 	spawn_new_hand()
@@ -104,7 +123,6 @@ func _ready():
 	elif Global.has_method("play_music_level"):
 		Global.play_music_level()
 	
-	# INTRODUCCIÓN
 	await get_tree().create_timer(0.3).timeout
 	mostrar_frase_hype("READY?", Color(1, 0.5, 0)) 
 	await get_tree().create_timer(0.6).timeout
@@ -130,9 +148,11 @@ func _on_puntos_ganados(puntos):
 	var puntos_finales = puntos * multiplicador
 	score += puntos_finales
 	update_score(score)
-	
-	# CAMBIO DE FONDO (Sistema de niveles infinito)
 	actualizar_fondo_por_puntos(score)
+	
+	if puntos > 0 and combo_actual <= 1:
+		if randf() < 0.3: 
+			mostrar_feedback_rapido()
 
 func update_score(val):
 	score = val
@@ -141,10 +161,8 @@ func update_score(val):
 func spawn_new_hand():
 	var espacios_vacios = board.get_empty_cells_count()
 	var presion = 1.0 - (float(espacios_vacios) / 64.0)
-	
 	var lista_segura = []
 	var lista_riesgo = []
-	
 	for shape in shapes_database:
 		if board.check_if_shape_fits_anywhere(shape["cells"]):
 			lista_segura.append(shape)
@@ -161,14 +179,11 @@ func spawn_new_hand():
 	
 	for i in range(1, 3):
 		var pieza_elegida
-		if presion > 0.70:
-			pieza_elegida = lista_segura.pick_random()
+		if presion > 0.70: pieza_elegida = lista_segura.pick_random()
 		elif presion < 0.30:
 			if randf() > 0.5: pieza_elegida = shapes_database.pick_random()
 			else: pieza_elegida = lista_segura.pick_random()
-		else:
-			pieza_elegida = lista_segura.pick_random()
-		
+		else: pieza_elegida = lista_segura.pick_random()
 		pieces_array[i].set_configuration(pieza_elegida["cells"], pieza_elegida["color"])
 
 	for i in range(pieces_array.size()):
@@ -198,15 +213,33 @@ func assign_random_shape(piece_node):
 	var data = shapes_database[random_idx]
 	piece_node.set_configuration(data["cells"], data["color"])
 
+# --- LÓGICA DE FANTASMA (PREVISUALIZACIÓN) ---
+
+func _on_pieza_arrastrada(which_piece, posicion_global):
+	var cell_size = 64
+	# Restamos la posición del tablero para obtener coordenadas locales
+	var local_pos = posicion_global - board.global_position
+	
+	# Usamos round() para encontrar el centro de la celda más cercana
+	var grid_x = round(local_pos.x / cell_size)
+	var grid_y = round(local_pos.y / cell_size)
+	
+	if board.can_place_piece(grid_x, grid_y, which_piece.cells):
+		board.actualizar_fantasma(grid_x, grid_y, which_piece.cells, which_piece.piece_color)
+	else:
+		board.ocultar_fantasma()
 # --- LÓGICA MAESTRA ---
 func _on_pieza_soltada(which_piece, posicion_global):
+	# IMPORTANTE: Ocultar el fantasma al soltar
+	if board.has_method("ocultar_fantasma"):
+		board.ocultar_fantasma()
+
 	var cell_size = 64
 	var local_pos = posicion_global - board.global_position
 	var grid_x = round(local_pos.x / cell_size)
 	var grid_y = round(local_pos.y / cell_size)
 	
 	if board.can_place_piece(grid_x, grid_y, which_piece.cells):
-		
 		if sfx_pop:
 			sfx_pop.pitch_scale = randf_range(0.9, 1.1)
 			sfx_pop.play()
@@ -235,12 +268,8 @@ func _on_pieza_soltada(which_piece, posicion_global):
 			
 		which_piece.visible = false
 		which_piece.global_position = start_positions[which_piece]
-		
 		check_hand_empty()
-		
-		if not check_hand_empty_silent():
-			check_game_over()
-		
+		if not check_hand_empty_silent(): check_game_over()
 	else:
 		var tween = create_tween()
 		tween.tween_property(which_piece, "global_position", start_positions[which_piece], 0.2).set_trans(Tween.TRANS_SINE)
@@ -262,18 +291,15 @@ func check_game_over():
 			if board.check_if_shape_fits_anywhere(p.cells):
 				can_move = true
 				break
-	
 	if not can_move:
 		if sfx_gameover: sfx_gameover.play()
 		if has_node("AudioManager"): $AudioManager.poner_musica_gameover()
-		
 		Global.actualizar_record(score)
 		var game_over_instance = GAME_OVER_SCENE.instantiate()
 		if game_over_instance.has_method("set_score"):
 			game_over_instance.set_score(score)
 		add_child(game_over_instance)
 
-# --- BOTONES ---
 func _on_btn_home_pressed():
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://MenuPrincipal.tscn")
@@ -291,14 +317,13 @@ func _on_btn_abrir_ajustes_pressed():
 	capa_ajustes.visible = true
 	get_tree().paused = true
 
-# --- SISTEMA VISUAL (HYPE Y COMBOS) ---
+# --- SISTEMA DE VISUALES (HYPE Y FEEDBACK) ---
 
+# 1. TEXTO GIGANTE (Para Combos y Start)
 func mostrar_frase_hype(texto, color_texto = Color.WHITE):
 	efecto_combo_fondo()
-	
 	var label = Label.new()
 	label.text = texto
-	
 	var settings = LabelSettings.new()
 	settings.font = FUENTE_MODERNA
 	settings.font_size = 90
@@ -307,86 +332,103 @@ func mostrar_frase_hype(texto, color_texto = Color.WHITE):
 	settings.shadow_color = Color(0, 0, 0, 0.5)
 	settings.shadow_offset = Vector2(5, 5)
 	label.label_settings = settings
-	
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.anchors_preset = Control.PRESET_CENTER
-	
 	var pantalla_centro = get_viewport_rect().size / 2
 	pantalla_centro.y -= 200
-	
 	label.global_position = pantalla_centro
 	label.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	label.grow_vertical = Control.GROW_DIRECTION_BOTH
 	label.z_index = 100 
 	add_child(label)
 	
+	# Efecto onda expansiva
 	var shockwave = label.duplicate()
 	shockwave.modulate = color_texto
 	shockwave.z_index = 99
 	add_child(shockwave)
-	
 	var t_shock = create_tween()
 	shockwave.scale = Vector2(1, 1)
 	t_shock.parallel().tween_property(shockwave, "scale", Vector2(2.5, 2.5), 0.25).set_ease(Tween.EASE_OUT)
 	t_shock.parallel().tween_property(shockwave, "modulate:a", 0.0, 0.25)
 	t_shock.tween_callback(shockwave.queue_free)
 	
+	# Animación principal
 	var tween = create_tween()
 	label.scale = Vector2(0, 0)
 	label.rotation_degrees = randf_range(-10, 10)
-	
 	tween.tween_property(label, "scale", Vector2(1.2, 1.2), 0.2).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(label, "rotation_degrees", 0, 0.2)
 	tween.tween_interval(0.2) 
 	tween.tween_property(label, "scale", Vector2(0, 0), 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	tween.tween_callback(label.queue_free)
 
+# 2. FEEDBACK RÁPIDO (Dopamina suave)
+func mostrar_feedback_rapido():
+	var texto = frases_animo.pick_random()
+	var color = colores_pastel.pick_random()
+	
+	var label = Label.new()
+	label.text = texto
+	
+	# Configuración más ligera y elegante
+	var settings = LabelSettings.new()
+	settings.font = FUENTE_MODERNA
+	settings.font_size = 48 
+	settings.font_color = color
+	settings.outline_size = 8
+	settings.outline_color = Color.BLACK
+	label.label_settings = settings
+	
+	# Posición aleatoria alrededor del centro
+	label.anchors_preset = Control.PRESET_CENTER
+	var centro = get_viewport_rect().size / 2
+	var offset = Vector2(randf_range(-100, 100), randf_range(-150, -50))
+	label.global_position = centro + offset
+	label.z_index = 90 # Debajo del Hype
+	add_child(label)
+	
+	# Animación rápida y suave (Pop y fade)
+	var tween = create_tween()
+	label.scale = Vector2(0, 0)
+	label.rotation_degrees = randf_range(-15, 15)
+	
+	tween.tween_property(label, "scale", Vector2(1.0, 1.0), 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(label, "position:y", label.position.y - 50, 0.6)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.6).set_ease(Tween.EASE_IN)
+	
+	tween.tween_callback(label.queue_free)
+
 func mostrar_combo_visual(valor_combo):
 	var color_combo = Color.YELLOW
 	var texto_extra = "COMBO"
-	
 	if valor_combo == 3:
 		color_combo = Color(1, 0.5, 0)
 		texto_extra = "SUPER"
 	elif valor_combo >= 4:
 		color_combo = Color(1, 0, 0)
 		texto_extra = "ULTRA"
-	
 	var texto_final = texto_extra + "\nx" + str(valor_combo) + "!"
 	mostrar_frase_hype(texto_final, color_combo)
 
 func aplicar_temblor(intensidad):
 	fuerza_temblor += intensidad
 
-# --- NUEVA FUNCIÓN: CICLO DE COLORES CADA 1000 PUNTOS ---
-
+# --- FONDO ---
 func actualizar_fondo_por_puntos(puntos_actuales):
-	if not fondo_visual: 
-		return
-	
-	# Calculamos el nivel (cada 1000 puntos es un nivel)
+	if not fondo_visual: return
 	var nivel = int(puntos_actuales / 1000)
-	
-	# Usamos el módulo (%) para que si llegas al nivel 8, vuelva al color 0
-	# Esto hace que la paleta sea "infinita"
 	var indice_color = nivel % paleta_niveles.size()
-	
 	var nuevo_color = paleta_niveles[indice_color]
 	
-	# Solo cambiamos si el color es diferente al actual para no reiniciar el tween a cada rato
 	if color_objetivo != nuevo_color:
 		color_objetivo = nuevo_color
-		print("Nivel", nivel, "- Cambiando fondo a color índice:", indice_color)
-		
-		# Animación de transición muy suave
 		var tween = create_tween()
 		tween.tween_property(fondo_visual, "modulate", color_objetivo, 2.0).set_trans(Tween.TRANS_SINE)
 
 func efecto_combo_fondo():
 	if not fondo_visual: return
-	
 	var tween = create_tween()
-	# Flash más sutil y elegante (Blanco azulado)
 	tween.tween_property(fondo_visual, "modulate", Color(1.5, 1.5, 2.0), 0.1) 
 	tween.tween_property(fondo_visual, "modulate", color_objetivo, 0.5)
