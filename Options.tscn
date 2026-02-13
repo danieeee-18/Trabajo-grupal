@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bpxiy6tufdg3v"]
+[gd_scene load_steps=8 format=3 uid="uid://bpxiy6tufdg3v"]
 
 [ext_resource type="Script" uid="uid://deo3bndqks7th" path="res://options.gd" id="1_r314q"]
 [ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_yia4p"]
@@ -15,21 +15,6 @@ metadata/_snap_count = 18
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ywiuv"]
 bg_color = Color(0.72156864, 0.5254902, 0.043137256, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 0.84313726, 0, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-shadow_color = Color(0.003921569, 0.003921569, 0.003921569, 0.34509805)
-shadow_size = 5
-shadow_offset = Vector2(0, 3)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2r1l1"]
-bg_color = Color(0.47837073, 0.71254265, 0.5201916, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -96,10 +81,10 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.056
 anchor_bottom = 0.031000001
-offset_left = 137.0
-offset_top = 301.0
-offset_right = 346.68
-offset_bottom = 553.32
+offset_left = 130.0
+offset_top = 342.0
+offset_right = 339.68
+offset_bottom = 594.32
 scale = Vector2(2, 2)
 theme_override_constants/separation = 20
 
@@ -145,18 +130,6 @@ theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_ywiuv")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ywiuv")
 theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_ywiuv")
 text = "Reiniciar récord"
-
-[node name="BotonEliminar" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(250, 40)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8745098, 0.8745098, 0.8745098, 1)
-theme_override_fonts/font = ExtResource("2_yia4p")
-theme_override_styles/normal = SubResource("StyleBoxFlat_2r1l1")
-theme_override_styles/hover = SubResource("StyleBoxFlat_2r1l1")
-theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_2r1l1")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_2r1l1")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_2r1l1")
-text = "Tienda"
 
 [node name="BotonVolver" type="Button" parent="."]
 layout_mode = 1

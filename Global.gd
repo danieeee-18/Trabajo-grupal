@@ -2,6 +2,7 @@ extends Node
 
 # VARIABLES GLOBALES
 var high_score = 0
+var monedas = 0 # Tu cartera
 var sonido_activado = true
 var musica_activada = true
 var vibracion_activada = true
@@ -14,17 +15,24 @@ func _ready():
 	# Aplicamos el audio nada más cargar
 	aplicar_audio_guardado()
 
-# --- ESTA ES LA FUNCIÓN QUE FALTABA ---
+# --- ACTUALIZAR RÉCORD ---
 func actualizar_record(puntos_actuales):
 	if puntos_actuales > high_score:
 		high_score = puntos_actuales
-		save_game() # Guardamos inmediatamente el nuevo récord
+		save_game() # Guardamos inmediatamente
+
+# --- GESTIÓN DE DINERO ---
+func agregar_monedas(cantidad):
+	monedas += cantidad
+	save_game() # Guardamos para que no se pierda el dinero
+	print("💰 Monedas actuales: ", monedas)
 
 # --- SISTEMA DE GUARDADO ---
 func save_game():
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	var data = {
 		"high_score": high_score,
+		"monedas": monedas,
 		"sonido_activado": sonido_activado,
 		"musica_activada": musica_activada,
 		"vibracion_activada": vibracion_activada
@@ -42,6 +50,7 @@ func load_game():
 			return 
 		
 		high_score = data.get("high_score", 0)
+		monedas = data.get("monedas", 0)
 		sonido_activado = data.get("sonido_activado", true)
 		musica_activada = data.get("musica_activada", true)
 		vibracion_activada = data.get("vibracion_activada", true)

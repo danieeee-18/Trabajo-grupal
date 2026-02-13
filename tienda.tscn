@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://d0yf5f57d1f20"]
+[gd_scene load_steps=5 format=3 uid="uid://d0yf5f57d1f20"]
 
 [ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="1_k64ye"]
+[ext_resource type="Script" uid="uid://gkoss1vpd2xw" path="res://tienda.gd" id="1_ko86m"]
 
 [sub_resource type="Gradient" id="Gradient_0oe1n"]
 offsets = PackedFloat32Array(0, 0.98)
@@ -20,6 +21,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_ko86m")
 
 [node name="Fondo" type="TextureRect" parent="."]
 layout_mode = 1
@@ -30,7 +32,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_ko86m")
 
-[node name="Label" type="Label" parent="."]
+[node name="LabelMonedas" type="Label" parent="."]
 layout_mode = 0
 offset_left = 393.0
 offset_top = 64.0

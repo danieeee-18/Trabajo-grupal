@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dwuh734k7n0qn"]
+[gd_scene load_steps=10 format=3 uid="uid://dwuh734k7n0qn"]
 
 [ext_resource type="Script" uid="uid://cg73behmoagmt" path="res://menu_principal.gd" id="1_0oe1n"]
 [ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_ba235"]
@@ -30,9 +30,39 @@ shadow_size = 10
 shadow_offset = Vector2(0, 5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5dpk2"]
-bg_color = Color(0.08216285, 0.77946645, 0.7951356, 1)
+bg_color = Color(1, 0, 0, 1)
 border_width_bottom = 10
-border_color = Color(0.050067358, 0.5519778, 0.5655069, 1)
+border_color = Color(0.59905666, 1.4318898e-06, 4.3317675e-07, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ba235"]
+bg_color = Color(0.1254902, 0.8901961, 0, 1)
+border_width_bottom = 10
+border_color = Color(0.20392157, 0.4862745, 0, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pi62y"]
+bg_color = Color(0.1254902, 0.8901961, 0, 1)
+border_width_bottom = 10
+border_color = Color(0.20392157, 0.4862745, 0, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ectly"]
+bg_color = Color(0.1254902, 0.8901961, 0, 1)
+border_width_bottom = 10
+border_color = Color(0.20392157, 0.4862745, 0, 1)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
@@ -76,10 +106,10 @@ text = "[center][color=#2b1b17]BLOCK BUST[/color][/center]"
 
 [node name="TituloColorido" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 135.0
-offset_top = 167.0
-offset_right = 562.0
-offset_bottom = 389.0
+offset_left = 154.0
+offset_top = 165.0
+offset_right = 581.0
+offset_bottom = 387.0
 theme_override_colors/font_shadow_color = Color(0.16862746, 0.105882354, 0.09019608, 1)
 theme_override_constants/shadow_offset_x = 14
 theme_override_constants/shadow_offset_y = 11
@@ -96,10 +126,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -159.0
-offset_top = 15.0
-offset_right = 191.0
-offset_bottom = 128.0
+offset_left = -157.0
+offset_top = -53.0
+offset_right = 193.0
+offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -122,10 +152,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -157.0
-offset_top = 201.0
-offset_right = 193.0
-offset_bottom = 315.0
+offset_left = -155.0
+offset_top = 133.0
+offset_right = 195.0
+offset_bottom = 247.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -139,12 +169,36 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_5dpk2")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5dpk2")
 text = " ⚙️ Options"
 
+[node name="BotonTienda" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -157.0
+offset_top = 303.0
+offset_right = 193.0
+offset_bottom = 417.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.8346143, 0.8346143, 0.8346143, 1)
+theme_override_colors/font_hover_color = Color(0.6913568, 0.6913567, 0.69135773, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 42
+theme_override_styles/normal = SubResource("StyleBoxFlat_ba235")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pi62y")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ectly")
+text = "🛒 Tienda"
+
 [node name="LabelRecord" type="Label" parent="."]
 layout_mode = 0
-offset_left = 315.0
-offset_top = 534.0
-offset_right = 392.0
-offset_bottom = 583.0
+offset_left = 329.0
+offset_top = 462.0
+offset_right = 406.0
+offset_bottom = 511.0
 theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
 theme_override_font_sizes/font_size = 35
 text = "👑 0"
@@ -159,3 +213,4 @@ theme_override_colors/font_color = Color(0.6356103, 0.9302399, 0.9997811, 1)
 
 [connection signal="pressed" from="BotonJugar" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="BotonOpciones" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="BotonTienda" to="." method="_on_boton_tienda_pressed"]
