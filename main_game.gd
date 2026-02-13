@@ -43,14 +43,14 @@ var colores_pastel = [
 
 # --- PALETA INFINITA (Fondo) ---
 var paleta_niveles = [
-	Color(1, 1, 1),          # Blanco
-	Color(0.6, 1.5, 1.5),    # Cian Eléctrico
-	Color(1.3, 0.8, 1.3),    # Rosa Magia
-	Color(0.8, 1.5, 0.8),    # Verde Esmeralda
-	Color(1.5, 1.2, 0.8),    # Dorado Solar
-	Color(1.5, 0.7, 0.7),    # Rojo Intenso
-	Color(0.9, 0.9, 1.8),    # Azul Hielo
-	Color(1.2, 0.5, 1.5)     # Violeta Profundo
+	Color(1, 1, 1),           # Blanco
+	Color(0.6, 1.5, 1.5),     # Cian Eléctrico
+	Color(1.3, 0.8, 1.3),     # Rosa Magia
+	Color(0.8, 1.5, 0.8),     # Verde Esmeralda
+	Color(1.5, 1.2, 0.8),     # Dorado Solar
+	Color(1.5, 0.7, 0.7),     # Rojo Intenso
+	Color(0.9, 0.9, 1.8),     # Azul Hielo
+	Color(1.2, 0.5, 1.5)      # Violeta Profundo
 ]
 var color_objetivo = Color.WHITE 
 
@@ -105,7 +105,6 @@ func _ready():
 			p.pieza_soltada.connect(_on_pieza_soltada)
 			
 		# --- CONEXIÓN NUEVA: PREVISUALIZACIÓN (GHOST) ---
-		# Si la señal existe en la pieza (que debería si modificaste Piece.gd)
 		if p.has_signal("pieza_arrastrada"):
 			if not p.pieza_arrastrada.is_connected(_on_pieza_arrastrada):
 				p.pieza_arrastrada.connect(_on_pieza_arrastrada)
@@ -118,10 +117,8 @@ func _ready():
 	if board.has_method("animar_ola_entrada"):
 		board.animar_ola_entrada()
 	
-	if has_node("AudioManager"):
-		$AudioManager.poner_musica_juego()
-	elif Global.has_method("play_music_level"):
-		Global.play_music_level()
+	# --- MÚSICA DE JUEGO (Directo al DJ) ---
+	AudioManager.poner_musica_juego()
 	
 	await get_tree().create_timer(0.3).timeout
 	mostrar_frase_hype("READY?", Color(1, 0.5, 0)) 
@@ -293,7 +290,10 @@ func check_game_over():
 				break
 	if not can_move:
 		if sfx_gameover: sfx_gameover.play()
-		if has_node("AudioManager"): $AudioManager.poner_musica_gameover()
+		
+		# --- MÚSICA GAME OVER (Directo al DJ) ---
+		AudioManager.poner_musica_gameover()
+		
 		Global.actualizar_record(score)
 		var game_over_instance = GAME_OVER_SCENE.instantiate()
 		if game_over_instance.has_method("set_score"):

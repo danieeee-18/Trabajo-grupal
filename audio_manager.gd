@@ -1,50 +1,60 @@
 extends Node
 
-# --- VARIABLES PARA ARRASTRAR MÚSICA ---
+# --- VARIABLES PARA ARRASTRAR TUS CANCIONES ---
 @export var musica_menu: AudioStream
 @export var musica_juego: AudioStream
 @export var musica_gameover: AudioStream
 
-# Referencia al hijo (el altavoz)
+# Referencia al altavoz hijo
 @onready var player = $MusicPlayer
 
 func _ready():
-	# Configuración inicial de volumen
+	# Configuración inicial de seguridad
 	if player:
-		player.volume_db = -10.0
+		player.volume_db = -10.0 # Un volumen base agradable
 	else:
-		print("ERROR CRÍTICO: No encuentro el nodo MusicPlayer")
+		print("ERROR CRÍTICO: No encuentro el nodo 'MusicPlayer' dentro de AudioManager.")
 
-# --- FUNCIONES DE CONTROL ---
+# --- FUNCIONES PÚBLICAS (LAS QUE LLAMA EL JUEGO) ---
 
 func poner_musica_menu():
-	if musica_menu: cambiar_pista(musica_menu)
+	cambiar_pista(musica_menu)
 
 func poner_musica_juego():
-	if musica_juego: cambiar_pista(musica_juego)
+	cambiar_pista(musica_juego)
 
 func poner_musica_gameover():
-	if musica_gameover: cambiar_pista(musica_gameover)
+	cambiar_pista(musica_gameover)
 
-# --- LÓGICA INTERNA ---
+# --- SISTEMA INTERNO (EL CEREBRO DEL DJ) ---
+
 func cambiar_pista(nueva_cancion):
-	# Si ya suena esa canción, no hacemos nada
+	# 1. Si el reproductor no existe, abortamos
+	if not player:
+		return
+	
+	# 2. Si no has puesto canción en el Inspector, avisamos
+	# (Aquí estaba el error, ahora pone 'nueva_cancion')
+	if nueva_cancion == null:
+		print("AVISO: Se ha pedido música, pero no hay archivo asignado en el Inspector.")
+		return
+
+	# 3. Si YA está sonando esa misma canción, no la reiniciamos
 	if player.stream == nueva_cancion and player.playing:
 		return
 	
-	# Si es nueva, cambiamos
+	# 4. Cambiamos el disco y le damos al Play
 	player.stream = nueva_cancion
 	player.play()
-	
-	# --- CONTROL DE VOLUMEN GLOBAL ---
+
+# --- CONTROL DE MUTE GLOBAL ---
 
 func mutear_musica(es_muteado: bool):
-	# Buscamos el canal "Musica"
 	var bus_idx = AudioServer.get_bus_index("Musica")
-	# Lo apagamos o encendemos
-	AudioServer.set_bus_mute(bus_idx, es_muteado)
+	if bus_idx != -1:
+		AudioServer.set_bus_mute(bus_idx, es_muteado)
 
 func mutear_sfx(es_muteado: bool):
-	# Buscamos el canal "Efectos"
 	var bus_idx = AudioServer.get_bus_index("Efectos")
-	AudioServer.set_bus_mute(bus_idx, es_muteado)
+	if bus_idx != -1:
+		AudioServer.set_bus_mute(bus_idx, es_muteado)
