@@ -3,7 +3,7 @@ extends Node2D
 const GAME_OVER_SCENE = preload("res://GameOver.tscn")
 const FUENTE_HYPE = preload("res://Luckiest_Guy/LuckiestGuy-Regular.ttf")
 const FUENTE_MODERNA = preload("res://Fuentes/Montserrat-Black.ttf")
-
+const ESCENA_MONEDA = preload("res://MonedaVisual.tscn")
 # --- REFERENCIAS ---
 @onready var board = $Board
 @onready var pieces_array = [$Piece, $Piece2, $Piece3]
@@ -18,7 +18,7 @@ const FUENTE_MODERNA = preload("res://Fuentes/Montserrat-Black.ttf")
 @onready var sfx_linea = $AudioLinea
 @onready var sfx_combo = $AudioCombo
 @onready var sfx_gameover = $AudioGameOver
-
+@onready var monedas_label = $MonedasLabel
 # VARIABLES
 var start_positions = {}
 var score = 0
@@ -91,7 +91,7 @@ func _ready():
 	mostrar_frase_hype("READY?", Color(1, 0.5, 0)) 
 	await get_tree().create_timer(0.6).timeout
 	mostrar_frase_hype("GO!", Color(0.2, 1, 0.2))
-
+	actualizar_ui_monedas()
 func _process(delta):
 	if fuerza_temblor > 0:
 		fuerza_temblor = lerp(fuerza_temblor, 0.0, 10.0 * delta)
@@ -99,15 +99,29 @@ func _process(delta):
 		if fuerza_temblor < 0.5:
 			fuerza_temblor = 0
 			if camera: camera.offset = Vector2.ZERO
-
 func _on_puntos_ganados(puntos):
 	hubo_puntos_turno = true
 	var multiplicador = max(1, combo_actual + 1)
 	score += puntos * multiplicador
+	
 	update_score(score)
 	actualizar_fondo_por_puntos(score)
-	if puntos > 0 and combo_actual <= 1 and randf() < 0.3: mostrar_feedback_rapido()
-
+	
+	# Si la jugada vale 100 puntos o más, damos monedas
+	if puntos >= 100:
+		var bonus = int(puntos / 100)
+		Global.agregar_monedas(bonus) # Guarda en Global.gd
+		actualizar_ui_monedas()
+		animar_monedas_ui()
+		
+		# Calculamos el centro del tablero para que salga de ahí
+		# Si tu tablero es de 8x8 y celdas de 64, el centro es aprox 256
+		var posicion_salida = board.global_position + Vector2(256, 256)
+		crear_moneda_voladora(posicion_salida)
+	
+	# Feedback visual aleatorio
+	if puntos > 0 and combo_actual <= 1 and randf() < 0.3: 
+		mostrar_feedback_rapido()
 func update_score(val):
 	score = val
 	score_label.text = str(score)
@@ -339,3 +353,32 @@ func efecto_combo_fondo():
 	var tween = create_tween()
 	tween.tween_property(fondo_visual, "modulate", Color(1.5, 1.5, 2.0), 0.1) 
 	tween.tween_property(fondo_visual, "modulate", color_objetivo, 0.5)
+
+func actualizar_ui_monedas():
+	if monedas_label:
+		# Accedemos directamente a la variable del script Global
+		monedas_label.text = "💰 " + str(Global.monedas)
+
+func animar_monedas_ui():
+	if not monedas_label: return
+	var tween = create_tween()
+	# Efecto de "Pop" para que el jugador note que ganó dinero
+	tween.tween_property(monedas_label, "scale", Vector2(1.2, 1.2), 0.1)
+	tween.tween_property(monedas_label, "scale", Vector2(1.0, 1.0), 0.1)
+func crear_moneda_voladora(pos_inicio: Vector2):
+	# 1. Creamos la moneda en memoria
+	var moneda = ESCENA_MONEDA.instantiate()
+	
+	# 2. La añadimos a la escena
+	add_child(moneda)
+	
+	# 3. FORZAMOS EL SCALE: Aquí el código manda sobre el editor
+	# Ponemos el tamaño inicial en 0.5 como querías
+	moneda.scale = Vector2(0.5, 0.5) 
+	
+	# 4. La situamos en el tablero
+	moneda.global_position = pos_inicio
+	
+	# 5. Le damos la orden de volar
+	if moneda.has_method("volar_a_la_ui"):
+		moneda.volar_a_la_ui(monedas_label.global_position)

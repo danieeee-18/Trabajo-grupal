@@ -1,0 +1,53 @@
+[gd_scene load_steps=6 format=3 uid="uid://bk6j06hgb27mc"]
+
+[ext_resource type="Script" uid="uid://bco5c45n7e3ps" path="res://moneda_visual.gd" id="1_gi6ne"]
+[ext_resource type="Texture2D" uid="uid://cwtvjqyof8nc5" path="res://assets/textures/moneda.png" id="2_23l02"]
+
+[sub_resource type="Animation" id="Animation_j7oed"]
+resource_name = "brillar "
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.05, 0.05), Vector2(0.08, 0.08)]
+}
+
+[sub_resource type="Animation" id="Animation_dqecn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tfxdy"]
+_data = {
+&"RESET": SubResource("Animation_dqecn"),
+&"brillar ": SubResource("Animation_j7oed")
+}
+
+[node name="MonedaVisual" type="Node2D"]
+script = ExtResource("1_gi6ne")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_23l02")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite2D"]
+libraries = {
+&"": SubResource("AnimationLibrary_tfxdy")
+}
