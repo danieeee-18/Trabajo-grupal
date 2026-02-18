@@ -1,18 +1,27 @@
 [gd_scene load_steps=5 format=3 uid="uid://d0yf5f57d1f20"]
 
-[ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="1_k64ye"]
 [ext_resource type="Script" uid="uid://gkoss1vpd2xw" path="res://tienda.gd" id="1_ko86m"]
 
-[sub_resource type="Gradient" id="Gradient_0oe1n"]
-offsets = PackedFloat32Array(0, 0.98)
-colors = PackedColorArray(0, 0.48235294, 0.9529412, 1, 0.2784314, 0.5686275, 0.99607843, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k64ye"]
+bg_color = Color(1, 0.49803922, 0.3137255, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_ko86m"]
-gradient = SubResource("Gradient_0oe1n")
-fill_from = Vector2(0.33333334, 0.22222222)
-fill_to = Vector2(0.3888889, 1)
-metadata/_snap_enabled = true
-metadata/_snap_count = 18
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sruq1"]
+bg_color = Color(1.2953845, 0.65382624, 0.4144388, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ko86m"]
+bg_color = Color(0.16470589, 0.16470589, 0.2509804, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [node name="Tienda" type="Control"]
 layout_mode = 3
@@ -23,33 +32,103 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ko86m")
 
-[node name="Fondo" type="TextureRect" parent="."]
+[node name="Fondo" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("GradientTexture2D_ko86m")
+color = Color(0.101960786, 0.101960786, 0.18039216, 1)
 
-[node name="LabelMonedas" type="Label" parent="."]
-layout_mode = 0
-offset_left = 393.0
-offset_top = 64.0
-offset_right = 678.0
-offset_bottom = 198.0
-theme_override_colors/font_color = Color(0.99999946, 0.84081626, 0.33841017, 1)
-theme_override_fonts/font = ExtResource("1_k64ye")
-theme_override_font_sizes/font_size = 45
-text = "Monedas: 0"
+[node name="ContenedorPrincipal" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 26.0
+offset_top = 31.0
+offset_right = -22.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
+[node name="Cabecera" type="HBoxContainer" parent="ContenedorPrincipal"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="BtnVolver" type="Button" parent="ContenedorPrincipal/Cabecera"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("StyleBoxFlat_k64ye")
+theme_override_styles/hover = SubResource("StyleBoxFlat_sruq1")
+text = "VOLVER"
+
+[node name="TituloTienda" type="Label" parent="ContenedorPrincipal/Cabecera"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 35
+text = "TIENDA DE FONDOS"
+
+[node name="LabelMonedas" type="Label" parent="ContenedorPrincipal/Cabecera"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "🪙 0"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ContenedorPrincipal"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="GridContainer" type="GridContainer" parent="ContenedorPrincipal/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/h_separation = 30
+theme_override_constants/v_separation = 30
+columns = 2
+
+[node name="PlantillaItem" type="Panel" parent="ContenedorPrincipal/ScrollContainer/GridContainer"]
+custom_minimum_size = Vector2(250, 350)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ko86m")
+
+[node name="PreviewFondo" type="ColorRect" parent="ContenedorPrincipal/ScrollContainer/GridContainer/PlantillaItem"]
+custom_minimum_size = Vector2(230, 200)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -115.0
+offset_top = 10.0
+offset_right = 115.0
+offset_bottom = 210.0
+grow_horizontal = 2
+
+[node name="NombreFondo" type="Label" parent="ContenedorPrincipal/ScrollContainer/GridContainer/PlantillaItem"]
 layout_mode = 0
-offset_left = 227.0
-offset_top = 211.0
-offset_right = 515.0
-offset_bottom = 286.0
-theme_override_fonts/normal_font = ExtResource("1_k64ye")
-theme_override_font_sizes/normal_font_size = 70
-bbcode_enabled = true
-text = "[center][color=#FFD700][shake rate=5 level=10]TIENDA[/shake][/color][/center]"
+offset_top = 220.0
+offset_right = 64.0
+offset_bottom = 243.0
+text = "Nombre"
+horizontal_alignment = 1
+
+[node name="PrecioFondo" type="Label" parent="ContenedorPrincipal/ScrollContainer/GridContainer/PlantillaItem"]
+layout_mode = 1
+offset_top = 260.0
+offset_right = 50.0
+offset_bottom = 283.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+text = "100🪙"
+horizontal_alignment = 1
+
+[node name="BotonComprar" type="Button" parent="ContenedorPrincipal/ScrollContainer/GridContainer/PlantillaItem"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Comprar"
