@@ -3,14 +3,14 @@
 [ext_resource type="Script" uid="uid://gkoss1vpd2xw" path="res://tienda.gd" id="1_ko86m"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k64ye"]
-bg_color = Color(1, 0.49803922, 0.3137255, 1)
+bg_color = Color(0.16470589, 0.16470589, 0.2509804, 1)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sruq1"]
-bg_color = Color(1.2953845, 0.65382624, 0.4144388, 1)
+bg_color = Color(0.15568686, 0.1557213, 0.24041599, 1)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
@@ -63,7 +63,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxFlat_k64ye")
 theme_override_styles/hover = SubResource("StyleBoxFlat_sruq1")
-text = "VOLVER"
+text = "    ↩    "
 
 [node name="TituloTienda" type="Label" parent="ContenedorPrincipal/Cabecera"]
 layout_mode = 2
