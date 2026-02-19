@@ -18,7 +18,7 @@ const ESCENA_MONEDA = preload("res://MonedaVisual.tscn")
 @onready var sfx_linea = $AudioLinea
 @onready var sfx_combo = $AudioCombo
 @onready var sfx_gameover = $AudioGameOver
-@onready var monedas_label = $MonedasLabel
+@onready var monedas_label = $ContenedorMonedas/MonedasLabel
 # VARIABLES
 var start_positions = {}
 var score = 0
@@ -357,28 +357,27 @@ func efecto_combo_fondo():
 func actualizar_ui_monedas():
 	if monedas_label:
 		# Accedemos directamente a la variable del script Global
-		monedas_label.text = "💰 " + str(Global.monedas)
+		monedas_label.text = str(Global.monedas)
 
 func animar_monedas_ui():
 	if not monedas_label: return
-	var tween = create_tween()
-	# Efecto de "Pop" para que el jugador note que ganó dinero
-	tween.tween_property(monedas_label, "scale", Vector2(1.2, 1.2), 0.1)
-	tween.tween_property(monedas_label, "scale", Vector2(1.0, 1.0), 0.1)
-func crear_moneda_voladora(pos_inicio: Vector2):
-	# 1. Creamos la moneda en memoria
-	var moneda = ESCENA_MONEDA.instantiate()
 	
-	# 2. La añadimos a la escena
+	var tween = create_tween()
+	# Animamos el contenedor entero (el icono + el texto)
+	var contenedor = monedas_label.get_parent() 
+	
+	tween.tween_property(contenedor, "scale", Vector2(1.1, 1.1), 0.1)
+	tween.tween_property(contenedor, "scale", Vector2(1.0, 1.0), 0.1)
+	
+	# Asegúrate de que el Pivot Offset del contenedor esté en el centro 
+	# para que no salte hacia una esquina al crecer.
+func crear_moneda_voladora(pos_inicio: Vector2):
+	var moneda = ESCENA_MONEDA.instantiate()
 	add_child(moneda)
 	
-	# 3. FORZAMOS EL SCALE: Aquí el código manda sobre el editor
-	# Ponemos el tamaño inicial en 0.5 como querías
 	moneda.scale = Vector2(0.5, 0.5) 
-	
-	# 4. La situamos en el tablero
 	moneda.global_position = pos_inicio
 	
-	# 5. Le damos la orden de volar
 	if moneda.has_method("volar_a_la_ui"):
+		# Ahora vuela hacia el contenedor completo, que es más fácil de apuntar
 		moneda.volar_a_la_ui(monedas_label.global_position)

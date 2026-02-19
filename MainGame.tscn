@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://4dwh20dufcq5"]
+[gd_scene load_steps=22 format=3 uid="uid://4dwh20dufcq5"]
 
 [ext_resource type="PackedScene" uid="uid://ckrmwddkl3sn3" path="res://board.tscn" id="1_3tbxw"]
 [ext_resource type="Script" uid="uid://buhmj71d7hac7" path="res://main_game.gd" id="1_ws5ob"]
@@ -9,6 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://bm2jff3dr0o4v" path="res://sonidos/linea.wav" id="6_x5ji8"]
 [ext_resource type="AudioStream" uid="uid://bc2qce0csmhsc" path="res://sonidos/combo.wav" id="7_o8l48"]
 [ext_resource type="AudioStream" uid="uid://jf53jpo7s36x" path="res://sonidos/gameover.wav" id="8_0v7qb"]
+[ext_resource type="Texture2D" uid="uid://byawab8htr64r" path="res://assets/textures/moneda1.png" id="10_o8l48"]
 
 [sub_resource type="Gradient" id="Gradient_ws5ob"]
 colors = PackedColorArray(7.52765e-05, 0.4820559, 0.9541736, 1, 0.2788064, 0.5682157, 0.99752694, 1)
@@ -129,14 +130,6 @@ text = "0"
 label_settings = SubResource("LabelSettings_ws5ob")
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="MonedasLabel" type="Label" parent="."]
-offset_left = 22.0
-offset_top = 14.0
-offset_right = 247.0
-offset_bottom = 76.0
-theme_override_fonts/font = ExtResource("4_x5ji8")
-theme_override_font_sizes/font_size = 50
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(361, 643)
@@ -354,6 +347,24 @@ bus = &"Efectos"
 [node name="AudioGameOver" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_0v7qb")
 bus = &"Efectos"
+
+[node name="ContenedorMonedas" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(80, 80)
+offset_left = -4.0
+offset_top = -17.0
+offset_right = 137.0
+offset_bottom = 120.0
+
+[node name="TextureRect" type="TextureRect" parent="ContenedorMonedas"]
+custom_minimum_size = Vector2(110, 60)
+layout_mode = 2
+texture = ExtResource("10_o8l48")
+expand_mode = 1
+
+[node name="MonedasLabel" type="Label" parent="ContenedorMonedas"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_x5ji8")
+theme_override_font_sizes/font_size = 50
 
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaHome/BtnHome" to="." method="_on_btn_home_pressed"]
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay/BtnReplay" to="." method="_on_btn_replay_pressed"]
