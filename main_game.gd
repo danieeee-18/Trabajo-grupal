@@ -4,6 +4,7 @@ const GAME_OVER_SCENE = preload("res://GameOver.tscn")
 const FUENTE_HYPE = preload("res://Luckiest_Guy/LuckiestGuy-Regular.ttf")
 const FUENTE_MODERNA = preload("res://Fuentes/Montserrat-Black.ttf")
 const ESCENA_MONEDA = preload("res://MonedaVisual.tscn")
+
 # --- REFERENCIAS ---
 @onready var board = $Board
 @onready var pieces_array = [$Piece, $Piece2, $Piece3]
@@ -19,12 +20,14 @@ const ESCENA_MONEDA = preload("res://MonedaVisual.tscn")
 @onready var sfx_combo = $AudioCombo
 @onready var sfx_gameover = $AudioGameOver
 @onready var monedas_label = $ContenedorMonedas/MonedasLabel
+
 # VARIABLES
 var start_positions = {}
 var score = 0
 var combo_actual = 0          
 var hubo_puntos_turno = false 
 var fuerza_temblor = 0.0      
+var ultima_pos_jugada : Vector2 = Vector2.ZERO # <--- PASO 3: Variable para guardar posición
 
 # DOPAMINA & COLORES
 var frases_animo = ["NICE", "GOOD", "SWEET", "PURE", "COOL", "FRESH", "SOFT", "LOVELY"]
@@ -36,7 +39,7 @@ var paleta_niveles = [
 ]
 var color_objetivo = Color.WHITE 
 
-# BASE DE DATOS PIEZAS
+# BASE DE DATOS PIEZAS (Igual a la tuya)
 var shapes_database = [
 	{"name": "Line_H_2", "color": Color.PINK, "cells": [Vector2i(0,0), Vector2i(1,0)]},
 	{"name": "Line_H_3", "color": Color.HOT_PINK, "cells": [Vector2i(0,0), Vector2i(1,0), Vector2i(2,0)]},
@@ -92,6 +95,7 @@ func _ready():
 	await get_tree().create_timer(0.6).timeout
 	mostrar_frase_hype("GO!", Color(0.2, 1, 0.2))
 	actualizar_ui_monedas()
+
 func _process(delta):
 	if fuerza_temblor > 0:
 		fuerza_temblor = lerp(fuerza_temblor, 0.0, 10.0 * delta)
@@ -99,29 +103,31 @@ func _process(delta):
 		if fuerza_temblor < 0.5:
 			fuerza_temblor = 0
 			if camera: camera.offset = Vector2.ZERO
+
 func _on_puntos_ganados(puntos):
 	hubo_puntos_turno = true
 	var multiplicador = max(1, combo_actual + 1)
 	score += puntos * multiplicador
-	
 	update_score(score)
 	actualizar_fondo_por_puntos(score)
 	
-	# Si la jugada vale 100 puntos o más, damos monedas
 	if puntos >= 100:
-		var bonus = int(puntos / 100)
-		Global.agregar_monedas(bonus) # Guarda en Global.gd
+		var cantidad_monedas = int(puntos / 100)
+		Global.agregar_monedas(cantidad_monedas)
 		actualizar_ui_monedas()
-		animar_monedas_ui()
 		
-		# Calculamos el centro del tablero para que salga de ahí
-		# Si tu tablero es de 8x8 y celdas de 64, el centro es aprox 256
-		var posicion_salida = board.global_position + Vector2(256, 256)
-		crear_moneda_voladora(posicion_salida)
-	
-	# Feedback visual aleatorio
+		# USAMOS LA POSICIÓN GUARDADA (PASO 3)
+		var origen = ultima_pos_jugada
+		if origen == Vector2.ZERO:
+			origen = board.global_position + Vector2(256, 256)
+		
+		for i in range(cantidad_monedas):
+			await get_tree().create_timer(0.08).timeout 
+			crear_moneda_voladora(origen)
+			
 	if puntos > 0 and combo_actual <= 1 and randf() < 0.3: 
 		mostrar_feedback_rapido()
+
 func update_score(val):
 	score = val
 	score_label.text = str(score)
@@ -184,6 +190,10 @@ func _on_pieza_soltada(which_piece, posicion_global):
 	var grid_x = round(local_pos.x / cell_size)
 	var grid_y = round(local_pos.y / cell_size)
 	if board.can_place_piece(grid_x, grid_y, which_piece.cells):
+		
+		# <--- AQUÍ GUARDAMOS LA POSICIÓN ANTES DE BORRARLA
+		ultima_pos_jugada = posicion_global
+		
 		if sfx_pop:
 			sfx_pop.pitch_scale = randf_range(0.9, 1.1)
 			sfx_pop.play()
@@ -256,7 +266,6 @@ func _on_btn_abrir_ajustes_pressed():
 	capa_ajustes.visible = true
 	get_tree().paused = true
 
-# SISTEMA VISUAL
 func mostrar_frase_hype(texto, color_texto = Color.WHITE):
 	efecto_combo_fondo()
 	var label = Label.new()
@@ -356,28 +365,20 @@ func efecto_combo_fondo():
 
 func actualizar_ui_monedas():
 	if monedas_label:
-		# Accedemos directamente a la variable del script Global
 		monedas_label.text = str(Global.monedas)
 
 func animar_monedas_ui():
 	if not monedas_label: return
-	
 	var tween = create_tween()
-	# Animamos el contenedor entero (el icono + el texto)
 	var contenedor = monedas_label.get_parent() 
-	
 	tween.tween_property(contenedor, "scale", Vector2(1.1, 1.1), 0.1)
 	tween.tween_property(contenedor, "scale", Vector2(1.0, 1.0), 0.1)
-	
-	# Asegúrate de que el Pivot Offset del contenedor esté en el centro 
-	# para que no salte hacia una esquina al crecer.
+
 func crear_moneda_voladora(pos_inicio: Vector2):
 	var moneda = ESCENA_MONEDA.instantiate()
 	add_child(moneda)
-	
-	moneda.scale = Vector2(0.5, 0.5) 
-	moneda.global_position = pos_inicio
-	
+	moneda.scale = Vector2(0.5, 0.5)
+	var variacion = Vector2(randf_range(-40, 40), randf_range(-40, 40))
+	moneda.global_position = pos_inicio + variacion
 	if moneda.has_method("volar_a_la_ui"):
-		# Ahora vuela hacia el contenedor completo, que es más fácil de apuntar
 		moneda.volar_a_la_ui(monedas_label.global_position)

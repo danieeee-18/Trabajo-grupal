@@ -356,7 +356,7 @@ offset_right = 137.0
 offset_bottom = 120.0
 
 [node name="TextureRect" type="TextureRect" parent="ContenedorMonedas"]
-custom_minimum_size = Vector2(110, 60)
+custom_minimum_size = Vector2(130, 60)
 layout_mode = 2
 texture = ExtResource("10_o8l48")
 expand_mode = 1
