@@ -22,6 +22,7 @@ buses/default_bus_layout="uid://c8h7k0wwnkt5a"
 
 Global="*res://Global.gd"
 AudioManager="*res://AudioManager.tscn"
+GameEvents="*res://GameEvents.gd"
 
 [display]
 
