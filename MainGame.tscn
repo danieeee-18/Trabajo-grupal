@@ -143,6 +143,7 @@ position = Vector2(361, 643)
 
 [node name="CapaAjustes" type="CanvasLayer" parent="."]
 process_mode = 3
+visible = false
 
 [node name="FondoOScuro" type="ColorRect" parent="CapaAjustes"]
 anchors_preset = 15

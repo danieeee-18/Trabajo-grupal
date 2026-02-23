@@ -1,13 +1,15 @@
 # res://Piece.gd
 extends Node2D
 
+# Señales para comunicación con el juego principal
 signal pieza_soltada(pieza_self, posicion_global)
 signal pieza_arrastrada(pieza, posicion)
 
 var block_texture = preload("res://block_texture.tres")
 
-# Ahora usamos el recurso para configurar la pieza
-var current_data: PieceData
+# Variables locales para almacenar la configuración (celdas y color)
+var cells = []
+var piece_color = Color.WHITE
 
 @onready var visuals = $Visuals
 @onready var collider = $Area2D/CollisionShape2D
@@ -15,26 +17,35 @@ var current_data: PieceData
 var dragging = false
 var offset_mouse = Vector2.ZERO 
 
-func set_configuration(data: PieceData):
-	current_data = data
+# FUNCIÓN CORREGIDA: Ahora acepta 2 argumentos (celdas y color)
+# Esto soluciona el error de "Expected 1 argument"
+func set_configuration(new_cells, new_color):
+	cells = new_cells
+	piece_color = new_color
 	draw_piece()
 	update_collider()
 
 func draw_piece():
+	# Limpiamos los bloques visuales anteriores
 	for child in visuals.get_children():
 		child.queue_free()
 	
-	for cell in current_data.cells:
+	# Dibujamos cada bloque de la pieza con su color correspondiente
+	for cell in cells:
 		var block = Sprite2D.new()
 		block.texture = block_texture
-		block.modulate = current_data.color
+		block.modulate = piece_color
 		block.position = Vector2(cell.x * 64, cell.y * 64)
 		visuals.add_child(block)
 
 func update_collider():
+	if cells.size() == 0: return
+	
 	var min_p = Vector2i(0,0)
 	var max_p = Vector2i(0,0)
-	for cell in current_data.cells:
+	
+	# Calculamos el área total de la pieza para el colisionador
+	for cell in cells:
 		min_p.x = min(min_p.x, cell.x)
 		max_p.x = max(max_p.x, cell.x)
 		min_p.y = min(min_p.y, cell.y)
@@ -42,8 +53,11 @@ func update_collider():
 	
 	var width = (max_p.x - min_p.x + 1) * 64
 	var height = (max_p.y - min_p.y + 1) * 64
-	collider.shape.size = Vector2(width, height)
-	collider.position = Vector2(width/2 - 32, height/2 - 32) # Ajuste de centro
+	
+	# Ajustamos el tamaño del colisionador (debe ser un RectangleShape2D)
+	if collider.shape is RectangleShape2D:
+		collider.shape.size = Vector2(width, height)
+		collider.position = Vector2(width/2 - 32, height/2 - 32) # Ajuste de centro
 
 func _process(_delta):
 	if dragging:

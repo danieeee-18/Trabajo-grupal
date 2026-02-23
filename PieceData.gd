@@ -1,4 +1,3 @@
-# res://src/resources/PieceData.gd
 extends Resource
 class_name PieceData
 

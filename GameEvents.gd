@@ -1,4 +1,4 @@
-# res://src/autoload/GameEvents.gd
+
 extends Node
 
 # Emitido cuando el jugador gana puntos
