@@ -1,12 +1,16 @@
-[gd_scene load_steps=22 format=3 uid="uid://4dwh20dufcq5"]
+[gd_scene load_steps=28 format=3 uid="uid://4dwh20dufcq5"]
 
 [ext_resource type="PackedScene" uid="uid://ckrmwddkl3sn3" path="res://board.tscn" id="1_3tbxw"]
 [ext_resource type="Script" uid="uid://buhmj71d7hac7" path="res://main_game.gd" id="1_ws5ob"]
 [ext_resource type="PackedScene" uid="uid://bdo5b0hnj41gs" path="res://Piece.tscn" id="2_e3m3f"]
 [ext_resource type="Script" uid="uid://dwvf47fvagd27" path="res://button.gd" id="4_bqqt8"]
 [ext_resource type="FontFile" uid="uid://c6vole0hpb72e" path="res://Fuentes/Montserrat-Black.ttf" id="4_x5ji8"]
+[ext_resource type="Texture2D" uid="uid://dcd4d8yn2w53t" path="res://assets/textures/configuraciones.png" id="5_0v7qb"]
+[ext_resource type="Texture2D" uid="uid://coopevoni3wj8" path="res://assets/textures/hogar-2.png" id="5_qtrx8"]
 [ext_resource type="AudioStream" uid="uid://fksgcpc4nf7e" path="res://sonidos/pop.wav" id="5_v3hs3"]
+[ext_resource type="Texture2D" uid="uid://cr05fe8q2x7nf" path="res://assets/textures/reanudar.png" id="6_led80"]
 [ext_resource type="AudioStream" uid="uid://bm2jff3dr0o4v" path="res://sonidos/linea.wav" id="6_x5ji8"]
+[ext_resource type="Texture2D" uid="uid://fsmsr31xo7nq" path="res://assets/textures/x.png" id="7_mi4js"]
 [ext_resource type="AudioStream" uid="uid://bc2qce0csmhsc" path="res://sonidos/combo.wav" id="7_o8l48"]
 [ext_resource type="AudioStream" uid="uid://jf53jpo7s36x" path="res://sonidos/gameover.wav" id="8_0v7qb"]
 [ext_resource type="Texture2D" uid="uid://byawab8htr64r" path="res://assets/textures/moneda1.png" id="10_o8l48"]
@@ -81,8 +85,11 @@ cache/0/16/0/scale = 1.0
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8qpgq"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x5ji8"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o8l48"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0v7qb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qtrx8"]
 
 [node name="MainGame" type="Node2D"]
 script = ExtResource("1_ws5ob")
@@ -136,7 +143,6 @@ position = Vector2(361, 643)
 
 [node name="CapaAjustes" type="CanvasLayer" parent="."]
 process_mode = 3
-visible = false
 
 [node name="FondoOScuro" type="ColorRect" parent="CapaAjustes"]
 anchors_preset = 15
@@ -252,6 +258,7 @@ size_flags_horizontal = 3
 clip_contents = true
 custom_minimum_size = Vector2(120, 60)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.99607843, 0.5058824, 0.16862746, 1)
 theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBoxFlat_pv6b4")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8dnxm")
@@ -282,7 +289,11 @@ theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBoxFlat_8dnxm")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8dnxm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_v3hs3")
-text = "🏠"
+text = "  "
+icon = ExtResource("5_qtrx8")
+alignment = 2
+icon_alignment = 1
+expand_icon = true
 
 [node name="FilaReplay" type="HBoxContainer" parent="CapaAjustes/CajaMenu/ListaOpciones"]
 layout_mode = 2
@@ -304,33 +315,44 @@ theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBoxFlat_8dnxm")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8dnxm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_v3hs3")
-text = "🔁"
+icon = ExtResource("6_led80")
+icon_alignment = 1
+expand_icon = true
 
 [node name="BotonCerrar" type="Button" parent="CapaAjustes"]
 anchors_preset = -1
 anchor_left = 0.772
 anchor_top = 0.23600002
-anchor_right = 0.77800006
-anchor_bottom = 0.24400002
-offset_left = -11.840027
-offset_top = -21.080017
-offset_right = 16.839966
-offset_bottom = 31.679993
+anchor_right = 0.777
+anchor_bottom = 0.26000002
+offset_left = -42.840027
+offset_top = -53.080017
+offset_right = 37.559998
+offset_bottom = 25.199982
 theme_override_colors/font_color = Color(0.3553136, 0.35531354, 0.35531357, 1)
 theme_override_fonts/font = SubResource("FontFile_ws5ob")
 theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxFlat_8qpgq")
-text = "X"
+icon = ExtResource("7_mi4js")
 alignment = 2
+expand_icon = true
 
 [node name="BtnAbrirAjustes" type="Button" parent="."]
-offset_left = 590.0
-offset_top = 5.0
-offset_right = 640.0
-offset_bottom = 36.0
+custom_minimum_size = Vector2(10, 10)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 630.00006
+offset_top = 21.0
+offset_right = 654.00006
+offset_bottom = 47.90909
+grow_horizontal = 0
 scale = Vector2(2.75, 2.75)
-theme_override_styles/normal = SubResource("StyleBoxFlat_x5ji8")
-text = "⚙️"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_o8l48")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_0v7qb")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_qtrx8")
+icon = ExtResource("5_0v7qb")
+expand_icon = true
 
 [node name="AudioPop" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_v3hs3")

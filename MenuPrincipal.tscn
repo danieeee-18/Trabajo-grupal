@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://dwuh734k7n0qn"]
+[gd_scene load_steps=11 format=3 uid="uid://dwuh734k7n0qn"]
 
 [ext_resource type="Script" uid="uid://cg73behmoagmt" path="res://menu_principal.gd" id="1_0oe1n"]
 [ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_ba235"]
+[ext_resource type="Texture2D" uid="uid://dcd4d8yn2w53t" path="res://assets/textures/configuraciones.png" id="3_5dpk2"]
 
 [sub_resource type="Gradient" id="Gradient_0oe1n"]
 offsets = PackedFloat32Array(0, 0.98)
@@ -167,7 +168,7 @@ theme_override_font_sizes/font_size = 42
 theme_override_styles/normal = SubResource("StyleBoxFlat_5dpk2")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_5dpk2")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5dpk2")
-text = " ⚙️ Options"
+text = "       Options"
 
 [node name="BotonTienda" type="Button" parent="."]
 layout_mode = 1
@@ -205,11 +206,14 @@ text = "👑 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="."]
+[node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
-theme_override_colors/font_color = Color(0.6356103, 0.9302399, 0.9997811, 1)
+offset_left = 270.0
+offset_top = 803.0
+offset_right = 329.0
+offset_bottom = 851.0
+texture = ExtResource("3_5dpk2")
+expand_mode = 1
 
 [connection signal="pressed" from="BotonJugar" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="BotonOpciones" to="." method="_on_options_pressed"]
