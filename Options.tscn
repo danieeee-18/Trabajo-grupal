@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://bpxiy6tufdg3v"]
+[gd_scene load_steps=10 format=3 uid="uid://bpxiy6tufdg3v"]
 
 [ext_resource type="Script" uid="uid://deo3bndqks7th" path="res://options.gd" id="1_r314q"]
-[ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_yia4p"]
 
 [sub_resource type="Gradient" id="Gradient_0oe1n"]
 colors = PackedColorArray(0, 0.3529412, 0.654902, 1, 1, 0.99215686, 0.89411765, 1)
@@ -25,16 +24,46 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 shadow_color = Color(0.003921569, 0.003921569, 0.003921569, 0.34509805)
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bwr58"]
+bg_color = Color(0.72156864, 0.5254902, 0.043137256, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.72156864, 0.5254902, 0.043137256, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.003921569, 0.003921569, 0.003921569, 0.34509805)
 shadow_size = 5
 shadow_offset = Vector2(0, 3)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r314q"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dfe3t"]
+bg_color = Color(0.8235294, 0.6, 0.05490196, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.84313726, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.003921569, 0.003921569, 0.003921569, 0.34509805)
+shadow_size = 5
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yia4p"]
 content_margin_left = 50.0
 content_margin_top = 20.0
 content_margin_right = 50.0
 content_margin_bottom = 35.0
 bg_color = Color(1, 0.84313726, 0, 1)
-border_width_bottom = 12
+border_width_bottom = 8
 border_color = Color(0.85490197, 0.64705884, 0.1254902, 1)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
@@ -43,10 +72,34 @@ corner_radius_bottom_left = 20
 shadow_size = 10
 shadow_offset = Vector2(0, 5)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yia4p"]
-content_margin_top = 10.0
-bg_color = Color(0, 0.8117647, 0.6156863, 1)
-border_color = Color(0, 0.56078434, 0.41960785, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r314q"]
+content_margin_left = 50.0
+content_margin_top = 20.0
+content_margin_right = 50.0
+content_margin_bottom = 35.0
+bg_color = Color(1, 0.84313726, 0, 1)
+border_color = Color(0.85490197, 0.64705884, 0.1254902, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2r1l1"]
+content_margin_left = 50.0
+content_margin_top = 20.0
+content_margin_right = 50.0
+content_margin_bottom = 35.0
+bg_color = Color(1.0569379, 0.89160943, 0, 1)
+border_width_bottom = 8
+border_color = Color(0.85490197, 0.64705884, 0.1254902, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
 
 [node name="PantallaOpciones" type="Control"]
 layout_mode = 3
@@ -90,44 +143,41 @@ theme_override_constants/separation = 20
 
 [node name="CheckButtonSonido" type="CheckButton" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(0.7764706, 0.7764706, 0.7764706, 1)
+theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.84313726, 0, 1)
 theme_override_colors/font_outline_color = Color(0.078431375, 0.11764706, 0.1882353, 1)
-theme_override_constants/outline_size = 8
-theme_override_fonts/font = ExtResource("2_yia4p")
+theme_override_constants/outline_size = 20
 theme_override_font_sizes/font_size = 30
 text = "Sound"
 
 [node name="CheckButtonMusica" type="CheckButton" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(0.7764706, 0.7764706, 0.7764706, 1)
+theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.84313726, 0, 1)
 theme_override_colors/font_outline_color = Color(0.078431375, 0.11764706, 0.1882353, 1)
-theme_override_constants/outline_size = 8
-theme_override_fonts/font = ExtResource("2_yia4p")
+theme_override_constants/outline_size = 20
 theme_override_font_sizes/font_size = 30
 text = "Music"
 
 [node name="CheckButtonVibra" type="CheckButton" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(0.7764706, 0.7764706, 0.7764706, 1)
+theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.84313726, 0, 1)
 theme_override_colors/font_outline_color = Color(0.078431375, 0.11764706, 0.1882353, 1)
-theme_override_constants/outline_size = 8
-theme_override_fonts/font = ExtResource("2_yia4p")
+theme_override_constants/outline_size = 20
 theme_override_font_sizes/font_size = 30
 text = "Vibration"
 
 [node name="BotonReset" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(250, 40)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.875, 0.875, 0.875, 1)
-theme_override_fonts/font = ExtResource("2_yia4p")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.11764706, 0.1882353, 1)
+theme_override_constants/outline_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_ywiuv")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ywiuv")
-theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_ywiuv")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ywiuv")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_ywiuv")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bwr58")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dfe3t")
 text = "Resert Record"
 
 [node name="BotonVolver" type="Button" parent="."]
@@ -144,25 +194,30 @@ offset_bottom = 429.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(0.8346143, 0.8346143, 0.8346143, 1)
-theme_override_colors/font_hover_color = Color(0.7490196, 0.30588236, 0.03137255, 1)
 theme_override_colors/font_outline_color = Color(0, 0.2, 0.4, 1)
-theme_override_constants/outline_size = 12
+theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 50
-theme_override_styles/normal = SubResource("StyleBoxFlat_r314q")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_yia4p")
-theme_override_styles/hover = SubResource("StyleBoxFlat_r314q")
+theme_override_styles/normal = SubResource("StyleBoxFlat_yia4p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_r314q")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2r1l1")
 text = "Return"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
-layout_mode = 0
-offset_left = 183.0
-offset_top = 172.0
-offset_right = 519.0
-offset_bottom = 247.0
-theme_override_fonts/normal_font = ExtResource("2_yia4p")
-theme_override_font_sizes/normal_font_size = 70
-bbcode_enabled = true
-text = "Settings"
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -184.0
+offset_top = 100.0
+offset_right = 184.0
+offset_bottom = 210.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
+theme_override_colors/font_shadow_color = Color(1.416, 1.198, 0, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.11764706, 0.1882353, 1)
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 20
+theme_override_font_sizes/font_size = 80
+text = "SETTINGS"
 
 [connection signal="pressed" from="BotonVolver" to="." method="_on_boton_volver_pressed"]

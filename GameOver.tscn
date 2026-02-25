@@ -1,7 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://gd6xqklh1xsa"]
+[gd_scene load_steps=9 format=3 uid="uid://gd6xqklh1xsa"]
 
 [ext_resource type="Script" uid="uid://gqax3f6dhl6s" path="res://GameOver.gd" id="1_a1htc"]
-[ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_eksk4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl4ts"]
 bg_color = Color(0.2901961, 0.13725491, 0.3529412, 1)
@@ -70,6 +69,7 @@ corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 
 [node name="CanvasLayer" type="CanvasLayer"]
+process_mode = 3
 script = ExtResource("1_a1htc")
 
 [node name="FondoNegro" type="ColorRect" parent="."]
@@ -107,8 +107,7 @@ alignment = 1
 [node name="Label" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9529412, 0.6117647, 0.07058824, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
-theme_override_fonts/font = ExtResource("2_eksk4")
+theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 45
 text = "GAME OVER"
 horizontal_alignment = 1
@@ -116,8 +115,9 @@ horizontal_alignment = 1
 [node name="LabelPuntos" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.18039216, 0.8, 0.44313726, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_eksk4")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 25
 text = "Score: 0"
 horizontal_alignment = 1
 
@@ -125,7 +125,9 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_fonts/font = ExtResource("2_eksk4")
+theme_override_colors/font_color = Color(0.875, 0.875, 0.875, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 7
 theme_override_styles/normal = SubResource("StyleBoxFlat_a1htc")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_jywu3")
 theme_override_styles/hover = SubResource("StyleBoxFlat_3y56u")
@@ -135,8 +137,12 @@ text = "RETRY"
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_fonts/font = ExtResource("2_eksk4")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 7
 theme_override_styles/normal = SubResource("StyleBoxFlat_eksk4")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ua7od")
 theme_override_styles/hover = SubResource("StyleBoxFlat_3fonj")
 text = "MAIN MENU"
+
+[connection signal="pressed" from="Panel/VBoxContainer/BotonReiniciar" to="." method="_on_btn_reintentar_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/BotonMenu" to="." method="_on_btn_menu_pressed"]

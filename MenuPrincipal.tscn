@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://dwuh734k7n0qn"]
+[gd_scene load_steps=18 format=3 uid="uid://dwuh734k7n0qn"]
 
 [ext_resource type="Script" uid="uid://cg73behmoagmt" path="res://menu_principal.gd" id="1_0oe1n"]
 [ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_ba235"]
 [ext_resource type="Texture2D" uid="uid://dcd4d8yn2w53t" path="res://assets/textures/configuraciones.png" id="3_5dpk2"]
 [ext_resource type="Texture2D" uid="uid://8iroit28x225" path="res://assets/textures/circulo.png" id="4_ectly"]
 [ext_resource type="Texture2D" uid="uid://c5g1cbem60v16" path="res://assets/textures/carrito-de-compras-3.png" id="5_knros"]
+[ext_resource type="Texture2D" uid="uid://cwtvjqyof8nc5" path="res://assets/textures/moneda.png" id="6_knros"]
 
 [sub_resource type="Gradient" id="Gradient_0oe1n"]
 offsets = PackedFloat32Array(0, 0.98)
@@ -17,7 +18,7 @@ fill_to = Vector2(0.3888889, 1)
 metadata/_snap_enabled = true
 metadata/_snap_count = 18
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0oe1n"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_knros"]
 content_margin_left = 50.0
 content_margin_top = 20.0
 content_margin_right = 50.0
@@ -32,9 +33,38 @@ corner_radius_bottom_left = 20
 shadow_size = 10
 shadow_offset = Vector2(0, 5)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5dpk2"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oh4jq"]
+content_margin_left = 50.0
+content_margin_top = 20.0
+content_margin_right = 50.0
+content_margin_bottom = 35.0
+bg_color = Color(1, 0.6156863, 0.03137255, 1)
+border_color = Color(0.73410374, 0.56212294, 0.38070887, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_348rq"]
+content_margin_left = 50.0
+content_margin_top = 20.0
+content_margin_right = 50.0
+content_margin_bottom = 35.0
+bg_color = Color(1.1374342, 0.7030562, 0.042044476, 1)
+border_width_bottom = 8
+border_color = Color(0.73410374, 0.56212294, 0.38070887, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xhhru"]
 bg_color = Color(1, 0, 0, 1)
-border_width_bottom = 10
+border_width_bottom = 8
 border_color = Color(0.59905666, 1.4318898e-06, 4.3317675e-07, 1)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
@@ -42,9 +72,28 @@ corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 shadow_size = 9
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ba235"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d5bff"]
+bg_color = Color(1, 0, 0, 1)
+border_color = Color(0.59905666, 1.4318898e-06, 4.3317675e-07, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_usri5"]
+bg_color = Color(0.99999934, 0.21293044, 0.15732148, 1)
+border_width_bottom = 8
+border_color = Color(0.59905666, 1.4318898e-06, 4.3317675e-07, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7b4h3"]
 bg_color = Color(0.1254902, 0.8901961, 0, 1)
-border_width_bottom = 10
+border_width_bottom = 8
 border_color = Color(0.20392157, 0.4862745, 0, 1)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
@@ -52,9 +101,8 @@ corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 shadow_size = 9
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pi62y"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tk4n5"]
 bg_color = Color(0.1254902, 0.8901961, 0, 1)
-border_width_bottom = 10
 border_color = Color(0.20392157, 0.4862745, 0, 1)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
@@ -62,9 +110,9 @@ corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 shadow_size = 9
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ectly"]
-bg_color = Color(0.1254902, 0.8901961, 0, 1)
-border_width_bottom = 10
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u2tii"]
+bg_color = Color(0.14900255, 1.0133263, 0, 1)
+border_width_bottom = 8
 border_color = Color(0.20392157, 0.4862745, 0, 1)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
@@ -141,9 +189,9 @@ theme_override_colors/font_hover_color = Color(0.60324824, 0.6032482, 0.6032482,
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 42
-theme_override_styles/normal = SubResource("StyleBoxFlat_0oe1n")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_0oe1n")
-theme_override_styles/hover = SubResource("StyleBoxFlat_0oe1n")
+theme_override_styles/normal = SubResource("StyleBoxFlat_knros")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_oh4jq")
+theme_override_styles/hover = SubResource("StyleBoxFlat_348rq")
 text = "       Classic 
 "
 alignment = 0
@@ -167,9 +215,9 @@ theme_override_colors/font_hover_color = Color(0.6913568, 0.6913567, 0.69135773,
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 7
 theme_override_font_sizes/font_size = 42
-theme_override_styles/normal = SubResource("StyleBoxFlat_5dpk2")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_5dpk2")
-theme_override_styles/hover = SubResource("StyleBoxFlat_5dpk2")
+theme_override_styles/normal = SubResource("StyleBoxFlat_xhhru")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_d5bff")
+theme_override_styles/hover = SubResource("StyleBoxFlat_usri5")
 text = "       Options"
 
 [node name="BotonTienda" type="Button" parent="."]
@@ -191,9 +239,9 @@ theme_override_colors/font_hover_color = Color(0.6913568, 0.6913567, 0.69135773,
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 7
 theme_override_font_sizes/font_size = 42
-theme_override_styles/normal = SubResource("StyleBoxFlat_ba235")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_pi62y")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ectly")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7b4h3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tk4n5")
+theme_override_styles/hover = SubResource("StyleBoxFlat_u2tii")
 text = "   Shop"
 
 [node name="LabelRecord" type="Label" parent="."]
@@ -234,6 +282,30 @@ offset_right = 311.0
 offset_bottom = 1018.0
 texture = ExtResource("5_knros")
 expand_mode = 1
+
+[node name="ContenedorMonedas" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -120.0
+offset_right = -12.0
+offset_bottom = 80.0
+grow_horizontal = 0
+theme_override_constants/separation = -15
+
+[node name="TextureRect" type="TextureRect" parent="ContenedorMonedas"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+texture = ExtResource("6_knros")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LabelMonedas" type="Label" parent="ContenedorMonedas"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
+theme_override_font_sizes/font_size = 25
+text = "999"
 
 [connection signal="pressed" from="BotonJugar" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="BotonOpciones" to="." method="_on_options_pressed"]

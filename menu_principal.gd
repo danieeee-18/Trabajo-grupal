@@ -6,18 +6,34 @@ extends Control
 @onready var boton_jugar = $BotonJugar
 # @onready var BotonOpciones = $BotonOpciones
 
+# NUEVO: Referencia al texto de las monedas
+# (Asegúrate de que la ruta coincida con cómo lo llamaste en el panel de nodos)
+@onready var label_monedas = $ContenedorMonedas/LabelMonedas
+
 func _ready():
+	# 0. CARGAMOS LA PARTIDA (Para asegurar que tenemos las monedas y récord al día)
+	if Global.has_method("load_game"):
+		Global.load_game()
+
 	# 1. ACTUALIZAR RÉCORD
 	# Verificamos si existe el nodo para evitar errores rojos
 	if has_node("LabelRecord"):
 		# Mostramos la corona y el número guardado en Global
 		$LabelRecord.text = "👑 " + str(Global.high_score)
 		
+	# 1.5 ACTUALIZAR MONEDAS (NUEVO)
+	actualizar_monedas_ui()
+		
 	# 2. MÚSICA
 	# Le decimos al DJ que ponga el disco de Menú Principal
-	# (Usamos has_node por seguridad, aunque debería estar siempre)
 	if has_node("/root/AudioManager"):
 		AudioManager.poner_musica_menu()
+
+# --- FUNCIONES DE LA INTERFAZ ---
+func actualizar_monedas_ui():
+	# Si hemos encontrado el nodo, le ponemos la cantidad de monedas
+	if label_monedas:
+		label_monedas.text = str(Global.monedas)
 
 # --- FUNCIONES DE LOS BOTONES ---
 
