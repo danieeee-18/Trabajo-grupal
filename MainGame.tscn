@@ -143,7 +143,6 @@ position = Vector2(361, 643)
 
 [node name="CapaAjustes" type="CanvasLayer" parent="."]
 process_mode = 3
-visible = false
 
 [node name="FondoOScuro" type="ColorRect" parent="CapaAjustes"]
 anchors_preset = 15
@@ -205,10 +204,14 @@ text = "Sound"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaSonido"]
+[node name="FilaSonido" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaSonido"]
 clip_contents = true
 custom_minimum_size = Vector2(120, 60)
 layout_mode = 2
+theme_override_colors/font_focus_color = Color(1, 0.6039216, 0.007843138, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.6039216, 0.007843138, 1)
+theme_override_colors/font_hover_color = Color(1, 0.6039216, 0.007843138, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.6039216, 0.007843138, 1)
 theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBoxFlat_pv6b4")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8dnxm")
@@ -230,10 +233,15 @@ text = "Music"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaMusica"]
+[node name="FilaMusica" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaMusica"]
 clip_contents = true
 custom_minimum_size = Vector2(120, 60)
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6039216, 0.007843138, 1)
+theme_override_colors/font_focus_color = Color(1, 0.6039216, 0.007843138, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.6039216, 0.007843138, 1)
+theme_override_colors/font_hover_color = Color(1, 0.6039216, 0.007843138, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.6039216, 0.007843138, 1)
 theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBoxFlat_pv6b4")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8dnxm")
@@ -255,11 +263,15 @@ text = "Vibration"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaVibracion"]
+[node name="FilaVibracion" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaVibracion"]
 clip_contents = true
 custom_minimum_size = Vector2(120, 60)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.99607843, 0.5058824, 0.16862746, 1)
+theme_override_colors/font_focus_color = Color(1, 0.6039216, 0.007843138, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.6039216, 0.007843138, 1)
+theme_override_colors/font_hover_color = Color(1, 0.6039216, 0.007843138, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.6039216, 0.007843138, 1)
 theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBoxFlat_pv6b4")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8dnxm")
@@ -281,7 +293,7 @@ text = "Home"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BtnHome" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaHome"]
+[node name="FilaHome" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaHome"]
 process_mode = 3
 clip_contents = true
 custom_minimum_size = Vector2(120, 60)
@@ -308,7 +320,7 @@ text = "Replay"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BtnReplay" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay"]
+[node name="FilaReplay" type="Button" parent="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay"]
 clip_contents = true
 custom_minimum_size = Vector2(120, 60)
 layout_mode = 2
@@ -389,7 +401,14 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("4_x5ji8")
 theme_override_font_sizes/font_size = 50
 
-[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaHome/BtnHome" to="." method="_on_btn_home_pressed"]
-[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay/BtnReplay" to="." method="_on_btn_replay_pressed"]
+[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaSonido/FilaSonido" to="." method="_on_fila_sonido_pressed"]
+[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaSonido/FilaSonido" to="CapaAjustes/CajaMenu/ListaOpciones/FilaSonido/FilaSonido" method="_on_pressed"]
+[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaMusica/FilaMusica" to="." method="_on_fila_musica_pressed"]
+[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaMusica/FilaMusica" to="CapaAjustes/CajaMenu/ListaOpciones/FilaMusica/FilaMusica" method="_on_pressed"]
+[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaVibracion/FilaVibracion" to="." method="_on_fila_vibracion_pressed"]
+[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaHome/FilaHome" to="." method="_on_fila_home_pressed"]
+[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaHome/FilaHome" to="." method="_on_btn_home_pressed"]
+[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay/FilaReplay" to="." method="_on_fila_replay_pressed"]
+[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay/FilaReplay" to="." method="_on_btn_replay_pressed"]
 [connection signal="pressed" from="CapaAjustes/BotonCerrar" to="." method="_on_boton_cerrar_pressed"]
 [connection signal="pressed" from="BtnAbrirAjustes" to="." method="_on_btn_abrir_ajustes_pressed"]

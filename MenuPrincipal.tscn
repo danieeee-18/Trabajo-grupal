@@ -1,8 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://dwuh734k7n0qn"]
+[gd_scene load_steps=13 format=3 uid="uid://dwuh734k7n0qn"]
 
 [ext_resource type="Script" uid="uid://cg73behmoagmt" path="res://menu_principal.gd" id="1_0oe1n"]
 [ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_ba235"]
 [ext_resource type="Texture2D" uid="uid://dcd4d8yn2w53t" path="res://assets/textures/configuraciones.png" id="3_5dpk2"]
+[ext_resource type="Texture2D" uid="uid://8iroit28x225" path="res://assets/textures/circulo.png" id="4_ectly"]
+[ext_resource type="Texture2D" uid="uid://c5g1cbem60v16" path="res://assets/textures/carrito-de-compras-3.png" id="5_knros"]
 
 [sub_resource type="Gradient" id="Gradient_0oe1n"]
 offsets = PackedFloat32Array(0, 0.98)
@@ -142,7 +144,7 @@ theme_override_font_sizes/font_size = 42
 theme_override_styles/normal = SubResource("StyleBoxFlat_0oe1n")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_0oe1n")
 theme_override_styles/hover = SubResource("StyleBoxFlat_0oe1n")
-text = "  ♾️  Classic 
+text = "       Classic 
 "
 alignment = 0
 
@@ -192,7 +194,7 @@ theme_override_font_sizes/font_size = 42
 theme_override_styles/normal = SubResource("StyleBoxFlat_ba235")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_pi62y")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ectly")
-text = "🛒 Tienda"
+text = "   Shop"
 
 [node name="LabelRecord" type="Label" parent="."]
 layout_mode = 0
@@ -208,11 +210,29 @@ vertical_alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = 270.0
+offset_left = 251.0
 offset_top = 803.0
-offset_right = 329.0
+offset_right = 310.0
 offset_bottom = 851.0
 texture = ExtResource("3_5dpk2")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 245.0
+offset_top = 616.0
+offset_right = 304.0
+offset_bottom = 664.0
+texture = ExtResource("4_ectly")
+expand_mode = 1
+
+[node name="TextureRect3" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 252.0
+offset_top = 970.0
+offset_right = 311.0
+offset_bottom = 1018.0
+texture = ExtResource("5_knros")
 expand_mode = 1
 
 [connection signal="pressed" from="BotonJugar" to="." method="_on_play_pressed"]

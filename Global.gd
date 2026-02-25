@@ -1,6 +1,10 @@
 extends Node
 
 # VARIABLES GLOBALES
+
+var fondos_desbloqueados = ["base"] # Empezamos con el clásico desbloqueado
+var fondo_equipado = "base"
+
 var high_score = 0
 var monedas = 0 # Tu cartera
 var sonido_activado = true
@@ -35,7 +39,9 @@ func save_game():
 		"monedas": monedas,
 		"sonido_activado": sonido_activado,
 		"musica_activada": musica_activada,
-		"vibracion_activada": vibracion_activada
+		"vibracion_activada": vibracion_activada,
+		"fondos_desbloqueados": fondos_desbloqueados, # NUEVO
+		"fondo_equipado": fondo_equipado              # NUEVO
 	}
 	file.store_var(data)
 
@@ -43,20 +49,15 @@ func load_game():
 	if FileAccess.file_exists(SAVE_PATH):
 		var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
 		var data = file.get_var()
-		
-		# Protección contra archivos corruptos
-		if data == null or not (data is Dictionary):
-			print("Archivo antiguo o corrupto. Usando valores por defecto.")
-			return 
+		if data == null or not (data is Dictionary): return 
 		
 		high_score = data.get("high_score", 0)
 		monedas = data.get("monedas", 0)
 		sonido_activado = data.get("sonido_activado", true)
 		musica_activada = data.get("musica_activada", true)
 		vibracion_activada = data.get("vibracion_activada", true)
-	else:
-		print("No hay datos guardados, iniciando nueva partida.")
-
+		fondos_desbloqueados = data.get("fondos_desbloqueados", ["base"]) # NUEVO
+		fondo_equipado = data.get("fondo_equipado", "base")               # NUEVO
 # --- APLICAR AUDIO ---
 func aplicar_audio_guardado():
 	var bus_musica = AudioServer.get_bus_index("Musica")

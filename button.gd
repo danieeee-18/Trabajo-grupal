@@ -16,3 +16,7 @@ func actualizar_boton(esta_encendido):
 		text = "OFF"
 		# Letra Gris clarito (para que se note apagado)
 		add_theme_color_override("font_color", Color(0.9, 0.9, 0.9, 1))
+
+
+func _on_pressed() -> void:
+	pass # Replace with function body.

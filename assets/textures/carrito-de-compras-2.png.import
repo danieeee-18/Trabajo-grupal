@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://8iroit28x225"
-path="res://.godot/imported/circulo.png-417760db98098c6b9ea130dc814f88a4.ctex"
+uid="uid://cg4436s3461yv"
+path="res://.godot/imported/carrito-de-compras-2.png-a341f759186e129c89093e00e0505b87.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://circulo.png"
-dest_files=["res://.godot/imported/circulo.png-417760db98098c6b9ea130dc814f88a4.ctex"]
+source_file="res://assets/textures/carrito-de-compras-2.png"
+dest_files=["res://.godot/imported/carrito-de-compras-2.png-a341f759186e129c89093e00e0505b87.ctex"]
 
 [params]
 

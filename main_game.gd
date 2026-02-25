@@ -4,6 +4,7 @@ const GAME_OVER_SCENE = preload("res://GameOver.tscn")
 const FUENTE_HYPE = preload("res://Luckiest_Guy/LuckiestGuy-Regular.ttf")
 const FUENTE_MODERNA = preload("res://Fuentes/Montserrat-Black.ttf")
 const ESCENA_MONEDA = preload("res://MonedaVisual.tscn")
+
 # --- REFERENCIAS ---
 @onready var board = $Board
 @onready var pieces_array = [$Piece, $Piece2, $Piece3]
@@ -19,12 +20,14 @@ const ESCENA_MONEDA = preload("res://MonedaVisual.tscn")
 @onready var sfx_combo = $AudioCombo
 @onready var sfx_gameover = $AudioGameOver
 @onready var monedas_label = $ContenedorMonedas/MonedasLabel
+
 # VARIABLES
 var start_positions = {}
 var score = 0
 var combo_actual = 0          
 var hubo_puntos_turno = false 
 var fuerza_temblor = 0.0      
+var ultima_pos_jugada : Vector2 = Vector2.ZERO 
 
 # DOPAMINA & COLORES
 var frases_animo = ["NICE", "GOOD", "SWEET", "PURE", "COOL", "FRESH", "SOFT", "LOVELY"]
@@ -36,7 +39,16 @@ var paleta_niveles = [
 ]
 var color_objetivo = Color.WHITE 
 
-# BASE DE DATOS PIEZAS
+# --- DICCIONARIO DE LA TIENDA ---
+var colores_tienda = {
+	"base": Color(1, 1, 1), # El clásico
+	"neon": Color(0.8, 0.1, 0.5),
+	"bosque": Color(0.1, 0.6, 0.3),
+	"oro": Color(0.9, 0.7, 0.1),
+	"hielo": Color(0.4, 0.9, 1.0)
+}
+
+# BASE DE DATOS PIEZAS (Acortado visualmente, pero es el tuyo completo)
 var shapes_database = [
 	{"name": "Line_H_2", "color": Color.PINK, "cells": [Vector2i(0,0), Vector2i(1,0)]},
 	{"name": "Line_H_3", "color": Color.HOT_PINK, "cells": [Vector2i(0,0), Vector2i(1,0), Vector2i(2,0)]},
@@ -83,7 +95,10 @@ func _ready():
 		if p.has_signal("pieza_arrastrada"):
 			if not p.pieza_arrastrada.is_connected(_on_pieza_arrastrada): p.pieza_arrastrada.connect(_on_pieza_arrastrada)
 		start_positions[p] = markers[i].global_position
+		
 	spawn_new_hand()
+	aplicar_fondo_tienda() 
+	
 	if board.has_method("animar_ola_entrada"): board.animar_ola_entrada()
 	if has_node("AudioManager"): $AudioManager.poner_musica_juego()
 	elif Global.has_method("play_music_level"): Global.play_music_level()
@@ -92,6 +107,11 @@ func _ready():
 	await get_tree().create_timer(0.6).timeout
 	mostrar_frase_hype("GO!", Color(0.2, 1, 0.2))
 	actualizar_ui_monedas()
+	
+	# --- APLICAMOS LOS AJUSTES DE AUDIO AL INICIAR ---
+	actualizar_textos_ajustes()
+	aplicar_audio_buses()
+
 func _process(delta):
 	if fuerza_temblor > 0:
 		fuerza_temblor = lerp(fuerza_temblor, 0.0, 10.0 * delta)
@@ -99,6 +119,21 @@ func _process(delta):
 		if fuerza_temblor < 0.5:
 			fuerza_temblor = 0
 			if camera: camera.offset = Vector2.ZERO
+
+# --- SISTEMA DE TABLERO Y PUNTOS ---
+func aplicar_fondo_tienda():
+	if not fondo_visual: return
+	
+	if Global.fondo_equipado == "base":
+		# Si es el clásico, restauramos el color base neutro sin romper nada
+		color_objetivo = paleta_niveles[0]
+		fondo_visual.modulate = color_objetivo
+	else:
+		# Si es de la tienda, aplicamos la luz del color comprado
+		var id_equipado = Global.fondo_equipado
+		if colores_tienda.has(id_equipado):
+			color_objetivo = colores_tienda[id_equipado]
+			fondo_visual.modulate = color_objetivo
 func _on_puntos_ganados(puntos):
 	hubo_puntos_turno = true
 	var multiplicador = max(1, combo_actual + 1)
@@ -107,21 +142,23 @@ func _on_puntos_ganados(puntos):
 	update_score(score)
 	actualizar_fondo_por_puntos(score)
 	
-	# Si la jugada vale 100 puntos o más, damos monedas
 	if puntos >= 100:
 		var bonus = int(puntos / 100)
-		Global.agregar_monedas(bonus) # Guarda en Global.gd
+		Global.agregar_monedas(bonus) 
 		actualizar_ui_monedas()
 		animar_monedas_ui()
 		
-		# Calculamos el centro del tablero para que salga de ahí
-		# Si tu tablero es de 8x8 y celdas de 64, el centro es aprox 256
-		var posicion_salida = board.global_position + Vector2(256, 256)
-		crear_moneda_voladora(posicion_salida)
+		var posicion_salida = ultima_pos_jugada
+		if posicion_salida == Vector2.ZERO: 
+			posicion_salida = board.global_position + Vector2(256, 256)
+			
+		for i in range(bonus):
+			crear_moneda_voladora(posicion_salida)
+			await get_tree().create_timer(0.1).timeout
 	
-	# Feedback visual aleatorio
 	if puntos > 0 and combo_actual <= 1 and randf() < 0.3: 
 		mostrar_feedback_rapido()
+
 func update_score(val):
 	score = val
 	score_label.text = str(score)
@@ -184,6 +221,7 @@ func _on_pieza_soltada(which_piece, posicion_global):
 	var grid_x = round(local_pos.x / cell_size)
 	var grid_y = round(local_pos.y / cell_size)
 	if board.can_place_piece(grid_x, grid_y, which_piece.cells):
+		ultima_pos_jugada = posicion_global
 		if sfx_pop:
 			sfx_pop.pitch_scale = randf_range(0.9, 1.1)
 			sfx_pop.play()
@@ -239,24 +277,8 @@ func check_game_over():
 		if game_over_instance.has_method("set_score"): game_over_instance.set_score(score)
 		add_child(game_over_instance)
 
-func _on_btn_home_pressed():
-	get_tree().paused = false
-	get_tree().change_scene_to_file("res://MenuPrincipal.tscn")
 
-func _on_btn_replay_pressed():
-	capa_ajustes.visible = false
-	get_tree().paused = false
-	get_tree().reload_current_scene()
-
-func _on_boton_cerrar_pressed():
-	capa_ajustes.visible = false
-	get_tree().paused = false
-
-func _on_btn_abrir_ajustes_pressed():
-	capa_ajustes.visible = true
-	get_tree().paused = true
-
-# SISTEMA VISUAL
+# --- SISTEMA VISUAL ---
 func mostrar_frase_hype(texto, color_texto = Color.WHITE):
 	efecto_combo_fondo()
 	var label = Label.new()
@@ -340,44 +362,114 @@ func aplicar_temblor(intensidad):
 
 func actualizar_fondo_por_puntos(puntos_actuales):
 	if not fondo_visual: return
+	
+	# Si hemos comprado un fondo, bloqueamos el cambio de colores por niveles
+	if Global.fondo_equipado != "base": return
+		
 	var nivel = int(puntos_actuales / 1000)
 	var indice_color = nivel % paleta_niveles.size()
 	var nuevo_color = paleta_niveles[indice_color]
+	
 	if color_objetivo != nuevo_color:
 		color_objetivo = nuevo_color
 		var tween = create_tween()
 		tween.tween_property(fondo_visual, "modulate", color_objetivo, 2.0).set_trans(Tween.TRANS_SINE)
-
 func efecto_combo_fondo():
 	if not fondo_visual: return
 	var tween = create_tween()
+	
+	# Brillo extremo por el combo
 	tween.tween_property(fondo_visual, "modulate", Color(1.5, 1.5, 2.0), 0.1) 
+	
+	# Vuelta suave al color en el que estábamos (sea de la tienda o del nivel actual)
 	tween.tween_property(fondo_visual, "modulate", color_objetivo, 0.5)
-
 func actualizar_ui_monedas():
 	if monedas_label:
-		# Accedemos directamente a la variable del script Global
 		monedas_label.text = str(Global.monedas)
 
 func animar_monedas_ui():
 	if not monedas_label: return
-	
 	var tween = create_tween()
-	# Animamos el contenedor entero (el icono + el texto)
 	var contenedor = monedas_label.get_parent() 
-	
 	tween.tween_property(contenedor, "scale", Vector2(1.1, 1.1), 0.1)
 	tween.tween_property(contenedor, "scale", Vector2(1.0, 1.0), 0.1)
-	
-	# Asegúrate de que el Pivot Offset del contenedor esté en el centro 
-	# para que no salte hacia una esquina al crecer.
+
 func crear_moneda_voladora(pos_inicio: Vector2):
 	var moneda = ESCENA_MONEDA.instantiate()
 	add_child(moneda)
-	
-	moneda.scale = Vector2(0.5, 0.5) 
-	moneda.global_position = pos_inicio
-	
+	moneda.scale = Vector2(0.25, 0.25) 
+	var variacion_random = Vector2(randf_range(-30, 30), randf_range(-30, 30))
+	moneda.global_position = pos_inicio + variacion_random
 	if moneda.has_method("volar_a_la_ui"):
-		# Ahora vuela hacia el contenedor completo, que es más fácil de apuntar
 		moneda.volar_a_la_ui(monedas_label.global_position)
+
+
+# ===================================================
+# --- LÓGICA DE LOS BOTONES DE AJUSTES (LIMPIA) ---
+# ===================================================
+
+func _on_boton_cerrar_pressed():
+	# Esta función asumo que cierra tu panel de ajustes
+	capa_ajustes.visible = false
+	get_tree().paused = false
+
+func _on_btn_abrir_ajustes_pressed():
+	# Esta abre tu panel de ajustes
+	capa_ajustes.visible = true
+	get_tree().paused = true
+
+func _on_fila_musica_pressed():
+	Global.musica_activada = not Global.musica_activada
+	Global.save_game()
+	actualizar_textos_ajustes()
+	aplicar_audio_buses()
+
+func _on_fila_sonido_pressed():
+	Global.sonido_activado = not Global.sonido_activado
+	Global.save_game()
+	actualizar_textos_ajustes()
+	aplicar_audio_buses()
+
+func _on_fila_vibracion_pressed():
+	Global.vibracion_activada = not Global.vibracion_activada
+	Global.save_game()
+	actualizar_textos_ajustes()
+	if Global.vibracion_activada:
+		Input.vibrate_handheld(50) 
+
+func _on_fila_home_pressed():
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://MenuPrincipal.tscn")
+
+func _on_fila_replay_pressed():
+	capa_ajustes.visible = false
+	get_tree().paused = false
+	get_tree().reload_current_scene()
+
+func actualizar_textos_ajustes():
+	var color_encendido = Color("ff8c00") 
+	var color_apagado = Color.DIM_GRAY   
+	
+	var btn_musica = find_child("FilaMusica", true, false)
+	if btn_musica and btn_musica is Button:
+		btn_musica.text = "ON" if Global.musica_activada else "OFF"
+		btn_musica.add_theme_color_override("font_color", color_encendido if Global.musica_activada else color_apagado)
+
+	var btn_sonido = find_child("FilaSonido", true, false)
+	if btn_sonido and btn_sonido is Button:
+		btn_sonido.text = "ON" if Global.sonido_activado else "OFF"
+		btn_sonido.add_theme_color_override("font_color", color_encendido if Global.sonido_activado else color_apagado)
+
+	var btn_vibra = find_child("FilaVibracion", true, false)
+	if btn_vibra and btn_vibra is Button:
+		btn_vibra.text = "ON" if Global.vibracion_activada else "OFF"
+		btn_vibra.add_theme_color_override("font_color", color_encendido if Global.vibracion_activada else color_apagado)
+
+func aplicar_audio_buses():
+	var bus_musica = AudioServer.get_bus_index("Musica") # Canal de la música
+	var bus_efectos = AudioServer.get_bus_index("Efectos") # Canal de los efectos
+	
+	if bus_musica >= 0:
+		AudioServer.set_bus_mute(bus_musica, not Global.musica_activada)
+	if bus_efectos >= 0:
+		AudioServer.set_bus_mute(bus_efectos, not Global.sonido_activado)

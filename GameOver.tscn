@@ -129,7 +129,7 @@ theme_override_fonts/font = ExtResource("2_eksk4")
 theme_override_styles/normal = SubResource("StyleBoxFlat_a1htc")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_jywu3")
 theme_override_styles/hover = SubResource("StyleBoxFlat_3y56u")
-text = "REINTENTAR"
+text = "RETRY"
 
 [node name="BotonMenu" type="Button" parent="Panel/VBoxContainer"]
 custom_minimum_size = Vector2(200, 30)
@@ -139,4 +139,4 @@ theme_override_fonts/font = ExtResource("2_eksk4")
 theme_override_styles/normal = SubResource("StyleBoxFlat_eksk4")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ua7od")
 theme_override_styles/hover = SubResource("StyleBoxFlat_3fonj")
-text = "VOLVER AL MENÚ"
+text = "MAIN MENU"

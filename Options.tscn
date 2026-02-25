@@ -96,8 +96,7 @@ theme_override_colors/font_outline_color = Color(0.078431375, 0.11764706, 0.1882
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("2_yia4p")
 theme_override_font_sizes/font_size = 30
-text = "Sonido
-"
+text = "Sound"
 
 [node name="CheckButtonMusica" type="CheckButton" parent="VBoxContainer"]
 layout_mode = 2
@@ -107,7 +106,7 @@ theme_override_colors/font_outline_color = Color(0.078431375, 0.11764706, 0.1882
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("2_yia4p")
 theme_override_font_sizes/font_size = 30
-text = "Música"
+text = "Music"
 
 [node name="CheckButtonVibra" type="CheckButton" parent="VBoxContainer"]
 layout_mode = 2
@@ -117,7 +116,7 @@ theme_override_colors/font_outline_color = Color(0.078431375, 0.11764706, 0.1882
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("2_yia4p")
 theme_override_font_sizes/font_size = 30
-text = "Vibración"
+text = "Vibration"
 
 [node name="BotonReset" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(250, 40)
@@ -129,7 +128,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_ywiuv")
 theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_ywiuv")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ywiuv")
 theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_ywiuv")
-text = "Reiniciar récord"
+text = "Resert Record"
 
 [node name="BotonVolver" type="Button" parent="."]
 layout_mode = 1
@@ -153,18 +152,17 @@ theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxFlat_r314q")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yia4p")
 theme_override_styles/hover = SubResource("StyleBoxFlat_r314q")
-text = "∞ Volver
-"
+text = "Return"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 231.0
+offset_left = 183.0
 offset_top = 172.0
 offset_right = 519.0
 offset_bottom = 247.0
 theme_override_fonts/normal_font = ExtResource("2_yia4p")
 theme_override_font_sizes/normal_font_size = 70
 bbcode_enabled = true
-text = "[center][color=#FFD700][shake rate=5 level=10]AJUSTES[/shake][/color][/center]"
+text = "Settings"
 
 [connection signal="pressed" from="BotonVolver" to="." method="_on_boton_volver_pressed"]
