@@ -17,6 +17,7 @@ const ESCENA_MONEDA = preload("res://MonedaVisual.tscn")
 @onready var color_fondo = $ColorFondo 
 @onready var imagen_fondo = $Fondo 
 
+var textura_base_original = null
 # SONIDOS
 @onready var sfx_pop = $AudioPop
 @onready var sfx_linea = $AudioLinea
@@ -79,6 +80,10 @@ var shapes_database = [
 ]
 
 func _ready():
+	
+	if imagen_fondo:                                   
+		textura_base_original = imagen_fondo.texture
+		
 	update_score(0)
 	capa_ajustes.visible = false
 	if not board.puntos_ganados.is_connected(_on_puntos_ganados):
@@ -118,29 +123,35 @@ func _process(delta):
 func aplicar_fondo_equipado():
 	var datos_fondo = null
 	
-	# Buscamos en Global los datos del fondo actual
 	for item in Global.catalogo_fondos:
 		if item["id"] == Global.fondo_equipado:
 			datos_fondo = item
 			break
 			
 	if datos_fondo != null:
-		# EXCEPCIÓN: Si es el fondo Clásico, usamos tu sistema de niveles normal
 		if Global.fondo_equipado == "base":
-			imagen_fondo.visible = false
-			color_objetivo = paleta_niveles[0] # Esto es el blanco original
-			color_fondo.color = color_objetivo
-		
-		# TIENE FOTO (Galaxia, Mar...)
+			# RESTAURA TU DEGRADADO AZUL ORIGINAL
+			imagen_fondo.texture = textura_base_original
+			imagen_fondo.visible = true
+			color_fondo.visible = false # Escondemos el color sólido base
+			
+			# Mantiene la lógica de oscurecer/colorear por niveles si la tenías
+			color_objetivo = paleta_niveles[0] 
+			imagen_fondo.modulate = color_objetivo
+			
 		elif datos_fondo.has("ruta_imagen") and datos_fondo["ruta_imagen"] != "":
+			# TIENE FOTO DE LA TIENDA (Galaxia, Mar...)
 			imagen_fondo.texture = load(datos_fondo["ruta_imagen"])
 			imagen_fondo.visible = true
+			color_fondo.visible = true
 			color_fondo.color = Color.WHITE
+			imagen_fondo.modulate = Color.WHITE
 			color_objetivo = Color.WHITE
 			
-		# ES SOLO COLOR COMPRADO (Cyberpunk, Oro...)
 		else:
+			# ES SOLO COLOR COMPRADO EN LA TIENDA
 			imagen_fondo.visible = false
+			color_fondo.visible = true
 			color_fondo.color = datos_fondo["color"]
 			color_objetivo = datos_fondo["color"]
 
@@ -373,7 +384,7 @@ func aplicar_temblor(intensidad):
 func actualizar_fondo_por_puntos(puntos_actuales):
 	if not color_fondo: return
 	
-	# Si hemos comprado un fondo especial, no cambiamos los colores por niveles
+	# Si hemos comprado un fondo especial en la tienda, no cambiamos los colores
 	if Global.fondo_equipado != "base": return
 		
 	var nivel = int(puntos_actuales / 1000)
@@ -383,18 +394,25 @@ func actualizar_fondo_por_puntos(puntos_actuales):
 	if color_objetivo != nuevo_color:
 		color_objetivo = nuevo_color
 		var tween = create_tween()
-		tween.tween_property(color_fondo, "color", color_objetivo, 2.0).set_trans(Tween.TRANS_SINE)
-
+		# IMPORTANTE: Ahora aplicamos el color al 'modulate' del degradado, no al fondo sólido
+		tween.tween_property(imagen_fondo, "modulate", color_objetivo, 2.0).set_trans(Tween.TRANS_SINE)
 func efecto_combo_fondo():
 	var tween = create_tween()
-	# Si tenemos una foto de fondo, brillará la foto. Si no, brillará el color liso.
-	if Global.fondo_equipado != "base" and imagen_fondo.visible:
+	
+	# 1. Si estamos usando el fondo Clásico (tu degradado azul)
+	if Global.fondo_equipado == "base":
 		tween.tween_property(imagen_fondo, "modulate", Color(1.5, 1.5, 2.0), 0.1) 
-		tween.tween_property(imagen_fondo, "modulate", Color(1, 1, 1), 0.5)
+		tween.tween_property(imagen_fondo, "modulate", color_objetivo, 0.5)
+		
+	# 2. Si es una foto de la tienda (Galaxia, Mar...)
+	elif Global.fondo_equipado != "base" and imagen_fondo.visible:
+		tween.tween_property(imagen_fondo, "modulate", Color(1.5, 1.5, 2.0), 0.1) 
+		tween.tween_property(imagen_fondo, "modulate", Color.WHITE, 0.5)
+		
+	# 3. Si es un color liso comprado en la tienda
 	else:
 		tween.tween_property(color_fondo, "color", Color(1.5, 1.5, 2.0), 0.1) 
 		tween.tween_property(color_fondo, "color", color_objetivo, 0.5)
-
 func actualizar_ui_monedas():
 	if monedas_label:
 		monedas_label.text = str(Global.monedas)
