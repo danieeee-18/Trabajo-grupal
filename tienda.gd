@@ -1,18 +1,9 @@
 extends Control
 
-# --- REFERENCIAS A TUS NODOS (Mantenemos los nombres en español para no romper la escena) ---
+# --- REFERENCIAS A TUS NODOS ---
 @onready var label_monedas = $ContenedorPrincipal/Cabecera/LabelMonedas
 @onready var contenedor_grid = $ContenedorPrincipal/ScrollContainer/GridContainer
 @onready var plantilla = $ContenedorPrincipal/ScrollContainer/GridContainer/PlantillaItem
-
-# --- EL CATÁLOGO (Traducido al inglés) ---
-var catalogo_fondos = [
-	{"id": "base", "nombre": "Classic", "precio": 0, "color": Color(0.2, 0.2, 0.25)},
-	{"id": "neon", "nombre": "Cyberpunk", "precio": 100, "color": Color(0.8, 0.1, 0.5)},
-	{"id": "bosque", "nombre": "Zen Forest", "precio": 250, "color": Color(0.1, 0.6, 0.3)},
-	{"id": "oro", "nombre": "King Midas", "precio": 500, "color": Color(0.9, 0.7, 0.1)},
-	{"id": "hielo", "nombre": "Glacier", "precio": 800, "color": Color(0.4, 0.9, 1.0)}
-]
 
 var botones_tienda = {} 
 
@@ -25,22 +16,31 @@ func _ready():
 
 func actualizar_texto_monedas():
 	if label_monedas:
-		# Texto traducido
 		label_monedas.text = "COINS: 🪙 " + str(Global.monedas)
 
 func generar_escaparate():
 	plantilla.visible = false
 	
-	for item in catalogo_fondos:
+	for item in Global.catalogo_fondos:
 		var nueva_tarjeta = plantilla.duplicate()
 		nueva_tarjeta.visible = true
 		
+		# Referencias de la tarjeta
 		var preview = nueva_tarjeta.get_node("PreviewFondo")
+		var imagen_rect = preview.get_node("ImagenFondo") # <-- Buscamos el nuevo nodo de imagen
 		var lbl_nombre = nueva_tarjeta.get_node("NombreFondo")
 		var lbl_precio = nueva_tarjeta.get_node("PrecioFondo")
 		var boton = nueva_tarjeta.get_node("BotonComprar")
 		
-		preview.color = item["color"]
+		# Lógica para mostrar Foto o Color
+		if item["ruta_imagen"] != "":
+			imagen_rect.texture = load(item["ruta_imagen"])
+			imagen_rect.visible = true
+			preview.color = Color.WHITE # Fondo neutro detrás de la foto
+		else:
+			imagen_rect.visible = false
+			preview.color = item["color"]
+			
 		lbl_nombre.text = item["nombre"]
 		
 		actualizar_estado_boton(boton, lbl_precio, item)
@@ -89,7 +89,6 @@ func _on_item_comprado(item_data, boton_pulsado, lbl_precio):
 		refrescar_todos_los_botones()
 		
 	else:
-		# Texto de error traducido
 		boton_pulsado.text = "NOT ENOUGH COINS"
 		boton_pulsado.modulate = Color.RED
 		await get_tree().create_timer(1.0).timeout
@@ -97,7 +96,7 @@ func _on_item_comprado(item_data, boton_pulsado, lbl_precio):
 			actualizar_estado_boton(boton_pulsado, lbl_precio, item_data)
 
 func refrescar_todos_los_botones():
-	for item in catalogo_fondos:
+	for item in Global.catalogo_fondos:
 		var id = item["id"]
 		if botones_tienda.has(id):
 			var refs = botones_tienda[id]

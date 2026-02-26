@@ -11,6 +11,18 @@ var sonido_activado = true
 var musica_activada = true
 var vibracion_activada = true
 
+# --- EL CATÁLOGO (Híbrido: Colores + Imágenes) ---
+var catalogo_fondos = [
+	{"id": "base", "nombre": "Classic", "precio": 0, "color": Color(0.2, 0.2, 0.25), "ruta_imagen": ""},
+	{"id": "neon", "nombre": "Cyberpunk", "precio": 100, "color": Color(0.8, 0.1, 0.5), "ruta_imagen": ""},
+	{"id": "oro", "nombre": "King Midas", "precio": 500, "color": Color(0.9, 0.7, 0.1), "ruta_imagen": ""},
+	
+	# Nuevos fondos con imágenes (Asegúrate de que estas imágenes existen en tu carpeta 'fondos')
+	{"id": "infierno", "nombre": "Hell", "precio": 1000, "color": Color(1, 0, 0), "ruta_imagen": "res://fondos/infierno.jpg"},
+	{"id": "mar", "nombre": "Ocean", "precio": 1200, "color": Color(0, 0, 1), "ruta_imagen": "res://fondos/mar.JPG"},
+	{"id": "galaxia", "nombre": "Galaxy", "precio": 1500, "color": Color(0.5, 0, 0.8), "ruta_imagen": "res://fondos/galaxia.jpg"}
+]
+
 # RUTA DE GUARDADO
 const SAVE_PATH = "user://savegame.save"
 

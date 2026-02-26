@@ -12,7 +12,10 @@ const ESCENA_MONEDA = preload("res://MonedaVisual.tscn")
 @onready var score_label = $ScoreLabel
 @onready var capa_ajustes = $CapaAjustes
 @onready var camera = $Camera2D
-@onready var fondo_visual = $Fondo 
+
+# LOS DOS NUEVOS NODOS DE FONDO
+@onready var color_fondo = $ColorFondo 
+@onready var imagen_fondo = $Fondo 
 
 # SONIDOS
 @onready var sfx_pop = $AudioPop
@@ -39,16 +42,7 @@ var paleta_niveles = [
 ]
 var color_objetivo = Color.WHITE 
 
-# --- DICCIONARIO DE LA TIENDA ---
-var colores_tienda = {
-	"base": Color(1, 1, 1), # El clásico
-	"neon": Color(0.8, 0.1, 0.5),
-	"bosque": Color(0.1, 0.6, 0.3),
-	"oro": Color(0.9, 0.7, 0.1),
-	"hielo": Color(0.4, 0.9, 1.0)
-}
-
-# BASE DE DATOS PIEZAS (Acortado visualmente, pero es el tuyo completo)
+# BASE DE DATOS PIEZAS
 var shapes_database = [
 	{"name": "Line_H_2", "color": Color.PINK, "cells": [Vector2i(0,0), Vector2i(1,0)]},
 	{"name": "Line_H_3", "color": Color.HOT_PINK, "cells": [Vector2i(0,0), Vector2i(1,0), Vector2i(2,0)]},
@@ -97,7 +91,7 @@ func _ready():
 		start_positions[p] = markers[i].global_position
 		
 	spawn_new_hand()
-	aplicar_fondo_tienda() 
+	aplicar_fondo_equipado() 
 	
 	if board.has_method("animar_ola_entrada"): board.animar_ola_entrada()
 	if has_node("AudioManager"): $AudioManager.poner_musica_juego()
@@ -120,20 +114,36 @@ func _process(delta):
 			fuerza_temblor = 0
 			if camera: camera.offset = Vector2.ZERO
 
-# --- SISTEMA DE TABLERO Y PUNTOS ---
-func aplicar_fondo_tienda():
-	if not fondo_visual: return
+
+func aplicar_fondo_equipado():
+	var datos_fondo = null
 	
-	if Global.fondo_equipado == "base":
-		# Si es el clásico, restauramos el color base neutro sin romper nada
-		color_objetivo = paleta_niveles[0]
-		fondo_visual.modulate = color_objetivo
-	else:
-		# Si es de la tienda, aplicamos la luz del color comprado
-		var id_equipado = Global.fondo_equipado
-		if colores_tienda.has(id_equipado):
-			color_objetivo = colores_tienda[id_equipado]
-			fondo_visual.modulate = color_objetivo
+	# Buscamos en Global los datos del fondo actual
+	for item in Global.catalogo_fondos:
+		if item["id"] == Global.fondo_equipado:
+			datos_fondo = item
+			break
+			
+	if datos_fondo != null:
+		# EXCEPCIÓN: Si es el fondo Clásico, usamos tu sistema de niveles normal
+		if Global.fondo_equipado == "base":
+			imagen_fondo.visible = false
+			color_objetivo = paleta_niveles[0] # Esto es el blanco original
+			color_fondo.color = color_objetivo
+		
+		# TIENE FOTO (Galaxia, Mar...)
+		elif datos_fondo.has("ruta_imagen") and datos_fondo["ruta_imagen"] != "":
+			imagen_fondo.texture = load(datos_fondo["ruta_imagen"])
+			imagen_fondo.visible = true
+			color_fondo.color = Color.WHITE
+			color_objetivo = Color.WHITE
+			
+		# ES SOLO COLOR COMPRADO (Cyberpunk, Oro...)
+		else:
+			imagen_fondo.visible = false
+			color_fondo.color = datos_fondo["color"]
+			color_objetivo = datos_fondo["color"]
+
 func _on_puntos_ganados(puntos):
 	hubo_puntos_turno = true
 	var multiplicador = max(1, combo_actual + 1)
@@ -361,9 +371,9 @@ func aplicar_temblor(intensidad):
 	fuerza_temblor += intensidad
 
 func actualizar_fondo_por_puntos(puntos_actuales):
-	if not fondo_visual: return
+	if not color_fondo: return
 	
-	# Si hemos comprado un fondo, bloqueamos el cambio de colores por niveles
+	# Si hemos comprado un fondo especial, no cambiamos los colores por niveles
 	if Global.fondo_equipado != "base": return
 		
 	var nivel = int(puntos_actuales / 1000)
@@ -373,16 +383,18 @@ func actualizar_fondo_por_puntos(puntos_actuales):
 	if color_objetivo != nuevo_color:
 		color_objetivo = nuevo_color
 		var tween = create_tween()
-		tween.tween_property(fondo_visual, "modulate", color_objetivo, 2.0).set_trans(Tween.TRANS_SINE)
+		tween.tween_property(color_fondo, "color", color_objetivo, 2.0).set_trans(Tween.TRANS_SINE)
+
 func efecto_combo_fondo():
-	if not fondo_visual: return
 	var tween = create_tween()
-	
-	# Brillo extremo por el combo
-	tween.tween_property(fondo_visual, "modulate", Color(1.5, 1.5, 2.0), 0.1) 
-	
-	# Vuelta suave al color en el que estábamos (sea de la tienda o del nivel actual)
-	tween.tween_property(fondo_visual, "modulate", color_objetivo, 0.5)
+	# Si tenemos una foto de fondo, brillará la foto. Si no, brillará el color liso.
+	if Global.fondo_equipado != "base" and imagen_fondo.visible:
+		tween.tween_property(imagen_fondo, "modulate", Color(1.5, 1.5, 2.0), 0.1) 
+		tween.tween_property(imagen_fondo, "modulate", Color(1, 1, 1), 0.5)
+	else:
+		tween.tween_property(color_fondo, "color", Color(1.5, 1.5, 2.0), 0.1) 
+		tween.tween_property(color_fondo, "color", color_objetivo, 0.5)
+
 func actualizar_ui_monedas():
 	if monedas_label:
 		monedas_label.text = str(Global.monedas)
@@ -409,12 +421,10 @@ func crear_moneda_voladora(pos_inicio: Vector2):
 # ===================================================
 
 func _on_boton_cerrar_pressed():
-	# Esta función asumo que cierra tu panel de ajustes
 	capa_ajustes.visible = false
 	get_tree().paused = false
 
 func _on_btn_abrir_ajustes_pressed():
-	# Esta abre tu panel de ajustes
 	capa_ajustes.visible = true
 	get_tree().paused = true
 
@@ -466,8 +476,8 @@ func actualizar_textos_ajustes():
 		btn_vibra.add_theme_color_override("font_color", color_encendido if Global.vibracion_activada else color_apagado)
 
 func aplicar_audio_buses():
-	var bus_musica = AudioServer.get_bus_index("Musica") # Canal de la música
-	var bus_efectos = AudioServer.get_bus_index("Efectos") # Canal de los efectos
+	var bus_musica = AudioServer.get_bus_index("Musica")
+	var bus_efectos = AudioServer.get_bus_index("Efectos")
 	
 	if bus_musica >= 0:
 		AudioServer.set_bus_mute(bus_musica, not Global.musica_activada)

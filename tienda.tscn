@@ -105,6 +105,16 @@ offset_right = 115.0
 offset_bottom = 210.0
 grow_horizontal = 2
 
+[node name="ImagenFondo" type="TextureRect" parent="ContenedorPrincipal/ScrollContainer/GridContainer/PlantillaItem/PreviewFondo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
+
 [node name="NombreFondo" type="Label" parent="ContenedorPrincipal/ScrollContainer/GridContainer/PlantillaItem"]
 layout_mode = 0
 offset_top = 220.0

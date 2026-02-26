@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://4dwh20dufcq5"]
+[gd_scene load_steps=26 format=3 uid="uid://4dwh20dufcq5"]
 
 [ext_resource type="PackedScene" uid="uid://ckrmwddkl3sn3" path="res://board.tscn" id="1_3tbxw"]
 [ext_resource type="Script" uid="uid://buhmj71d7hac7" path="res://main_game.gd" id="1_ws5ob"]
@@ -14,16 +14,6 @@
 [ext_resource type="AudioStream" uid="uid://bc2qce0csmhsc" path="res://sonidos/combo.wav" id="7_o8l48"]
 [ext_resource type="AudioStream" uid="uid://jf53jpo7s36x" path="res://sonidos/gameover.wav" id="8_0v7qb"]
 [ext_resource type="Texture2D" uid="uid://byawab8htr64r" path="res://assets/textures/moneda1.png" id="10_o8l48"]
-
-[sub_resource type="Gradient" id="Gradient_ws5ob"]
-colors = PackedColorArray(7.52765e-05, 0.4820559, 0.9541736, 1, 0.2788064, 0.5682157, 0.99752694, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_bqqt8"]
-gradient = SubResource("Gradient_ws5ob")
-fill_from = Vector2(1, 0)
-fill_to = Vector2(1, 1)
-metadata/_snap_count = 2
-metadata/_snap_enabled = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ws5ob"]
 bg_color = Color(0.21050721, 0.21050721, 0.21050721, 1)
@@ -94,10 +84,18 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 [node name="MainGame" type="Node2D"]
 script = ExtResource("1_ws5ob")
 
+[node name="ColorFondo" type="ColorRect" parent="."]
+offset_right = 1500.0
+offset_bottom = 2500.0
+
 [node name="Fondo" type="TextureRect" parent="."]
-offset_right = 722.0
-offset_bottom = 1282.0
-texture = SubResource("GradientTexture2D_bqqt8")
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 1500.0
+offset_bottom = 2500.0
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
 metadata/_edit_use_anchors_ = true
 
 [node name="FondoTablero" type="Panel" parent="."]
