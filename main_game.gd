@@ -32,7 +32,7 @@ var combo_actual = 0
 var hubo_puntos_turno = false 
 var fuerza_temblor = 0.0      
 var ultima_pos_jugada : Vector2 = Vector2.ZERO 
-
+var umbral_puntos_moneda = 1000
 # DOPAMINA & COLORES
 var frases_animo = ["NICE", "GOOD", "SWEET", "PURE", "COOL", "FRESH", "SOFT", "LOVELY"]
 var colores_pastel = [Color("ffb7b2"), Color("b5ead7"), Color("e2f0cb"), Color("ffdac1"), Color("e0bbe4"), Color("97c1a9")]
@@ -85,6 +85,7 @@ func _ready():
 		textura_base_original = imagen_fondo.texture
 		
 	update_score(0)
+	umbral_puntos_moneda = 1000
 	capa_ajustes.visible = false
 	if not board.puntos_ganados.is_connected(_on_puntos_ganados):
 		board.puntos_ganados.connect(_on_puntos_ganados)
@@ -163,19 +164,27 @@ func _on_puntos_ganados(puntos):
 	update_score(score)
 	actualizar_fondo_por_puntos(score)
 	
-	if puntos >= 100:
-		var bonus = int(puntos / 100)
-		Global.agregar_monedas(bonus) 
+	# --- NUEVO SISTEMA: JACKPOT DE MONEDAS ---
+	if score >= umbral_puntos_moneda:
+		umbral_puntos_moneda += 1000 # Preparamos el siguiente umbral
+		Global.agregar_monedas(10) # Damos 10 monedas de golpe
 		actualizar_ui_monedas()
-		animar_monedas_ui()
+		
+		# Hacemos que la UI de las monedas palpite más fuerte
+		var tween = create_tween()
+		var contenedor = monedas_label.get_parent() 
+		tween.tween_property(contenedor, "scale", Vector2(1.3, 1.3), 0.15)
+		tween.tween_property(contenedor, "scale", Vector2(1.0, 1.0), 0.2)
 		
 		var posicion_salida = ultima_pos_jugada
 		if posicion_salida == Vector2.ZERO: 
 			posicion_salida = board.global_position + Vector2(256, 256)
 			
-		for i in range(bonus):
+		# Lluvia de 10 monedas volando súper rápido
+		for i in range(10):
 			crear_moneda_voladora(posicion_salida)
-			await get_tree().create_timer(0.1).timeout
+			await get_tree().create_timer(0.05).timeout
+	# -----------------------------------------
 	
 	if puntos > 0 and combo_actual <= 1 and randf() < 0.3: 
 		mostrar_feedback_rapido()
@@ -251,6 +260,12 @@ func _on_pieza_soltada(which_piece, posicion_global):
 		await board.place_piece(grid_x, grid_y, which_piece.cells, which_piece.piece_color)
 		var diferencia_puntos = score - puntuacion_antes
 		if diferencia_puntos > 20:
+			if JuiceManager.has_method("crear_explosion"):
+				JuiceManager.crear_explosion(ultima_pos_jugada, which_piece.piece_color)
+			
+			animar_marcador_puntos(which_piece.piece_color)
+			animar_destello_tablero()
+			mostrar_palabra_rotura(ultima_pos_jugada, which_piece.piece_color)
 			combo_actual += 1
 			if combo_actual > 1:
 				if sfx_combo:
@@ -501,3 +516,63 @@ func aplicar_audio_buses():
 		AudioServer.set_bus_mute(bus_musica, not Global.musica_activada)
 	if bus_efectos >= 0:
 		AudioServer.set_bus_mute(bus_efectos, not Global.sonido_activado)
+
+
+# ==========================================
+# --- NUEVAS ANIMACIONES DE JUICE (LÍNEAS) ---
+# ==========================================
+
+func animar_marcador_puntos(color_pieza):
+	if not score_label: return
+	var tween = create_tween()
+	
+	score_label.pivot_offset = score_label.size / 2 
+	
+	# 1. Salto MÁS GRANDE y cambio al color de la pieza
+	tween.parallel().tween_property(score_label, "scale", Vector2(1.8, 1.8), 0.15).set_trans(Tween.TRANS_BACK)
+	tween.parallel().tween_property(score_label, "modulate", color_pieza, 0.15)
+	
+	# 2. TRUCO: Congelamos la animación un tercio de segundo para que el color se lea bien
+	tween.chain().tween_interval(0.3)
+	
+	# 3. Vuelta suave a la normalidad y al color blanco
+	tween.chain().tween_property(score_label, "scale", Vector2(1.0, 1.0), 0.4).set_trans(Tween.TRANS_BOUNCE)
+	tween.parallel().tween_property(score_label, "modulate", Color.WHITE, 0.4)
+
+func animar_destello_tablero():
+	if not board: return
+	var tween = create_tween()
+	# Flashazo blanco intenso
+	tween.tween_property(board, "modulate", Color(2.5, 2.5, 2.5, 1.0), 0.05)
+	# Vuelta a su color normal
+	tween.tween_property(board, "modulate", Color.WHITE, 0.2)
+
+func mostrar_palabra_rotura(posicion, color_texto):
+	# ¡Palabras en inglés y con mucha energía!
+	var palabras = ["CLEAR!", "CLEAN!", "AWESOME!", "BOOM!", "PERFECT!", "SMASH!", "NICE!"]
+	
+	var label = Label.new()
+	label.text = palabras.pick_random()
+	
+	var settings = LabelSettings.new()
+	settings.font = FUENTE_MODERNA
+	settings.font_size = 60 # Un pelín más grandes también
+	settings.font_color = color_texto
+	settings.outline_size = 12
+	settings.outline_color = Color.BLACK
+	label.label_settings = settings
+	
+	label.anchors_preset = Control.PRESET_CENTER
+	label.global_position = posicion - Vector2(100, 80) 
+	label.z_index = 100 
+	add_child(label)
+	
+	var tween = create_tween()
+	label.scale = Vector2(0, 0)
+	label.rotation_degrees = randf_range(-25, 25) 
+	
+	tween.tween_property(label, "scale", Vector2(1.2, 1.2), 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(label, "position:y", label.position.y - 100, 0.7).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.7).set_delay(0.2)
+	
+	tween.tween_callback(label.queue_free)
