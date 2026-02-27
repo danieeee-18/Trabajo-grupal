@@ -422,7 +422,7 @@ theme_override_font_sizes/font_size = 50
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaVibracion/FilaVibracion" to="." method="_on_fila_vibracion_pressed"]
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaHome/FilaHome" to="." method="_on_btn_home_pressed"]
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaHome/FilaHome" to="." method="_on_fila_home_pressed"]
-[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay/FilaReplay" to="." method="_on_fila_replay_pressed"]
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay/FilaReplay" to="." method="_on_btn_replay_pressed"]
+[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay/FilaReplay" to="." method="_on_fila_replay_pressed"]
 [connection signal="pressed" from="CapaAjustes/BotonCerrar" to="." method="_on_boton_cerrar_pressed"]
 [connection signal="pressed" from="BtnAbrirAjustes" to="." method="_on_btn_abrir_ajustes_pressed"]

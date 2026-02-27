@@ -46,7 +46,7 @@ func _actualizar_audio_real():
 # --- FUNCIONES DE LÓGICA ---
 
 func _on_volver_pressed():
-	get_tree().change_scene_to_file("res://MenuPrincipal.tscn")
+	TransitionManager.cambiar_escena("res://MenuPrincipal.tscn")
 
 func _on_reset_record_pressed():
 	Global.high_score = 0
@@ -86,10 +86,14 @@ func _on_musica_toggled(toggled_on):
 func _on_vibra_toggled(toggled_on): 
 	Global.vibracion_activada = toggled_on
 	Global.save_game()
-	# La vibración se controla en el MainGame con un 'if Global.vibracion_activada',
-	# así que aquí no hace falta llamar al AudioServer.
+	
+	# --- NUEVO: Feedback táctil inmediato ---
+	# Si el jugador acaba de encender la vibración, hacemos que el móvil
+	# vibre 50 milisegundos para confirmarle que la opción funciona.
+	if toggled_on:
+		Input.vibrate_handheld(50)
 	
 func _on_btn_tienda_pressed():
 	# Despausar es clave antes de cambiar de escena
 	get_tree().paused = false 
-	get_tree().change_scene_to_file("res://tienda.tscn")
+	TransitionManager.cambiar_escena("res://tienda.tscn") # <--- TRANSICIÓN ELEGANTE

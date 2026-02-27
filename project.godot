@@ -24,6 +24,7 @@ Global="*res://Global.gd"
 AudioManager="*res://AudioManager.tscn"
 GameEvents="*res://GameEvents.gd"
 JuiceManager="*res://JuiceManager.gd"
+TransitionManager="*res://TransitionManager.gd"
 
 [display]
 

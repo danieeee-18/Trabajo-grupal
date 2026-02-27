@@ -213,13 +213,26 @@ func spawn_new_hand():
 	for i in range(pieces_array.size()):
 		var p = pieces_array[i]
 		var marker = markers[i]
-		p.visible = true
-		p.scale = Vector2(0.57, 0.57)
+		
+		# Aseguramos que empiece sin rotación
+		p.rotation_degrees = 0 
+		
 		var col_shape = p.get_node("Area2D/CollisionShape2D")
 		var raw_size = col_shape.shape.size
-		var centered_pos = marker.global_position - (raw_size / 2.0 * p.scale.x)
+		# Calculamos el centro usando la escala final (0.57)
+		var centered_pos = marker.global_position - (raw_size / 2.0 * 0.57) 
 		start_positions[p] = centered_pos
 		p.global_position = centered_pos
+		
+		# --- ANIMACIÓN DE APARICIÓN CON REBOTE ---
+		p.scale = Vector2.ZERO # Empieza invisible
+		p.visible = true
+		
+		var tween = create_tween()
+		# Aparecen una detrás de otra gracias al 'delay'
+		tween.tween_property(p, "scale", Vector2(0.57, 0.57), 0.4).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT).set_delay(i * 0.1)
+		# ----------------------------------------
+		
 	check_game_over()
 
 func generar_mano_aleatoria_total():
@@ -243,6 +256,10 @@ func _on_pieza_arrastrada(which_piece, posicion_global):
 	var grid_y = round(local_pos.y / cell_size)
 	if board.can_place_piece(grid_x, grid_y, which_piece.cells): board.actualizar_fantasma(grid_x, grid_y, which_piece.cells, which_piece.piece_color)
 	else: board.ocultar_fantasma()
+	# Efecto de levantar la pieza: Se hace un pelín más grande y se inclina
+	var tween = create_tween()
+	tween.parallel().tween_property(which_piece, "scale", Vector2(0.65, 0.65), 0.1).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(which_piece, "rotation_degrees", 5.0, 0.1)
 
 func _on_pieza_soltada(which_piece, posicion_global):
 	if board.has_method("ocultar_fantasma"): board.ocultar_fantasma()
@@ -255,7 +272,11 @@ func _on_pieza_soltada(which_piece, posicion_global):
 		if sfx_pop:
 			sfx_pop.pitch_scale = randf_range(0.9, 1.1)
 			sfx_pop.play()
-		hubo_puntos_turno = false 
+		hubo_puntos_turno = false
+		# -------- NUEVO: MICRO-JUICE AL CAER --------
+		animar_polvo_caida(ultima_pos_jugada)
+		aplicar_temblor(3.0) # Un temblor muy flojito para dar sensación de peso
+		# --------------------------------------------
 		var puntuacion_antes = score
 		await board.place_piece(grid_x, grid_y, which_piece.cells, which_piece.piece_color)
 		var diferencia_puntos = score - puntuacion_antes
@@ -266,6 +287,11 @@ func _on_pieza_soltada(which_piece, posicion_global):
 			animar_marcador_puntos(which_piece.piece_color)
 			animar_destello_tablero()
 			mostrar_palabra_rotura(ultima_pos_jugada, which_piece.piece_color)
+			# -------- NUEVO: CHECK PERFECT CLEAR --------
+			# Si tras romper la línea, las 64 casillas están vacías... ¡BINGO!
+			if board.get_empty_cells_count() == 64:
+				ejecutar_perfect_clear()
+			# --------------------------------------------
 			combo_actual += 1
 			if combo_actual > 1:
 				if sfx_combo:
@@ -284,6 +310,9 @@ func _on_pieza_soltada(which_piece, posicion_global):
 	else:
 		var tween = create_tween()
 		tween.tween_property(which_piece, "global_position", start_positions[which_piece], 0.2).set_trans(Tween.TRANS_SINE)
+		# Devolvemos el tamaño y le quitamos la inclinación
+		tween.parallel().tween_property(which_piece, "scale", Vector2(0.57, 0.57), 0.2).set_trans(Tween.TRANS_BOUNCE)
+		tween.parallel().tween_property(which_piece, "rotation_degrees", 0.0, 0.2)
 
 func check_hand_empty():
 	if check_hand_empty_silent():
@@ -395,6 +424,13 @@ func mostrar_combo_visual(valor_combo):
 
 func aplicar_temblor(intensidad):
 	fuerza_temblor += intensidad
+	
+	# --- NUEVO: VIBRACIÓN FÍSICA DEL MÓVIL ---
+	if Global.vibracion_activada:
+		# Multiplicamos la intensidad visual por 10 para sacar los milisegundos de vibración
+		# Ej: Un golpe suave (3.0) vibrará 30ms. Un Perfect Clear (20.0) vibrará 200ms!
+		var tiempo_vibracion = int(intensidad * 10) 
+		Input.vibrate_handheld(tiempo_vibracion)
 
 func actualizar_fondo_por_puntos(puntos_actuales):
 	if not color_fondo: return
@@ -481,8 +517,15 @@ func _on_fila_vibracion_pressed():
 		Input.vibrate_handheld(50) 
 
 func _on_fila_home_pressed():
+	# 1. Quitamos la pausa del juego para que la animación pueda funcionar
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://MenuPrincipal.tscn")
+	
+	# 2. Escondemos el menú de ajustes (si lo tenías visible) para que quede limpio
+	if capa_ajustes:
+		capa_ajustes.visible = false
+		
+	# 3. Llamamos a nuestra transición mágica
+	TransitionManager.cambiar_escena("res://MenuPrincipal.tscn")
 
 func _on_fila_replay_pressed():
 	capa_ajustes.visible = false
@@ -576,3 +619,57 @@ func mostrar_palabra_rotura(posicion, color_texto):
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.7).set_delay(0.2)
 	
 	tween.tween_callback(label.queue_free)
+	# ==========================================
+# --- EVENTO ESPECIAL: PERFECT CLEAR ---
+# ==========================================
+
+func ejecutar_perfect_clear():
+	# 1. Super premio de puntos y monedas
+	score += 1000
+	update_score(score)
+	Global.agregar_monedas(25) # 25 monedas de golpe
+	actualizar_ui_monedas()
+	
+	# 2. Espectáculo Visual
+	mostrar_frase_hype("PERFECT\nCLEAR!!!", Color.GOLD)
+	
+	# Un temblor bestial
+	aplicar_temblor(20.0)
+	
+	# Si tienes un sonido de Game Over o algo épico, puedes usarlo aquí cambiándole el pitch
+	if sfx_combo:
+		sfx_combo.pitch_scale = 1.5
+		sfx_combo.play()
+
+	# 3. Lluvia de monedas desde el centro de la pantalla
+	var pantalla_centro = get_viewport_rect().size / 2
+	for i in range(15):
+		crear_moneda_voladora(pantalla_centro)
+		await get_tree().create_timer(0.08).timeout
+		
+func animar_polvo_caida(posicion: Vector2):
+	for i in range(6):
+		var polvo = ColorRect.new()
+		polvo.size = Vector2(10, 10)
+		polvo.pivot_offset = polvo.size / 2
+		polvo.color = Color(0.8, 0.8, 0.8, 0.7)
+		
+		var offset_inicial = Vector2(randf_range(-30, 30), randf_range(-10, 20))
+		polvo.global_position = posicion + offset_inicial
+		polvo.z_index = 80
+		add_child(polvo)
+		
+		var tween = create_tween()
+		var angulo = randf_range(0, PI * 2)
+		var distancia = randf_range(30, 70)
+		var dest_x = polvo.position.x + cos(angulo) * distancia
+		var dest_y = polvo.position.y + sin(angulo) * distancia
+		
+		tween.parallel().tween_property(polvo, "position", Vector2(dest_x, dest_y), 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(polvo, "rotation_degrees", randf_range(-180, 180), 0.3)
+		tween.parallel().tween_property(polvo, "scale", Vector2.ZERO, 0.3)
+		
+		tween.tween_callback(polvo.queue_free)
+		
+		
+		

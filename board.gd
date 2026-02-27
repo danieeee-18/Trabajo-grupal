@@ -218,8 +218,10 @@ func animar_celda(nodo, tiempo_espera, color_brillo):
 			# Hacemos que la explosión también tenga el color aleatorio
 			explosion.modulate = color_brillo 
 			
-			# Limpieza de la partícula
-			get_tree().create_timer(1.0).timeout.connect(func(): explosion.queue_free())
+			# Limpieza 100% segura usando Tweens en vez de Timers
+			var tween_limpieza = explosion.create_tween()
+			tween_limpieza.tween_interval(1.0)
+			tween_limpieza.tween_callback(explosion.queue_free)
 	)
 	
 	tween.set_parallel(true)

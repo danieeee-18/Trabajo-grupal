@@ -19,9 +19,9 @@ func _on_btn_reintentar_pressed():
 	get_tree().reload_current_scene()
 
 func _on_btn_menu_pressed():
-	# Vuelve al menú principal
+	# Vuelve al menú principal asegurándose de quitar la pausa primero
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://MenuPrincipal.tscn")
+	TransitionManager.cambiar_escena("res://MenuPrincipal.tscn")
 
 
 func _on_boton_reiniciar_pressed() -> void:

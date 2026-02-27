@@ -17,6 +17,20 @@ func _ready():
 func actualizar_texto_monedas():
 	if label_monedas:
 		label_monedas.text = "COINS: 🪙 " + str(Global.monedas)
+		
+		# 1. Si el texto no tiene una configuración creada, la creamos
+		if not label_monedas.label_settings:
+			label_monedas.label_settings = LabelSettings.new()
+			
+		# --- RECUPERAMOS EL TAMAÑO DE LA LETRA ---
+		# Cambia este 40 por el número que tenías antes (30, 50, 60...)
+		label_monedas.label_settings.font_size = 25
+		# -----------------------------------------
+			
+		# 2. Le aplicamos el contorno de tamaño 12 y color negro
+		label_monedas.label_settings.outline_size = 12
+		label_monedas.label_settings.outline_color = Color.BLACK
+		# -------------------------------------------
 
 func generar_escaparate():
 	plantilla.visible = false
@@ -103,4 +117,5 @@ func refrescar_todos_los_botones():
 			actualizar_estado_boton(refs["boton"], refs["precio"], item)
 
 func _on_btn_volver_pressed():
-	get_tree().change_scene_to_file("res://MenuPrincipal.tscn")
+	# Llamamos a nuestra transición mágica
+	TransitionManager.cambiar_escena("res://MenuPrincipal.tscn")
