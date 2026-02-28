@@ -26,6 +26,9 @@ var textura_base_original = null
 @onready var monedas_label = $ContenedorMonedas/MonedasLabel
 
 # VARIABLES
+var usos_refresh = 3
+var usos_bomba = 3
+var usos_rayo = 3
 var start_positions = {}
 var score = 0
 var combo_actual = 0          
@@ -129,32 +132,41 @@ func aplicar_fondo_equipado():
 			datos_fondo = item
 			break
 			
-	if datos_fondo != null:
-		if Global.fondo_equipado == "base":
-			# RESTAURA TU DEGRADADO AZUL ORIGINAL
+	# CASO 1: FONDO AZUL POR DEFECTO ("base")
+	if Global.fondo_equipado == "base" or datos_fondo == null:
+		if textura_base_original != null:
+			# Si tu azul original es un degradado (imagen)
 			imagen_fondo.texture = textura_base_original
 			imagen_fondo.visible = true
-			color_fondo.visible = false # Escondemos el color sólido base
-			
-			# Mantiene la lógica de oscurecer/colorear por niveles si la tenías
-			color_objetivo = paleta_niveles[0] 
-			imagen_fondo.modulate = color_objetivo
-			
-		elif datos_fondo.has("ruta_imagen") and datos_fondo["ruta_imagen"] != "":
-			# TIENE FOTO DE LA TIENDA (Galaxia, Mar...)
-			imagen_fondo.texture = load(datos_fondo["ruta_imagen"])
-			imagen_fondo.visible = true
-			color_fondo.visible = true
-			color_fondo.color = Color.WHITE
-			imagen_fondo.modulate = Color.WHITE
-			color_objetivo = Color.WHITE
-			
+			color_fondo.visible = false # Apagamos el color liso
 		else:
-			# ES SOLO COLOR COMPRADO EN LA TIENDA
+			# Si por algún casual no detecta textura, forzamos un color azul sólido por seguridad
 			imagen_fondo.visible = false
 			color_fondo.visible = true
-			color_fondo.color = datos_fondo["color"]
-			color_objetivo = datos_fondo["color"]
+			color_fondo.color = Color("1a4066") # Azul marino clásico
+			
+		# Mantiene la lógica de colorear por niveles
+		color_objetivo = paleta_niveles[0]
+		if imagen_fondo.visible:
+			imagen_fondo.modulate = color_objetivo
+			
+	# CASO 2: IMAGEN COMPRADA EN LA TIENDA (Galaxia, Mar...)
+	elif datos_fondo.has("ruta_imagen") and datos_fondo["ruta_imagen"] != "":
+		imagen_fondo.texture = load(datos_fondo["ruta_imagen"])
+		imagen_fondo.visible = true
+		imagen_fondo.modulate = Color.WHITE
+		
+		# ¡CLAVE! Aseguramos que el color de fondo esté apagado para que no tape la foto
+		color_fondo.visible = false 
+		color_objetivo = Color.WHITE
+		
+	# CASO 3: COLOR LISO COMPRADO EN LA TIENDA
+	else:
+		imagen_fondo.visible = false # Apagamos las texturas
+		
+		color_fondo.visible = true
+		color_fondo.color = datos_fondo["color"]
+		color_objetivo = datos_fondo["color"]
 
 func _on_puntos_ganados(puntos):
 	hubo_puntos_turno = true
@@ -671,5 +683,79 @@ func animar_polvo_caida(posicion: Vector2):
 		
 		tween.tween_callback(polvo.queue_free)
 		
+# ==========================================
+# --- SISTEMA DE PODERES (POWER-UPS) ---
+# ==========================================
+
+func _on_boton_refresh_pressed():
+	if usos_refresh <= 0:
+		mostrar_frase_hype("EMPTY!", Color.GRAY)
+		return # Cortamos la función aquí para que no haga nada más
 		
+	var precio = 20
+	if Global.monedas >= precio:
+		usos_refresh -= 1 # Restamos un uso
+		Global.monedas -= precio
+		actualizar_ui_monedas()
+		mostrar_frase_hype("REFRESH!", Color.CYAN)
+		if sfx_pop: sfx_pop.play()
 		
+		for p in pieces_array:
+			if p.visible:
+				var tween = create_tween()
+				tween.tween_property(p, "scale", Vector2.ZERO, 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+				tween.tween_callback(p.hide)
+		
+		await get_tree().create_timer(0.3).timeout
+		spawn_new_hand()
+	else:
+		mostrar_frase_hype("NO COINS!", Color.RED)
+		animar_monedas_ui()
+
+func _on_boton_bomba_pressed():
+	if usos_bomba <= 0:
+		mostrar_frase_hype("EMPTY!", Color.GRAY)
+		return
+		
+	var precio = 50
+	if Global.monedas >= precio:
+		if board.has_method("explotar_bomba_inteligente"):
+			usos_bomba -= 1 # Restamos un uso
+			Global.monedas -= precio
+			actualizar_ui_monedas()
+			mostrar_frase_hype("BOMB!", Color.ORANGE)
+			aplicar_temblor(15.0)
+			
+			board.explotar_bomba_inteligente()
+			
+			await get_tree().create_timer(0.5).timeout
+			if board.get_empty_cells_count() == 64:
+				ejecutar_perfect_clear()
+			check_game_over()
+	else:
+		mostrar_frase_hype("NO COINS!", Color.RED)
+		animar_monedas_ui()
+
+func _on_boton_rayo_pressed():
+	if usos_rayo <= 0:
+		mostrar_frase_hype("EMPTY!", Color.GRAY)
+		return
+		
+	var precio = 75
+	if Global.monedas >= precio:
+		if board.has_method("disparar_rayo_inteligente"):
+			usos_rayo -= 1 # Restamos un uso
+			Global.monedas -= precio
+			actualizar_ui_monedas()
+			mostrar_frase_hype("LASER!", Color.YELLOW)
+			aplicar_temblor(12.0)
+			
+			board.disparar_rayo_inteligente()
+			
+			await get_tree().create_timer(0.5).timeout
+			if board.get_empty_cells_count() == 64:
+				ejecutar_perfect_clear()
+			check_game_over()
+	else:
+		mostrar_frase_hype("NO COINS!", Color.RED)
+		animar_monedas_ui()

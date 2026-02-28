@@ -229,3 +229,105 @@ func animar_celda(nodo, tiempo_espera, color_brillo):
 	tween.tween_property(nodo, "scale", Vector2(0.96, 0.96), 0.6).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 	# Transición de color: del color brillante al gris transparente original
 	tween.tween_property(nodo, "modulate", color_original_fondo, 0.8).set_trans(Tween.TRANS_SINE)
+
+
+# ==========================================
+# --- PODERES INTELIGENTES (POWER-UPS) ---
+# ==========================================
+
+func explotar_bomba_inteligente():
+	var mejor_x = 1
+	var mejor_y = 1
+	var max_bloques = -1
+	
+	# 1. ESCÁNER: Buscamos el centro ideal (de 3x3) que tenga más bloques
+	for cx in range(1, GRID_SIZE - 1):
+		for cy in range(1, GRID_SIZE - 1):
+			var contador = 0
+			# Contamos los bloques en el 3x3 alrededor de este centro
+			for dx in [-1, 0, 1]:
+				for dy in [-1, 0, 1]:
+					if grid_sprites[cx + dx][cy + dy] != null:
+						contador += 1
+						
+			if contador > max_bloques:
+				max_bloques = contador
+				mejor_x = cx
+				mejor_y = cy
+				
+	# 2. DESTRUCCIÓN: Explotamos esa zona 3x3
+	var bloques_destruidos = 0
+	for dx in [-1, 0, 1]:
+		for dy in [-1, 0, 1]:
+			var tx = mejor_x + dx
+			var ty = mejor_y + dy
+			var bloque = grid_sprites[tx][ty]
+			
+			if is_instance_valid(bloque):
+				# Animación de implosión
+				var tween = create_tween()
+				tween.tween_property(bloque, "scale", Vector2.ZERO, 0.3).set_trans(Tween.TRANS_BACK)
+				tween.tween_callback(bloque.queue_free) # Lo borramos de la memoria
+				
+				grid_sprites[tx][ty] = null # Liberamos la casilla
+				bloques_destruidos += 1
+				
+	# 3. RECOMPENSA: Damos un bonus de puntos por los bloques destruidos
+	if bloques_destruidos > 0:
+		puntos_ganados.emit(bloques_destruidos * 50)
+
+func disparar_rayo_inteligente():
+	var cuenta_filas = [0, 0, 0, 0, 0, 0, 0, 0]
+	var cuenta_columnas = [0, 0, 0, 0, 0, 0, 0, 0]
+	
+	# 1. ESCÁNER: Contamos cuántos bloques hay en cada fila y columna
+	for x in range(GRID_SIZE):
+		for y in range(GRID_SIZE):
+			if grid_sprites[x][y] != null:
+				cuenta_columnas[x] += 1
+				cuenta_filas[y] += 1
+				
+	# 2. BÚSQUEDA DE LA CRUZ PERFECTA: Buscamos la intersección que rompa más bloques
+	var mejor_x = 0
+	var mejor_y = 0
+	var max_bloques = -1
+	
+	for x in range(GRID_SIZE):
+		for y in range(GRID_SIZE):
+			# Sumamos los de su fila y columna
+			var suma = cuenta_columnas[x] + cuenta_filas[y]
+			# Si en el centro exacto de la cruz hay un bloque, restamos 1 para no contarlo doble
+			if grid_sprites[x][y] != null: 
+				suma -= 1
+				
+			if suma > max_bloques:
+				max_bloques = suma
+				mejor_x = x
+				mejor_y = y
+				
+	# 3. DESTRUCCIÓN: Limpiamos esa fila y columna entera (Forma de cruz)
+	var bloques_destruidos = 0
+	
+	# Destruimos la Columna
+	for y in range(GRID_SIZE):
+		var bloque = grid_sprites[mejor_x][y]
+		if is_instance_valid(bloque):
+			var tween = create_tween()
+			tween.tween_property(bloque, "scale", Vector2.ZERO, 0.2).set_delay(y * 0.05) # Efecto cascada
+			tween.tween_callback(bloque.queue_free)
+			grid_sprites[mejor_x][y] = null
+			bloques_destruidos += 1
+			
+	# Destruimos la Fila
+	for x in range(GRID_SIZE):
+		var bloque = grid_sprites[x][mejor_y]
+		if is_instance_valid(bloque):
+			var tween = create_tween()
+			tween.tween_property(bloque, "scale", Vector2.ZERO, 0.2).set_delay(x * 0.05) # Efecto cascada
+			tween.tween_callback(bloque.queue_free)
+			grid_sprites[x][mejor_y] = null
+			bloques_destruidos += 1
+
+	# 4. RECOMPENSA: Bonus extra brutal por usar el rayo
+	if bloques_destruidos > 0:
+		puntos_ganados.emit(bloques_destruidos * 60)

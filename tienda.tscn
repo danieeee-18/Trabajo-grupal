@@ -73,7 +73,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 15
 theme_override_font_sizes/font_size = 35
-text = "TIENDA DE FONDOS"
+text = "SHOP"
 
 [node name="LabelMonedas" type="Label" parent="ContenedorPrincipal/Cabecera"]
 layout_mode = 2

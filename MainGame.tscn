@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://4dwh20dufcq5"]
+[gd_scene load_steps=31 format=3 uid="uid://4dwh20dufcq5"]
 
 [ext_resource type="PackedScene" uid="uid://ckrmwddkl3sn3" path="res://board.tscn" id="1_3tbxw"]
 [ext_resource type="Script" uid="uid://buhmj71d7hac7" path="res://main_game.gd" id="1_ws5ob"]
@@ -14,6 +14,9 @@
 [ext_resource type="AudioStream" uid="uid://bc2qce0csmhsc" path="res://sonidos/combo.wav" id="7_o8l48"]
 [ext_resource type="AudioStream" uid="uid://jf53jpo7s36x" path="res://sonidos/gameover.wav" id="8_0v7qb"]
 [ext_resource type="Texture2D" uid="uid://byawab8htr64r" path="res://assets/textures/moneda1.png" id="10_o8l48"]
+[ext_resource type="Texture2D" uid="uid://dsns685e0h4t3" path="res://assets/textures/reset.png" id="15_yphxy"]
+[ext_resource type="Texture2D" uid="uid://d2mjbob2y0ag1" path="res://assets/textures/bomba.png" id="16_ma1re"]
+[ext_resource type="Texture2D" uid="uid://c58xvgsjn8fuv" path="res://assets/textures/rayo.png" id="17_28psf"]
 
 [sub_resource type="Gradient" id="Gradient_0oe1n"]
 offsets = PackedFloat32Array(0, 0.98)
@@ -415,14 +418,44 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("4_x5ji8")
 theme_override_font_sizes/font_size = 50
 
+[node name="BotonRefresh" type="TextureButton" parent="."]
+offset_left = 129.0
+offset_top = 1102.0
+offset_right = 226.0
+offset_bottom = 1201.0
+texture_normal = ExtResource("15_yphxy")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BotonBomba" type="TextureButton" parent="."]
+offset_left = 335.0
+offset_top = 1085.0
+offset_right = 436.0
+offset_bottom = 1191.0
+texture_normal = ExtResource("16_ma1re")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BotonRayo" type="TextureButton" parent="."]
+offset_left = 530.0
+offset_top = 1092.0
+offset_right = 644.0
+offset_bottom = 1200.0
+texture_normal = ExtResource("17_28psf")
+ignore_texture_size = true
+stretch_mode = 5
+
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaSonido/FilaSonido" to="." method="_on_fila_sonido_pressed"]
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaSonido/FilaSonido" to="CapaAjustes/CajaMenu/ListaOpciones/FilaSonido/FilaSonido" method="_on_pressed"]
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaMusica/FilaMusica" to="." method="_on_fila_musica_pressed"]
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaMusica/FilaMusica" to="CapaAjustes/CajaMenu/ListaOpciones/FilaMusica/FilaMusica" method="_on_pressed"]
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaVibracion/FilaVibracion" to="." method="_on_fila_vibracion_pressed"]
-[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaHome/FilaHome" to="." method="_on_btn_home_pressed"]
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaHome/FilaHome" to="." method="_on_fila_home_pressed"]
-[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay/FilaReplay" to="." method="_on_btn_replay_pressed"]
+[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaHome/FilaHome" to="." method="_on_btn_home_pressed"]
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay/FilaReplay" to="." method="_on_fila_replay_pressed"]
+[connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaReplay/FilaReplay" to="." method="_on_btn_replay_pressed"]
 [connection signal="pressed" from="CapaAjustes/BotonCerrar" to="." method="_on_boton_cerrar_pressed"]
 [connection signal="pressed" from="BtnAbrirAjustes" to="." method="_on_btn_abrir_ajustes_pressed"]
+[connection signal="pressed" from="BotonRefresh" to="." method="_on_boton_refresh_pressed"]
+[connection signal="pressed" from="BotonBomba" to="." method="_on_boton_bomba_pressed"]
+[connection signal="pressed" from="BotonRayo" to="." method="_on_boton_rayo_pressed"]
