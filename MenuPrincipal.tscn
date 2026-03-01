@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dwuh734k7n0qn"]
+[gd_scene load_steps=19 format=3 uid="uid://dwuh734k7n0qn"]
 
 [ext_resource type="Script" uid="uid://cg73behmoagmt" path="res://menu_principal.gd" id="1_0oe1n"]
 [ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_ba235"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://8iroit28x225" path="res://assets/textures/circulo.png" id="4_ectly"]
 [ext_resource type="Texture2D" uid="uid://c5g1cbem60v16" path="res://assets/textures/carrito-de-compras-3.png" id="5_knros"]
 [ext_resource type="Texture2D" uid="uid://cwtvjqyof8nc5" path="res://assets/textures/moneda.png" id="6_knros"]
+[ext_resource type="Texture2D" uid="uid://drflt4f01f4xb" path="res://assets/textures/crown.png" id="7_oh4jq"]
 
 [sub_resource type="Gradient" id="Gradient_0oe1n"]
 offsets = PackedFloat32Array(0, 0.98)
@@ -252,7 +253,7 @@ offset_right = 406.0
 offset_bottom = 511.0
 theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
 theme_override_font_sizes/font_size = 35
-text = "👑 0"
+text = "     0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -306,6 +307,11 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
 theme_override_font_sizes/font_size = 25
 text = "999"
+
+[node name="Crown" type="Sprite2D" parent="."]
+position = Vector2(352, 486)
+scale = Vector2(0.083984375, 0.09375)
+texture = ExtResource("7_oh4jq")
 
 [connection signal="pressed" from="BotonJugar" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="BotonOpciones" to="." method="_on_options_pressed"]

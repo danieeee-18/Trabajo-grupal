@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://d0yf5f57d1f20"]
+[gd_scene load_steps=6 format=3 uid="uid://d0yf5f57d1f20"]
 
 [ext_resource type="Script" uid="uid://gkoss1vpd2xw" path="res://tienda.gd" id="1_ko86m"]
+[ext_resource type="Texture2D" uid="uid://cwtvjqyof8nc5" path="res://assets/textures/moneda.png" id="2_ko86m"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k64ye"]
 bg_color = Color(0.16470589, 0.16470589, 0.2509804, 1)
@@ -146,3 +147,8 @@ offset_top = -31.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Comprar"
+
+[node name="Moneda" type="Sprite2D" parent="."]
+position = Vector2(654.00006, 82)
+scale = Vector2(0.084472634, 0.08593743)
+texture = ExtResource("2_ko86m")

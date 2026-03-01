@@ -19,7 +19,7 @@ func _ready():
 	# Verificamos si existe el nodo para evitar errores rojos
 	if has_node("LabelRecord"):
 		# Mostramos la corona y el número guardado en Global
-		$LabelRecord.text = "👑 " + str(Global.high_score)
+		$LabelRecord.text = "      " + str(Global.high_score)
 		
 	# 1.5 ACTUALIZAR MONEDAS (NUEVO)
 	actualizar_monedas_ui()

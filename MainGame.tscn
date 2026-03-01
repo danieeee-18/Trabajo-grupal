@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://4dwh20dufcq5"]
+[gd_scene load_steps=32 format=3 uid="uid://4dwh20dufcq5"]
 
 [ext_resource type="PackedScene" uid="uid://ckrmwddkl3sn3" path="res://board.tscn" id="1_3tbxw"]
 [ext_resource type="Script" uid="uid://buhmj71d7hac7" path="res://main_game.gd" id="1_ws5ob"]
@@ -94,6 +94,10 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0v7qb"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qtrx8"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_yphxy"]
+font = ExtResource("4_x5ji8")
+font_size = 23
 
 [node name="MainGame" type="Node2D"]
 script = ExtResource("1_ws5ob")
@@ -419,31 +423,64 @@ theme_override_fonts/font = ExtResource("4_x5ji8")
 theme_override_font_sizes/font_size = 50
 
 [node name="BotonRefresh" type="TextureButton" parent="."]
-offset_left = 129.0
-offset_top = 1102.0
-offset_right = 226.0
-offset_bottom = 1201.0
+offset_left = 127.0
+offset_top = 1067.0
+offset_right = 224.0
+offset_bottom = 1166.0
 texture_normal = ExtResource("15_yphxy")
 ignore_texture_size = true
 stretch_mode = 5
 
+[node name="Label" type="Label" parent="BotonRefresh"]
+layout_mode = 0
+offset_left = -4.0
+offset_top = 110.0
+offset_right = 99.0
+offset_bottom = 166.0
+text = "25 🪙"
+label_settings = SubResource("LabelSettings_yphxy")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="BotonBomba" type="TextureButton" parent="."]
-offset_left = 335.0
-offset_top = 1085.0
-offset_right = 436.0
-offset_bottom = 1191.0
+offset_left = 333.0
+offset_top = 1050.0
+offset_right = 434.0
+offset_bottom = 1156.0
 texture_normal = ExtResource("16_ma1re")
 ignore_texture_size = true
 stretch_mode = 5
 
+[node name="Label" type="Label" parent="BotonBomba"]
+layout_mode = 0
+offset_left = -10.0
+offset_top = 127.0
+offset_right = 93.0
+offset_bottom = 183.0
+text = "40 🪙"
+label_settings = SubResource("LabelSettings_yphxy")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="BotonRayo" type="TextureButton" parent="."]
-offset_left = 530.0
-offset_top = 1092.0
-offset_right = 644.0
-offset_bottom = 1200.0
+offset_left = 528.0
+offset_top = 1057.0
+offset_right = 642.0
+offset_bottom = 1165.0
 texture_normal = ExtResource("17_28psf")
 ignore_texture_size = true
 stretch_mode = 5
+
+[node name="Label" type="Label" parent="BotonRayo"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 120.0
+offset_right = 101.0
+offset_bottom = 176.0
+text = "30 🪙"
+label_settings = SubResource("LabelSettings_yphxy")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaSonido/FilaSonido" to="." method="_on_fila_sonido_pressed"]
 [connection signal="pressed" from="CapaAjustes/CajaMenu/ListaOpciones/FilaSonido/FilaSonido" to="CapaAjustes/CajaMenu/ListaOpciones/FilaSonido/FilaSonido" method="_on_pressed"]
