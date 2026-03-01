@@ -692,7 +692,7 @@ func _on_boton_refresh_pressed():
 		mostrar_frase_hype("EMPTY!", Color.GRAY)
 		return # Cortamos la función aquí para que no haga nada más
 		
-	var precio = 20
+	var precio = 25 # <--- Precio actualizado de 20 a 25
 	if Global.monedas >= precio:
 		usos_refresh -= 1 # Restamos un uso
 		Global.monedas -= precio
@@ -717,7 +717,7 @@ func _on_boton_bomba_pressed():
 		mostrar_frase_hype("EMPTY!", Color.GRAY)
 		return
 		
-	var precio = 50
+	var precio = 40 # <--- Precio actualizado de 50 a 40
 	if Global.monedas >= precio:
 		if board.has_method("explotar_bomba_inteligente"):
 			usos_bomba -= 1 # Restamos un uso
@@ -741,7 +741,7 @@ func _on_boton_rayo_pressed():
 		mostrar_frase_hype("EMPTY!", Color.GRAY)
 		return
 		
-	var precio = 75
+	var precio = 30 # <--- Precio actualizado de 75 a 30
 	if Global.monedas >= precio:
 		if board.has_method("disparar_rayo_inteligente"):
 			usos_rayo -= 1 # Restamos un uso

@@ -112,8 +112,8 @@ texture = SubResource("GradientTexture2D_mi4js")
 
 [node name="ColorFondo" type="ColorRect" parent="."]
 visible = false
-offset_right = 1500.0
-offset_bottom = 2500.0
+offset_right = 500.0
+offset_bottom = 1000.0
 mouse_filter = 2
 
 [node name="FondoTablero" type="Panel" parent="."]
