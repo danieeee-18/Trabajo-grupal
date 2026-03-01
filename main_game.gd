@@ -84,7 +84,7 @@ var shapes_database = [
 
 func _ready():
 	
-	if imagen_fondo:                                   
+	if imagen_fondo:
 		textura_base_original = imagen_fondo.texture
 		
 	update_score(0)
@@ -103,8 +103,11 @@ func _ready():
 	aplicar_fondo_equipado() 
 	
 	if board.has_method("animar_ola_entrada"): board.animar_ola_entrada()
-	if has_node("AudioManager"): $AudioManager.poner_musica_juego()
-	elif Global.has_method("play_music_level"): Global.play_music_level()
+	
+	# --- LLAMADA AL DJ GLOBAL CORREGIDA ---
+	AudioManager.poner_musica_juego()
+	# --------------------------------------
+	
 	await get_tree().create_timer(0.3).timeout
 	mostrar_frase_hype("READY?", Color(1, 0.5, 0)) 
 	await get_tree().create_timer(0.6).timeout

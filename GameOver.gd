@@ -13,6 +13,10 @@ func set_score(puntos_finales):
 # --- BOTONES DE LA PANTALLA DE GAME OVER ---
 # Conecta las señales de tus botones en el editor a estas funciones:
 
+func _ready():
+	# Le decimos al DJ que cambie a la música triste/épica
+	AudioManager.poner_musica_gameover()
+
 func _on_btn_reintentar_pressed():
 	# Reinicia la partida
 	get_tree().paused = false
