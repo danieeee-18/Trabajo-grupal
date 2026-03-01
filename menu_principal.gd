@@ -28,6 +28,19 @@ func _ready():
 	# Le decimos al DJ que ponga el disco de Menú Principal
 	if has_node("/root/AudioManager"):
 		AudioManager.poner_musica_menu()
+		
+	# 3. CONECTAR EL BOTÓN DE SALIR (NUEVO)
+	# ¡OJO! Cambia "BotonSalir" por el nombre exacto de tu botón en la escena
+	if has_node("BotonSalir"):
+		$BotonSalir.pressed.connect(_on_boton_salir_pressed)
+	else:
+		print("AVISO: No encuentro el nodo del botón de salir. Revisa el nombre.")
+
+
+# --- FUNCIÓN QUE SE EJECUTA AL PULSAR EL BOTÓN ---
+func _on_boton_salir_pressed():
+	print("¡Botón de salida pulsado! Cerrando el juego...")
+	get_tree().quit()
 
 # --- FUNCIONES DE LA INTERFAZ ---
 func actualizar_monedas_ui():

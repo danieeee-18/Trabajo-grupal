@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dwuh734k7n0qn"]
+[gd_scene load_steps=22 format=3 uid="uid://dwuh734k7n0qn"]
 
 [ext_resource type="Script" uid="uid://cg73behmoagmt" path="res://menu_principal.gd" id="1_0oe1n"]
 [ext_resource type="FontFile" uid="uid://okd01re7873h" path="res://Luckiest_Guy/LuckiestGuy-Regular.ttf" id="2_ba235"]
@@ -120,6 +120,50 @@ corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 shadow_size = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n71xe"]
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0, 0, 0, 1)
+border_width_bottom = 5
+border_color = Color(0.28485027, 0.2848503, 0.28485012, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 5
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_it06f"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 1)
+border_color = Color(0.28485027, 0.2848503, 0.28485012, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 5
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vuxh6"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.12225223, 0.12225223, 0.12225223, 1)
+border_width_bottom = 5
+border_color = Color(0.28485027, 0.2848503, 0.28485012, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 5
+shadow_offset = Vector2(0, 5)
 
 [node name="MenuPrincipal" type="Control"]
 layout_mode = 3
@@ -313,6 +357,24 @@ position = Vector2(352, 486)
 scale = Vector2(0.083984375, 0.09375)
 texture = ExtResource("7_oh4jq")
 
+[node name="BotonSalir" type="Button" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 83.0
+offset_bottom = 66.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.6039216, 0.6039216, 0.6039216, 1)
+theme_override_colors/font_hover_color = Color(0.6039216, 0.6039216, 0.6039216, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_n71xe")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_it06f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_vuxh6")
+text = "Exit"
+
 [connection signal="pressed" from="BotonJugar" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="BotonOpciones" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="BotonTienda" to="." method="_on_boton_tienda_pressed"]
+[connection signal="pressed" from="BotonSalir" to="." method="_on_boton_salir_pressed"]

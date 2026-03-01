@@ -149,6 +149,6 @@ grow_vertical = 0
 text = "Comprar"
 
 [node name="Moneda" type="Sprite2D" parent="."]
-position = Vector2(612, 82)
-scale = Vector2(0.084472634, 0.08593743)
+position = Vector2(635, 80)
+scale = Vector2(0.06860352, 0.06738278)
 texture = ExtResource("2_ko86m")
