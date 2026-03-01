@@ -79,7 +79,7 @@ text = "SHOP"
 [node name="LabelMonedas" type="Label" parent="ContenedorPrincipal/Cabecera"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
-text = "🪙 0"
+text = "  0"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="ContenedorPrincipal"]
 layout_mode = 2
@@ -149,6 +149,6 @@ grow_vertical = 0
 text = "Comprar"
 
 [node name="Moneda" type="Sprite2D" parent="."]
-position = Vector2(654.00006, 82)
+position = Vector2(612, 82)
 scale = Vector2(0.084472634, 0.08593743)
 texture = ExtResource("2_ko86m")

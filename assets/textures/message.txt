@@ -1,0 +1,83 @@
+¡Vamos a por esa memoria a contrarreloj! Como tenéis que entregarla mañana y debe tener entre 20 y 40 páginas, la clave ahora es no empezar de cero, sino usar todo lo que ya sabemos de vuestro código para rellenar los apartados más técnicos y largos rápidamente.
++1
+
+He revisado la estructura exacta que os piden en el PDF. Para ayudaros a ir a tiro hecho, os he preparado los textos base para las secciones más importantes, adaptados 100% a vuestro juego de Godot. Podéis copiar, pegar y ampliar con vuestras palabras.
++1
+
+Aquí tenéis el contenido redactado para los puntos clave:
+
+1. Objetivos y características del proyecto 
+
+Objetivo general:
+El objetivo principal de este proyecto es el diseño y desarrollo de un videojuego de rompecabezas (puzzle) de bloques en 2D, orientado a un público casual. El juego busca ofrecer una experiencia satisfactoria y adictiva mediante la combinación de mecánicas lógicas tradicionales con un fuerte componente de retroalimentación visual (Game Juice) y un sistema de progresión económica.
+
+Características principales:
+
+Mecánica de tablero: Colocación de piezas aleatorias en una cuadrícula con el objetivo de completar y destruir líneas, similar a referentes como Blockudoku o Tetris.
+
+Sistema de Economía y Tienda: Implementación de una moneda virtual que se obtiene al alcanzar ciertos umbrales de puntuación (Jackpots), permitiendo al jugador adquirir elementos cosméticos.
+
+Personalización Dinámica: Una tienda híbrida que permite equipar fondos de pantalla complejos (imágenes completas como "Galaxia" o "Océano") o colores planos, modificando la estética de la partida en tiempo real.
+
+Game Juice y Feedback Visual: Uso intensivo de partículas, interpolaciones (Tweens) para animar el marcador, vibración de cámara y destellos de pantalla para recompensar las acciones del jugador.
+
+Persistencia de Datos: Sistema de guardado local que recuerda las monedas, el récord de puntuación, los objetos desbloqueados y los ajustes de audio de sesiones anteriores.
+
+2. Estado del arte 
++1
+
+Para el diseño de este proyecto, se han analizado títulos referentes en el mercado de dispositivos móviles y navegador, principalmente Wood Block Puzzle y Blockudoku. Estos juegos destacan por su interfaz minimalista y su bucle de jugabilidad infinito.
++1
+
+En cuanto a tecnologías, aunque existen opciones como Unity o Unreal Engine, para el desarrollo en 2D se ha identificado Godot Engine 4 como el motor de vanguardia más adecuado. Godot destaca por ser de código abierto, extremadamente ligero y poseer una arquitectura basada en Nodos y Escenas que facilita la programación modular y orientada a objetos mediante su lenguaje nativo GDScript.
+
+3. Herramientas, medios y bibliotecas usadas 
+
+Motor de Juego: Godot Engine 4.x.
+
+Lenguaje de Programación: GDScript (lenguaje tipado dinámico optimizado para la arquitectura de Godot).
+
+Control de Versiones: Git y GitHub para la colaboración en equipo y el control de cambios.
+
+Recursos Gráficos y Sonoros: Fuentes tipográficas (Montserrat-Black para menús legibles y Luckiest Guy para impactos visuales), efectos de sonido (SFX para pop, líneas y combos), y texturas 2D.
+
+Gestión de Audio: Sistema de Buses de audio integrados en Godot para separar música de efectos, permitiendo mutear canales individualmente.
+
+4. Arquitectura y organización lógica 
++1
+
+El proyecto sigue una arquitectura fuertemente basada en el patrón de Autoloads (Singletons) y jerarquía de Nodos.
+
+Patrón Singleton (Global.gd y JuiceManager.gd): Se ha empleado un script Global.gd cargado en memoria desde el inicio para actuar como "base de datos" en tiempo real y gestor de estado. Este nodo almacena el inventario del jugador, las opciones de audio y controla el guardado/carga del archivo del sistema. El JuiceManager.gd actúa como un despachador global de efectos visuales y partículas, instanciando escenas dinámicamente sin sobrecargar la lógica del tablero.
++1
+
+Arquitectura Orientada a Eventos (Señales): La comunicación entre componentes (por ejemplo, entre una Pieza, el Tablero y la Interfaz de Usuario) se realiza mediante Signals. Cuando el tablero detecta que se ha ganado puntuación, emite una señal que el MainGame.gd escucha para actualizar el marcador, generar monedas o disparar animaciones de texto, logrando un código desacoplado.
+
+Estructura de la Interfaz: Separación mediante CanvasLayer para aislar la interfaz gráfica (UI) de las piezas del juego, garantizando que los menús de pausa o los ajustes siempre se rendericen por encima del juego.
+
+5. Evolución del desarrollo 
++1
+
+El desarrollo se realizó de forma iterativa:
+
+Fase de Prototipado: Creación de la cuadrícula base y las mecánicas de arrastrar y soltar (drag and drop) piezas usando cálculos en el espacio 2D.
+
+Lógica del Juego: Implementación del algoritmo de detección de líneas completas y su posterior eliminación, junto con el sistema de puntuación y combos.
+
+Sistema de Tienda: Desarrollo del catálogo y la persistencia de datos. Se introdujo un rediseño para permitir que los fondos no fueran solo colores lisos (ColorRect), sino también imágenes (TextureRect), obligando a crear un sistema de renderizado híbrido.
+
+Pulido (Juice) y Corrección de Errores : Uno de los obstáculos principales encontrados fue el uso de nodos de fondo a pantalla completa que bloqueaban los eventos de ratón (Mouse Clicks) impidiendo interactuar con las piezas. La solución aplicada consistió en modificar la propiedad Mouse Filter a Ignore en la jerarquía de interfaces. Además, se refinó el feedback visual para evitar saturación en la pantalla, agrupando la generación de monedas en un "Jackpot" cada 1000 puntos en lugar de recompensas constantes.
++1
+
+¿Cómo seguimos?
+
+Esto os cubre un buen puñado de páginas. Aún os faltaría añadir:
+
+Las capturas de pantalla (¡vitales para abultar las 20-40 páginas!  Poned fotos de la tienda, del tablero, del game over, diagramas de clases, etc.).
+
+La Planificación del proyecto (haced un diagrama de Gantt rápido o una tabla diciendo qué hizo cada uno en qué semanas ).
+
+Conclusiones y posibles mejoras futuras  (Añadid que queréis hacer port a Android, meter tablas de clasificación (Leaderboards) y nuevos modos de juego contrarreloj).
+
+¿Quieres que te redacte la sección de Conclusiones y Mejoras completas o prefieres que te ayude a definir los Casos de Uso / Historias de Usuario  que os piden? ¡Dime y lo saco al instante!
++1

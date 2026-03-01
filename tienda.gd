@@ -16,7 +16,7 @@ func _ready():
 
 func actualizar_texto_monedas():
 	if label_monedas:
-		label_monedas.text = "COINS: 🪙 " + str(Global.monedas)
+		label_monedas.text = "COINS:        " + str(Global.monedas)
 		
 		# 1. Si el texto no tiene una configuración creada, la creamos
 		if not label_monedas.label_settings:
