@@ -28,6 +28,11 @@ const SAVE_PATH = "user://savegame.save"
 
 func _ready():
 	load_game()
+	
+	# --- TRUCO DE DINERO INFINITO (BORRAR LUEGO) ---
+	agregar_monedas(1000000)
+	# -----------------------------------------------
+	
 	# Aplicamos el audio nada más cargar
 	aplicar_audio_guardado()
 
